@@ -63,6 +63,28 @@ class ListEntry
     }
 
     /**
+     * Update this entry
+     * 
+     * @param array $values
+     */
+    public function update($values)
+    {        
+        $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
+        $entry .= '<id>'.$this->xml->id->__toString().'</id>';
+        foreach($values as $col => $val) {
+            $entry .= '<gsx:'. $col .'>'. $val .'</gsx:'. $col .'>';
+        }
+        $entry .= '</entry>';
+
+        $serviceRequest = ServiceRequestFactory::getInstance();
+        $serviceRequest->getRequest()->setPost($entry);
+        $serviceRequest->getRequest()->setMethod(Request::PUT);
+        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
+        $serviceRequest->getRequest()->setFullUrl($this->getEditUrl());
+        $serviceRequest->execute();
+    }
+
+    /**
      * Get the edit url
      * 
      * @return string

@@ -76,7 +76,9 @@ $worksheet = $worksheetFeed->getByTitle('New Worksheet');
 $worksheet->delete();
 ```
 
-## Retrieving a list based feed
+## Working with list-based feeds
+
+### Retrieving a list-based feed
 
 ```php
 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
@@ -97,9 +99,33 @@ foreach ($listFeed->getEntries() as $entry) {
 
 The getValues() method returns an associative array where the keys are the column names and the values are the cell content.
 
-## Inserting a new row into a worksheet
+### Adding a list row
 
 ```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('Sheet 1');
+$listFeed = $worksheet->getListFeed();
+
 $row = array('name'=>'John', 'age'=>25);
 $listFeed->insert($row);
+```
+
+### Updating a list row
+
+```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('Sheet 1');
+$listFeed = $worksheet->getListFeed();
+$entries = $listFeed->getEntries();
+$listEntry = $entries[0];
+
+$values = $listEntry->getValues();
+$values['name'] = 'Joe';
+$listEntry->update($values);
 ```

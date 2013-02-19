@@ -13,7 +13,7 @@ I strongly encourage you to read through the [official Google Spreadsheet API do
 
 ## Bootstrapping
 
-The first thing you will need to do is include the autoloader and initializing the service request factory:
+The first thing you will need to do is include the autoloader and initialize the service request factory:
 
 ```php
 require_once 'src/Google/Spreadsheet/Autoloader.php';
@@ -42,6 +42,9 @@ $spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
 You can retrieve a list of worksheets from a spreadsheet by calling the getWorksheets() method.
 
 ```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
 $worksheetFeed = $spreadsheet->getWorksheets();
 ```
 
@@ -51,12 +54,48 @@ You can loop over each worksheet or get a single worksheet by title.
 $worksheet = $worksheetFeed->getByTitle('Sheet 1');
 ```
 
+## Adding a worksheet
+
+```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$spreadsheet->addWorksheet('New Worksheet', 50, 20);
+```
+
+The only required parameter is the worksheet name, The row and column count are optional. The default value for rows is 100 and columns is 10.
+
+## Deleting a worksheet
+
+```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('New Worksheet');
+$worksheet->delete();
+```
+
 ## Retrieving a list based feed
 
 ```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('Sheet 1');
 $listFeed = $worksheet->getListFeed();
-$entries = $listFeed->getEntries();
 ```
+
+Once you have a list feed you can loop over each entry.
+
+```php
+foreach ($listFeed->getEntries() as $entry) {
+	$values = $entry->getValues();
+}
+```
+
+The getValues() method returns an associative array where the keys are the column names and the values are the cell content.
 
 ## Inserting a new row into a worksheet
 

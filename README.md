@@ -16,8 +16,8 @@ The first thing you will need to do is include the autoloader and set the access
 ```php
 require_once 'src/Google/Spreadsheet/Autoloader.php';
 
-$accessToken = 'ya29.HES6ZQ2Q-HozDTZ9Nw';
-$request = new Google\Spreadsheet\new Request($accessToken);
+$accessToken = 'ya29.HES6ZQ2ar4xug3nQ-HozDTZ9Nw';
+$request = new Google\Spreadsheet\Request($accessToken);
 $serviceRequest = new Google\Spreadsheet\DefaultServiceRequest($request);
 ServiceRequestFactory::setInstance($serviceRequest);
 ```

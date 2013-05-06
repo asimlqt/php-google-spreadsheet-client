@@ -46,6 +46,16 @@ class Spreadsheet
     }
 
     /**
+     * Get the spreadsheet xml
+     * 
+     * @return \SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
+    /**
      * Get all the worksheets which belong to this spreadsheet
      * 
      * @return \Google\Spreadsheet\WorksheetFeed

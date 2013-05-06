@@ -67,6 +67,16 @@ class CellEntry extends \ArrayIterator
     }
 
     /**
+     * Get the cell entry xml
+     * 
+     * @return \SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
+    /**
      * Set the post url
      * 
      * @param string

@@ -46,6 +46,16 @@ class ListFeed
     }
 
     /**
+     * Get the list feed xml
+     * 
+     * @return \SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
+    /**
      * Get the post url for this feed
      * 
      * @return string

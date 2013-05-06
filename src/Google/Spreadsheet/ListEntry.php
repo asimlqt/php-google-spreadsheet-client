@@ -53,6 +53,16 @@ class ListEntry
     }
 
     /**
+     * Get the list entry xml
+     * 
+     * @return \SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
+    /**
      * Get the values of this list entry
      * 
      * @return array

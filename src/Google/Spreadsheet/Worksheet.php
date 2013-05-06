@@ -48,6 +48,16 @@ class Worksheet
             $this->xml = $xml;
     }
 
+    /**
+     * Get the worksheet xml
+     * 
+     * @return \SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
     public function getId()
     {
         $id = $this->xml->id->__toString();

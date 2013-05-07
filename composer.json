@@ -18,6 +18,6 @@
         }
     ],
     "autoload": {
-        "classmap": ["src/Google/Spreadsheet/Autoloader.php"]
+        "classmap": ["src/"]
     }
 }

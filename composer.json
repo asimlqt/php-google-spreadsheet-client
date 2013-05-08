@@ -1,0 +1,23 @@
+{
+    "name": "miku/php-google-spreadsheet-client",
+    "type": "library",
+    "description": "Google Spreadsheet PHP Client",
+    "keywords": ["google", "spreadsheet"],
+    "homepage": "https://github.com/miku/php-google-spreadsheet-client",
+    "authors": [
+        {
+            "name": "Asim Liaquat",
+            "email": "asimlqt22@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Martin Czygan",
+            "email": "martin.czygan@gmail.com",
+            "homepage": "http://twitter.com/cvvfj",
+            "role": "Packager"
+        }
+    ],
+    "autoload": {
+        "classmap": ["src/"]
+    }
+}

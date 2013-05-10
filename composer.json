@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Google Spreadsheet PHP Client",
     "keywords": ["google", "spreadsheet"],
-    "homepage": "https://github.com/miku/php-google-spreadsheet-client",
+    "homepage": "https://github.com/asimlqt/php-google-spreadsheet-client",
     "authors": [
         {
             "name": "Asim Liaquat",

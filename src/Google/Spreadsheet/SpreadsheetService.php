@@ -28,7 +28,7 @@ class SpreadsheetService
 {
     /**
      * Fetches a list of spreadhsheet spreadsheets from google drive.
-     * 
+     *
      * @return \Google\Spreadsheet\SpreadsheetFeed
      */
     public function getSpreadsheets()
@@ -40,17 +40,18 @@ class SpreadsheetService
     }
 
     /**
-     * Fetches a single spreadsheet from google drive by id if you decide 
+     * Fetches a single spreadsheet from google drive by id if you decide
      * to store the id locally. This can help reduce api calls.
-     * 
+     *
      * @param  string $id the id of the spreadsheet
-     * 
+     *
      * @return \Google\Spreadsheet\Spreadsheet
      */
     public function getSpreadsheetById($id)
     {
-        $this->request->setEndpoint('feeds/spreadsheets/private/full/'. $id);
-        $res = $this->execute();
+        $serviceRequest = ServiceRequestFactory::getInstance();
+        $serviceRequest->getRequest()->setEndpoint('feeds/spreadsheets/private/full/'. $id);
+        $res = $serviceRequest->execute();
         return new Spreadsheet($res);
     }
 }

@@ -53,10 +53,8 @@ class Autoloader
 
     public function autoload($cls)
     {
-        if(!array_key_exists($cls, $this->classmap))
-            throw new Exception('Class not found');
-
-        require_once $this->src . $this->classmap[$cls] . '.php';
+        if(array_key_exists($cls, $this->classmap))
+            require_once $this->src . $this->classmap[$cls] . '.php';
     }
 }
 

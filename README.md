@@ -129,3 +129,38 @@ $values = $listEntry->getValues();
 $values['name'] = 'Joe';
 $listEntry->update($values);
 ```
+
+### Adding headers to a new workseet
+
+The Google Spreadsheet API does not allow you to update a list row if headers are not already assigned. So, when you create a new worksheet, before you can add data to a worksheet using the 'Adding/Updating a list row' methods above, you need to add headers.
+
+To add headers to a worksheet, use the following:
+```php
+
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('Sheet 1');
+
+$worksheet->editCell(1,1, "Row1Col1 Header");
+$worksheet->editCell(1,2, "Row1Col2 Header");
+$worksheet->editCell(1,3, "Row1Col3 Header");
+$worksheet->editCell(1,4, "Row1Col4 Header");
+
+```
+
+You can also do
+```php
+
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+$worksheetFeed = $spreadsheet->getWorksheets();
+$worksheet = $worksheetFeed->getByTitle('Sheet 1');
+
+$headerArray = new array("Row1Col1 Header", "Row1Col2 Header", "Row1Col3 Header", "Row1Col4 Header");
+
+$worksheet->createHeader($headerArray);
+
+```

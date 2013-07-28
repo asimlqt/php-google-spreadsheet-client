@@ -35,6 +35,8 @@ class Worksheet
 
     private $postUrl;
 
+    private $editCellPostUrl;
+
     /**
      * Initializes the worksheet object.
      * 
@@ -128,11 +130,22 @@ class Worksheet
      */
     public function editCell($row, $col, $value)
     {
+        $entry = '
+            <entry xmlns="http://www.w3.org/2005/Atom"
+                xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+              <gs:cell row="'.$row.'" col="'.$col.'" inputValue="'.$value.'"/>
+            </entry>
+        ';
+
+        if(is_null($this->editCellPostUrl)) {
+            $this->editCellPostUrl = $this->getCellFeed()->getPostUrl();
+        }
+
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellEditUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->editCellPostUrl);
         $serviceRequest->getRequest()->setMethod(Request::POST);
         $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $serviceRequest->getRequest()->setPost($this->getHeaderXml($row, $col, $value));
+        $serviceRequest->getRequest()->setPost($entry);
         $serviceRequest->execute();
     }
 

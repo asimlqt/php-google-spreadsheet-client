@@ -100,10 +100,10 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\ListFeed
      */
-    public function getListFeed()
+    public function getListFeed($reverse = false)
     {
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getListFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getListFeedUrl($reverse));
         $res = $serviceRequest->execute();
         return new ListFeed($res);
     }
@@ -220,12 +220,17 @@ class Worksheet
 
     /**
      * The url which is used to fetch the data of a worksheet as a list
-     * 
+     *
+	 * @param boolean $reverse
+	 * @param string $orderBy - column name
      * @return string
      */
-    public function getListFeedUrl()
+    public function getListFeedUrl($reverse = false)
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+        $url = Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+		if($reverse)
+			$url .= "?reverse=true";
+		return $url;
     }
 
     /**

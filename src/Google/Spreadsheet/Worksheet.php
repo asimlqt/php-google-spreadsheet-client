@@ -98,6 +98,7 @@ class Worksheet
     /**
      * Get the list feed of this worksheet
      * 
+	 * @param boolean $reverse
      * @return \Google\Spreadsheet\ListFeed
      */
     public function getListFeed($reverse = false)
@@ -222,8 +223,7 @@ class Worksheet
      * The url which is used to fetch the data of a worksheet as a list
      *
 	 * @param boolean $reverse
-	 * @param string $orderBy - column name
-     * @return string
+    * @return string
      */
     public function getListFeedUrl($reverse = false)
     {

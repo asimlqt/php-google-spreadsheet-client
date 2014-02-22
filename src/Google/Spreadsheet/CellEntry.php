@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Worksheet Data.
  *
@@ -104,7 +106,7 @@ class CellEntry extends \ArrayIterator
      */
     public function getContent()
     {
-        if(strlen($this->cellValue) == 0 && $this->xml instanceof \SimpleXMLElement)
+        if(strlen($this->cellValue) == 0 && $this->xml instanceof SimpleXMLElement)
             $this->cellValue = $this->xml->content->__toString();
 
         return $this->cellValue;
@@ -145,7 +147,7 @@ class CellEntry extends \ArrayIterator
         $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
         $serviceRequest->getRequest()->setPost($entry);
         $ret = $serviceRequest->execute();
-        $this->xml = new \SimpleXMLElement($ret);
+        $this->xml = new SimpleXMLElement($ret);
     }
 
     /**

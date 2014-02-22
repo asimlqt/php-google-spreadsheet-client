@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Spreadsheet. Represents a single spreadsheet.
  *
@@ -39,7 +41,7 @@ class Spreadsheet
      */
     public function __construct($xml) {
         if(is_string($xml))
-            $this->xml = new \SimpleXMLElement($xml);
+            $this->xml = new SimpleXMLElement($xml);
         else
             $this->xml = $xml;
     }

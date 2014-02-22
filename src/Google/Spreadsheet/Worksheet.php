@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Worksheet.
  *
@@ -44,7 +46,7 @@ class Worksheet
     public function __construct($xml)
     {
         if(is_string($xml))
-            $this->xml = new \SimpleXMLElement($xml);
+            $this->xml = new SimpleXMLElement($xml);
         else
             $this->xml = $xml;
     }
@@ -90,7 +92,7 @@ class Worksheet
         $serviceRequest = ServiceRequestFactory::getInstance();
         $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
         $res = $serviceRequest->execute();
-        $xml = new \SimpleXMLElement($res);
+        $xml = new SimpleXMLElement($res);
         return Util::getLinkHref($xml, 'http://schemas.google.com/g/2005#post');
     }
 
@@ -202,7 +204,7 @@ class Worksheet
         $serviceRequest = ServiceRequestFactory::getInstance();
         $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
         $res = $serviceRequest->execute();
-        $xml = new \SimpleXMLElement($res);
+        $xml = new SimpleXMLElement($res);
         $postUrl = Util::getLinkHref($xml, 'http://schemas.google.com/g/2005#post');
         return $postUrl;
     }

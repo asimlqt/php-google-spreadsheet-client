@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Spreadsheet feed. 
  *
@@ -39,7 +41,7 @@ class SpreadsheetFeed extends \ArrayIterator
      */
     public function __construct($xml)
     {
-        $this->xml = new \SimpleXMLElement($xml);
+        $this->xml = new SimpleXMLElement($xml);
 
         $spreadsheets = array();
         foreach ($this->xml->entry as $entry) {

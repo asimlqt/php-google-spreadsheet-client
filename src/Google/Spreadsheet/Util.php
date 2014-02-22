@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Utility class. Provides several methods which are common to multiple classes.
  *
@@ -45,7 +47,7 @@ class Util
      * 
      * @return string
      */
-    public static function getLinkHref(\SimpleXMLElement $xml, $rel)
+    public static function getLinkHref(SimpleXMLElement $xml, $rel)
     {
         foreach($xml->link as $link) {
             $attributes = $link->attributes();

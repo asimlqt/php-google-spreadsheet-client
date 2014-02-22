@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Worksheet Data.
  *
@@ -39,7 +41,7 @@ class CellFeed
      */
     public function __construct($xml)
     {
-        $this->xml = new \SimpleXMLElement($xml);
+        $this->xml = new SimpleXMLElement($xml);
     }
 
     /**

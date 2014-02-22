@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use SimpleXMLElement;
+
 /**
  * Worksheet Data.
  *
@@ -39,7 +41,7 @@ class ListFeed
      */
     public function __construct($xmlStr)
     {
-        $xml = new \SimpleXMLElement($xmlStr);
+        $xml = new SimpleXMLElement($xmlStr);
         $xml->registerXPathNamespace('gsx', 'http://schemas.google.com/spreadsheets/2006/extended');
         $this->xml = $xml;
     }

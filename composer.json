@@ -4,6 +4,7 @@
     "description": "Google Spreadsheet PHP Client",
     "keywords": ["google", "spreadsheet"],
     "homepage": "https://github.com/asimlqt/php-google-spreadsheet-client",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Asim Liaquat",
@@ -17,7 +18,10 @@
             "role": "Packager"
         }
     ],
+    "require": {
+        "php": ">=5.3.0"
+    },
     "autoload": {
-        "classmap": ["src/"]
+        "psr-4": {"Google\\": "src/Google"}
     }
 }

@@ -21,7 +21,6 @@ namespace Google\Spreadsheet;
  *
  * @package    Google
  * @subpackage Spreadsheet
- * @version    0.1
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
 class Util

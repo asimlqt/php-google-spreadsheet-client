@@ -16,6 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
+use ArrayIterator;
 use SimpleXMLElement;
 
 /**
@@ -25,7 +26,7 @@ use SimpleXMLElement;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class SpreadsheetFeed extends \ArrayIterator
+class SpreadsheetFeed extends ArrayIterator
 {
     /**
      * The spreadsheet feed xml object

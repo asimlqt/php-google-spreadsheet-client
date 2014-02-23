@@ -17,6 +17,7 @@
 namespace Google\Spreadsheet;
 
 use SimpleXMLElement;
+use DateTime;
 
 /**
  * Spreadsheet. Represents a single spreadsheet.
@@ -27,6 +28,8 @@ use SimpleXMLElement;
  */
 class Spreadsheet
 {
+    const REL_WORKSHEETS_FEED = 'http://schemas.google.com/spreadsheets/2006#worksheetsfeed';
+
     /**
      * The spreadsheet xml object
      * 
@@ -37,7 +40,7 @@ class Spreadsheet
     /**
      * Initializes the spreadsheet object
      * 
-     * @param string|\SimpleXMLElement $xml
+     * @param string|SimpleXMLElement $xml
      */
     public function __construct($xml) {
         if(is_string($xml))
@@ -57,6 +60,37 @@ class Spreadsheet
     }
 
     /**
+     * Get the spreadsheet id. Returns the actual id and not the full url
+     * 
+     * @return string
+     */
+    public function getId()
+    {
+        $url = $this->xml->id->__toString();
+        return substr($url, strrpos($url, '/')+1);
+    }
+
+    /**
+     * Get the updated date
+     * 
+     * @return DateTime
+     */
+    public function getUpdated()
+    {
+        return new DateTime($this->xml->updated->__toString());
+    }
+
+    /**
+     * Returns the title (name) of the spreadsheet
+     * 
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->xml->title->__toString();
+    }
+
+    /**
      * Get all the worksheets which belong to this spreadsheet
      * 
      * @return \Google\Spreadsheet\WorksheetFeed
@@ -64,7 +98,7 @@ class Spreadsheet
     public function getWorksheets()
     {
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getWorksheetsFeedUrl());
         $res = $serviceRequest->execute();
         return new WorksheetFeed($res);
     }
@@ -88,7 +122,7 @@ class Spreadsheet
         ';
 
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getWorksheetsFeedUrl());
         $serviceRequest->getRequest()->setMethod(Request::POST);
         $serviceRequest->getRequest()->setPost($entry);
         $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
@@ -101,17 +135,9 @@ class Spreadsheet
      * 
      * @return string
      */
-    public function getFeedUrl() {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#worksheetsfeed');
-    }
-
-    /**
-     * Returns the title (name) of the spreadsheet
-     * 
-     * @return string
-     */
-    public function getTitle() {
-        return $this->xml->title->__toString();
+    public function getWorksheetsFeedUrl()
+    {
+        return Util::getLinkHref($this->xml, self::REL_WORKSHEETS_FEED);
     }
 
 }

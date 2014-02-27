@@ -98,12 +98,13 @@ class Worksheet
     /**
      * Get the list feed of this worksheet
      * 
+	 * @param boolean $reverse
      * @return \Google\Spreadsheet\ListFeed
      */
-    public function getListFeed()
+    public function getListFeed($reverse = false)
     {
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getListFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getListFeedUrl($reverse));
         $res = $serviceRequest->execute();
         return new ListFeed($res);
     }
@@ -113,10 +114,10 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\CellFeed
      */
-    public function getCellFeed()
+    public function getCellFeed($minRow = null, $maxRow = null, $minCol = null, $maxCol = null)
     {
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl($minRow, $maxRow, $minCol, $maxCol));
         $res = $serviceRequest->execute();
         return new CellFeed($res);
     }
@@ -220,21 +221,37 @@ class Worksheet
 
     /**
      * The url which is used to fetch the data of a worksheet as a list
-     * 
-     * @return string
+     *
+	 * @param boolean $reverse
+    * @return string
      */
-    public function getListFeedUrl()
+    public function getListFeedUrl($reverse = false)
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+        $url = Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+		if($reverse)
+			$url .= "?reverse=true";
+		return $url;
     }
 
     /**
      * Get the cell feed url
      * 
-     * @return stirng
+     * @return string
      */
-    public function getCellFeedUrl()
+    public function getCellFeedUrl($minRow = null, $maxRow = null, $minCol = null, $maxCol = null)
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        $url = Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+		$params = [];
+		if(isset($minRow))
+			$params[] = "min-row=$minRow";
+		if(isset($maxRow))
+			$params[] = "max-row=$maxRow";
+		if(isset($minCol))
+			$params[] = "min-col=$minCol";
+		if(isset($maxCol))
+			$params[] = "max-col=$maxCol";
+		if(!empty($params))
+			$url .= '?' . implode("&", $params);
+		return $url;
     }
 }

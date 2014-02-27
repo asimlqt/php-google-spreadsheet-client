@@ -114,10 +114,10 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\CellFeed
      */
-    public function getCellFeed()
+    public function getCellFeed($minRow = null, $maxRow = null, $minCol = null, $maxCol = null)
     {
         $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
+        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl($minRow, $maxRow, $minCol, $maxCol));
         $res = $serviceRequest->execute();
         return new CellFeed($res);
     }
@@ -236,10 +236,22 @@ class Worksheet
     /**
      * Get the cell feed url
      * 
-     * @return stirng
+     * @return string
      */
-    public function getCellFeedUrl()
+    public function getCellFeedUrl($minRow = null, $maxRow = null, $minCol = null, $maxCol = null)
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        $url = Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+		$params = [];
+		if(isset($minRow))
+			$params[] = "min-row=$minRow";
+		if(isset($maxRow))
+			$params[] = "max-row=$maxRow";
+		if(isset($minCol))
+			$params[] = "min-col=$minCol";
+		if(isset($maxCol))
+			$params[] = "max-col=$maxCol";
+		if(!empty($params))
+			$url .= '?' . implode("&", $params);
+		return $url;
     }
 }

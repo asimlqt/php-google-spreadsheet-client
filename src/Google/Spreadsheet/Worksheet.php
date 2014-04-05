@@ -17,6 +17,7 @@
 namespace Google\Spreadsheet;
 
 use SimpleXMLElement;
+use DateTime;
 
 /**
  * Worksheet.
@@ -61,12 +62,34 @@ class Worksheet
         return $this->xml;
     }
 
+    /**
+     * Get the worksheet id. Returns the full url. 
+     * 
+     * @return string
+     */
     public function getId()
     {
         $id = $this->xml->id->__toString();
         return $id;
     }
 
+    /**
+     * Get the updated date
+     * 
+     * @return DateTime
+     */
+    public function getUpdated()
+    {
+        return new DateTime($this->xml->updated->__toString());
+    }
+
+    /**
+     * Get the actual id not the full url.
+     * 
+     * @return string
+     *
+     * @throws \Google\Exception
+     */
     public function getWorksheetId()
     {
         preg_match('@worksheets/([a-zA-z0-9]+)/@', $this->getId(), $match);
@@ -85,15 +108,6 @@ class Worksheet
     public function getTitle()
     {
         return $this->xml->title->__toString();
-    }
-
-    private function getCellEditUrl()
-    {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
-        $res = $serviceRequest->execute();
-        $xml = new SimpleXMLElement($res);
-        return Util::getLinkHref($xml, 'http://schemas.google.com/g/2005#post');
     }
 
     /**

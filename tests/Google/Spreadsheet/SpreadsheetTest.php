@@ -1,10 +1,9 @@
 <?php
 namespace Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
 use DateTime;
 
-class SpreadsheetTest extends PHPUnit_Framework_TestCase
+class SpreadsheetTest extends TestBase
 {
     public function testGetId()
     {
@@ -33,9 +32,7 @@ class SpreadsheetTest extends PHPUnit_Framework_TestCase
 
     public function testGetWorksheets()
     {
-        $serviceRequest = new TestServiceRequest(new Request(''));
-        $serviceRequest->setExecuteReturn(file_get_contents(__DIR__.'/xml/worksheet-feed.xml'));
-        ServiceRequestFactory::setInstance($serviceRequest);
+        $this->setServiceRequest('worksheet-feed.xml');
 
         $xml = file_get_contents(__DIR__.'/xml/spreadsheet.xml');
         $spreadsheet = new Spreadsheet($xml);
@@ -45,9 +42,7 @@ class SpreadsheetTest extends PHPUnit_Framework_TestCase
 
     public function testAddWorksheet()
     {
-        $serviceRequest = new TestServiceRequest(new Request(''));
-        $serviceRequest->setExecuteReturn(file_get_contents(__DIR__.'/xml/worksheet.xml'));
-        ServiceRequestFactory::setInstance($serviceRequest);
+        $this->setServiceRequest('worksheet.xml');
 
         $xml = file_get_contents(__DIR__.'/xml/spreadsheet.xml');
         $spreadsheet = new Spreadsheet($xml);

@@ -27,11 +27,21 @@ class ServiceRequestFactory
 {
     private static $instance;
 
-    public static function setInstance($instance)
+    /**
+     * [setInstance description]
+     * 
+     * @param ServiceRequestInterface $instance
+     */
+    public static function setInstance(ServiceRequestInterface $instance = null)
     {
         self::$instance = $instance;
     }
 
+    /**
+     * [getInstance description]
+     * 
+     * @return ServiceRequestInterface
+     */
     public static function getInstance()
     {
         if(is_null(self::$instance)) {

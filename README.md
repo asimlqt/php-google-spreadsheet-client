@@ -11,17 +11,36 @@ I strongly recommend you read through the [official Google Spreadsheet API docum
 
 # Usage
 
+## Installation
+
+Create a composer.json file in your project and add the following:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/asimlqt/php-google-spreadsheet-client"
+        }
+    ],
+    "require": {
+        "asimlqt/php-google-spreadsheet-client": "2.1.*"
+    }
+}
+```
+
 ## Bootstrapping
 
 The first thing you will need to do is include the autoloader and initialize the service request factory:
 
 ```php
-require_once 'src/Google/Spreadsheet/Autoloader.php';
+require 'vendor/autoload.php';
 
-$accessToken = 'ya29.HES6ZQ2ar4xug3nQ-HozDTZ9Nw';
-$request = new Google\Spreadsheet\Request($accessToken);
-$serviceRequest = new Google\Spreadsheet\DefaultServiceRequest($request);
-Google\Spreadsheet\ServiceRequestFactory::setInstance($serviceRequest);
+use Google\Spreadsheet\DefaultServiceRequest;
+use Google\Spreadsheet\ServiceRequestFactory;
+
+$serviceRequest = new DefaultServiceRequest($accessToken);
+ServiceRequestFactory::setInstance($serviceRequest);
 ```
 
 ## Retrieving a list of spreadsheets

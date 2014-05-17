@@ -42,24 +42,12 @@ class Worksheet
     /**
      * Initializes the worksheet object.
      * 
-     * @param string $xml
+     * @param SimpleXMLElement $xml
      */
-    public function __construct($xml)
+    public function __construct(SimpleXMLElement $xml)
     {
-        if(is_string($xml))
-            $this->xml = new SimpleXMLElement($xml);
-        else
-            $this->xml = $xml;
-    }
-
-    /**
-     * Get the worksheet xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
-    {
-        return $this->xml;
+        $xml->registerXPathNamespace('gs', 'http://schemas.google.com/spreadsheets/2006');
+        $this->xml = $xml;
     }
 
     /**
@@ -69,8 +57,7 @@ class Worksheet
      */
     public function getId()
     {
-        $id = $this->xml->id->__toString();
-        return $id;
+        return $this->xml->id->__toString();
     }
 
     /**
@@ -84,23 +71,6 @@ class Worksheet
     }
 
     /**
-     * Get the actual id not the full url.
-     * 
-     * @return string
-     *
-     * @throws \Google\Exception
-     */
-    public function getWorksheetId()
-    {
-        preg_match('@worksheets/([a-zA-z0-9]+)/@', $this->getId(), $match);
-        if(is_array($match) && count($match) === 2) {
-            return $match[1];
-        }
-        throw new Exception('Could not extract worksheet id');
-    }
-
-
-    /**
      * Get the title of the worksheet
      * 
      * @return string
@@ -111,116 +81,62 @@ class Worksheet
     }
 
     /**
+     * Get the number of rows in the worksheet
+     *
+     * @return int
+     */
+    public function getRowCount()
+    {
+        $el = current($this->xml->xpath('//gs:rowCount'));
+        return (int) $el->__toString();
+    }
+
+    /**
+     * Get the number of columns in the worksheet
+     *
+     * @return int
+     */
+    public function getColCount()
+    {
+        $el = current($this->xml->xpath('//gs:colCount'));
+        return (int) $el->__toString();
+    }
+
+    /**
      * Get the list feed of this worksheet
      * 
-     * @return \Google\Spreadsheet\ListFeed
+     * @return \Google\Spreadsheet\List\Feed
      */
     public function getListFeed()
     {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getListFeedUrl());
-        $res = $serviceRequest->execute();
+        $res = ServiceRequestFactory::getInstance()->get($this->getListFeedUrl());
         return new ListFeed($res);
     }
 
     /**
      * Get the cell feed of this worksheet
      * 
-     * @return \Google\Spreadsheet\CellFeed
+     * @return \Google\Spreadsheet\Cell\Feed
      */
     public function getCellFeed()
     {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
-        $res = $serviceRequest->execute();
+        $res = ServiceRequestFactory::getInstance()->get($this->getCellFeedUrl());
         return new CellFeed($res);
     }
 
     /**
-     * Create the header row for this worksheet
-     * 
-     * @param array $headings
-     * 
-     * @return void
-     */
-    public function editCell($row, $col, $value)
-    {
-        $entry = '
-            <entry xmlns="http://www.w3.org/2005/Atom"
-                xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-              <gs:cell row="'.$row.'" col="'.$col.'" inputValue="'.$value.'"/>
-            </entry>
-        ';
-
-        if(is_null($this->editCellPostUrl)) {
-            $this->editCellPostUrl = $this->getCellFeed()->getPostUrl();
-        }
-
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->editCellPostUrl);
-        $serviceRequest->getRequest()->setMethod(Request::POST);
-        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $serviceRequest->getRequest()->setPost($entry);
-        $serviceRequest->execute();
-    }
-
-    /**
-     * Create the header row for this worksheet
-     * 
-     * @param array $headings
-     * 
-     * @return void
-     */
-    public function createHeader(array $headings)
-    {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $row = 1;
-        $col = 1;
-
-        foreach($headings as $heading) {
-
-            $entry = '
-                <entry xmlns="http://www.w3.org/2005/Atom"
-                    xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-                  <gs:cell row="'.$row.'" col="'.$col.'" inputValue="'.$heading.'"/>
-                </entry>
-            ';
-
-            $serviceRequest->getRequest()->setFullUrl($this->getPostUrl());
-            $serviceRequest->getRequest()->setMethod(Request::POST);
-            $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-            $serviceRequest->getRequest()->setPost($entry);
-            $serviceRequest->execute();
-            $col++;
-        }
-    }
-
-    /**
      * Delete this worksheet
-     * 
-     * @return void
+     *
+     * @return null
      */
     public function delete()
     {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getEditUrl());
-        $serviceRequest->getRequest()->setMethod(Request::DELETE);
-        $serviceRequest->execute();
+        ServiceRequestFactory::getInstance()->delete($this->getEditUrl());
     }
 
     public function setPostUrl($url)
     {
         $this->postUrl = $url;
-    }
-
-    public function getPostUrl()
-    {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getCellFeedUrl());
-        $res = $serviceRequest->execute();
-        $xml = new SimpleXMLElement($res);
-        $postUrl = Util::getLinkHref($xml, 'http://schemas.google.com/g/2005#post');
-        return $postUrl;
     }
 
     /**

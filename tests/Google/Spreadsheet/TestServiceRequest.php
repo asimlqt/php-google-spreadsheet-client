@@ -3,18 +3,7 @@ namespace Google\Spreadsheet;
 
 class TestServiceRequest implements ServiceRequestInterface
 {
-    private $request;
     private $retVal;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    public function getRequest()
-    {
-        return $this->request;
-    }
 
     public function setExecuteReturn($retVal)
     {
@@ -28,6 +17,26 @@ class TestServiceRequest implements ServiceRequestInterface
         }
         
         return $this->retVal;
+    }
+
+    public function delete($url)
+    {
+        return $this->execute();
+    }
+
+    public function get($url)
+    {
+        return $this->execute();
+    }
+
+    public function post($url, $postData)
+    {
+        return $this->execute();
+    }
+
+    public function put($url, $postData)
+    {
+        return $this->execute();
     }
 
 }

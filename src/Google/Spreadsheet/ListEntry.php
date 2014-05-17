@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Spreadsheet\Util;
+
 /**
  * List Entry
  *
@@ -30,14 +32,14 @@ class ListEntry
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * The data for this list entry
      * 
      * @var array
      */
-    private $data;
+    protected $data;
 
     /**
      * Constructor
@@ -49,16 +51,6 @@ class ListEntry
     {
         $this->xml = $xml;
         $this->data = $data;
-    }
-
-    /**
-     * Get the list entry xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
-    {
-        return $this->xml;
     }
 
     /**
@@ -80,17 +72,19 @@ class ListEntry
     {        
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
         $entry .= '<id>'.$this->xml->id->__toString().'</id>';
-        foreach($values as $col => $val) {
-            $entry .= '<gsx:'. $col .'>'. $val .'</gsx:'. $col .'>';
+
+        foreach($values as $colName => $value) {
+            $entry .= sprintf(
+                '<gsx:%s>%s</gsx:%s>',
+                $colName,
+                $value,
+                $colName
+            );
         }
+
         $entry .= '</entry>';
 
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setPost($entry);
-        $serviceRequest->getRequest()->setMethod(Request::PUT);
-        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $serviceRequest->getRequest()->setFullUrl($this->getEditUrl());
-        $serviceRequest->execute();
+        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
     }
 
     /**

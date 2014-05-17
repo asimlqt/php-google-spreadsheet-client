@@ -15,7 +15,7 @@ class SpreadsheetServiceTest extends TestBase
 
     public function testGetSpreadsheetById()
     {
-        $this->setServiceRequest('spreadsheet.xml');
+        $this->setServiceRequest('spreadsheet.xml', true);
 
         $spreadsheetService = new SpreadsheetService();
         $spreadsheet = $spreadsheetService->getSpreadsheetById('spreadsheet-id');

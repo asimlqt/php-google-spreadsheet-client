@@ -32,7 +32,7 @@ class CellFeed
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * Constructor
@@ -42,16 +42,6 @@ class CellFeed
     public function __construct($xml)
     {
         $this->xml = new SimpleXMLElement($xml);
-    }
-
-    /**
-     * Get the cell feed xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
-    {
-        return $this->xml;
     }
 
     /**
@@ -69,6 +59,30 @@ class CellFeed
         }
 
         return $entries;
+    }
+
+    /**
+     * Edit a single cell. the row and column indexing start at 1.
+     * So the first column of the first row will be (1,1).
+     * 
+     * @param int    $rowNum
+     * @param int    $colNum
+     * @param string $value
+     * 
+     * @return null
+     */
+    public function editCell($rowNum, $colNum, $value)
+    {
+        $entry = sprintf('
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+              <gs:cell row="%u" col="%u" inputValue="%s"/>
+            </entry>',
+            $rowNum,
+            $colNum,
+            $value
+        );
+
+        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
     }
 
     /**

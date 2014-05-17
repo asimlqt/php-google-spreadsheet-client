@@ -8,8 +8,7 @@ class ServiceRequestFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testGetInstance()
     {
-        $serviceRequest = new TestServiceRequest(new Request('accesstoken'));
-        ServiceRequestFactory::setInstance($serviceRequest);
+        ServiceRequestFactory::setInstance(new TestServiceRequest());
         $this->assertTrue(ServiceRequestFactory::getInstance() instanceof ServiceRequestInterface);
     }
 

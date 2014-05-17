@@ -35,39 +35,26 @@ class Spreadsheet
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * Initializes the spreadsheet object
      * 
-     * @param string|SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      */
-    public function __construct($xml) {
-        if(is_string($xml))
-            $this->xml = new SimpleXMLElement($xml);
-        else
-            $this->xml = $xml;
-    }
-
-    /**
-     * Get the spreadsheet xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
+    public function __construct(SimpleXMLElement $xml)
     {
-        return $this->xml;
+        $this->xml = $xml;
     }
 
     /**
-     * Get the spreadsheet id. Returns the actual id and not the full url
+     * Get the spreadsheet id
      * 
      * @return string
      */
     public function getId()
     {
-        $url = $this->xml->id->__toString();
-        return substr($url, strrpos($url, '/')+1);
+        return $this->xml->id->__toString();
     }
 
     /**
@@ -97,9 +84,7 @@ class Spreadsheet
      */
     public function getWorksheets()
     {
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getWorksheetsFeedUrl());
-        $res = $serviceRequest->execute();
+        $res = ServiceRequestFactory::getInstance()->get($this->getWorksheetsFeedUrl());
         return new WorksheetFeed($res);
     }
 
@@ -107,27 +92,26 @@ class Spreadsheet
      * Add a new worksheet to this spreadsheet
      * 
      * @param string $title
+     * @param int    $rowCount default is 100
+     * @param int    $colCount default is 10
      *
      * @return \Google\Spreadsheet\Worksheet
      */
     public function addWorksheet($title, $rowCount=100, $colCount=10)
     {
-        $entry = '
-            <entry xmlns="http://www.w3.org/2005/Atom"
-            xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-            <title>'. $title .'</title>
-            <gs:rowCount>'. $rowCount .'</gs:rowCount>
-            <gs:colCount>'. $colCount .'</gs:colCount>
-            </entry>
-        ';
+        $entry = sprintf('
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+                <title>%s</title>
+                <gs:rowCount>%u</gs:rowCount>
+                <gs:colCount>%u</gs:colCount>
+            </entry>',
+            $title,
+            $rowCount,
+            $colCount
+        );
 
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setFullUrl($this->getWorksheetsFeedUrl());
-        $serviceRequest->getRequest()->setMethod(Request::POST);
-        $serviceRequest->getRequest()->setPost($entry);
-        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $res = $serviceRequest->execute();
-        return new Worksheet($res);
+        $response = ServiceRequestFactory::getInstance()->post($this->getWorksheetsFeedUrl(), $entry);
+        return new Worksheet(new SimpleXMLElement($response));
     }
 
     /**

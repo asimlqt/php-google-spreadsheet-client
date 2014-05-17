@@ -16,6 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
+use ArrayIterator;
 use SimpleXMLElement;
 
 /**
@@ -25,35 +26,21 @@ use SimpleXMLElement;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class CellEntry extends \ArrayIterator
+class CellEntry extends ArrayIterator
 {
     /**
      * Xml element for a cell entry
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * The url for making a post request
      * 
      * @var string
      */
-    private $postUrl;
-
-    /**
-     * The contents of a cell
-     * 
-     * @var string
-     */
-    private $cellValue = '';
-
-    /**
-     * The cell this entry refers to
-     * 
-     * @var array
-     */
-    private $cell;
+    protected $postUrl;
 
     /**
      * Constructor
@@ -65,16 +52,6 @@ class CellEntry extends \ArrayIterator
     {
         $this->xml = $xml;
         $this->postUrl = $postUrl;
-    }
-
-    /**
-     * Get the cell entry xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
-    {
-        return $this->xml;
     }
 
     /**
@@ -113,55 +90,28 @@ class CellEntry extends \ArrayIterator
     }
 
     /**
-     * Set the contents of the cell
-     * 
-     * @param string $value
-     */
-    public function setContent($value)
-    {
-        if(!is_string($value))
-            throw new Exception('value must be a string');
-
-        $this->cellValue = $value;
-    }
-
-    /**
      * Update the cell value
+     *
+     * @param string $value
      * 
-     * @return void
+     * @return null
      */
-    public function update()
+    public function update($value)
     {
-        $loc = $this->getCell();
-        $serviceRequest = ServiceRequestFactory::getInstance();
+        $location = $this->getCellLocation();
 
-        $entry = '
+        $entry = sprintf('
             <entry xmlns="http://www.w3.org/2005/Atom"
                 xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-              <gs:cell row="'.$loc['row'].'" col="'.$loc['col'].'" inputValue="'.$this->cellValue.'"/>
-            </entry>
-        ';
-
-        $serviceRequest->getRequest()->setFullUrl($this->postUrl);
-        $serviceRequest->getRequest()->setMethod(Request::POST);
-        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $serviceRequest->getRequest()->setPost($entry);
-        $ret = $serviceRequest->execute();
-        $this->xml = new SimpleXMLElement($ret);
-    }
-
-    /**
-     * Set the cell location
-     * 
-     * @param int $row row number
-     * @param int $col column number
-     */
-    public function setCell($row, $col)
-    {
-        $this->cell = array(
-            'row' => $row,
-            'col' => $col,
+              <gs:cell row="%u" col="%u" inputValue="%s"/>
+            </entry>',
+            $location['row'],
+            $location['col'],
+            $value
         );
+
+        $res = ServiceRequestFactory::getInstance()->post($this->postUrl, $entry);
+        $this->xml = new SimpleXMLElement($res);
     }
 
     /**
@@ -169,11 +119,8 @@ class CellEntry extends \ArrayIterator
      * 
      * @return array
      */
-    private function getCell()
+    protected function getCellLocation()
     {
-        if(!is_null($this->cell))
-            return $this->cell;
-
         $id = $this->xml->id->__toString();
         preg_match('@/R(\d)C(\d)@', $id, $matches);
 

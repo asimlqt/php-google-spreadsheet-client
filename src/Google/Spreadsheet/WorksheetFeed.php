@@ -40,7 +40,8 @@ class WorksheetFeed extends ArrayIterator
      * 
      * @param string $xml
      */
-    public function __construct($xml) {
+    public function __construct($xml)
+    {
         $this->xml = new SimpleXMLElement($xml);
 
         $worksheets = array();

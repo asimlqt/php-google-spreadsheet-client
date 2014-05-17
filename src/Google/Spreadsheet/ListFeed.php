@@ -32,28 +32,18 @@ class ListFeed
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * Constructor
      * 
      * @param string $xmlStr
      */
-    public function __construct($xmlStr)
+    public function __construct($xmlString)
     {
-        $xml = new SimpleXMLElement($xmlStr);
+        $xml = new SimpleXMLElement($xmlString);
         $xml->registerXPathNamespace('gsx', 'http://schemas.google.com/spreadsheets/2006/extended');
         $this->xml = $xml;
-    }
-
-    /**
-     * Get the list feed xml
-     * 
-     * @return \SimpleXMLElement
-     */
-    public function getXml()
-    {
-        return $this->xml;
     }
 
     /**
@@ -76,17 +66,17 @@ class ListFeed
     public function insert($row)
     {
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
-        foreach($row as $col => $val) {
-            $entry .= '<gsx:'. $col .'>'. $val .'</gsx:'. $col .'>';
+        foreach($row as $colName => $value) {
+            $entry .= sprintf(
+                '<gsx:%s>%s</gsx:%s>',
+                $colName,
+                $value,
+                $colName
+            );
         }
         $entry .= '</entry>';
 
-        $serviceRequest = ServiceRequestFactory::getInstance();
-        $serviceRequest->getRequest()->setPost($entry);
-        $serviceRequest->getRequest()->setMethod(Request::POST);
-        $serviceRequest->getRequest()->setHeaders(array('Content-Type'=>'application/atom+xml'));
-        $serviceRequest->getRequest()->setFullUrl($this->getPostUrl());
-        $serviceRequest->execute();
+        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
     }
 
     /**
@@ -121,12 +111,10 @@ class ListFeed
      * 
      * @return array
      */
-    private function getColumnNames($xml)
+    protected function getColumnNames($xml)
     {
         $ret = array();
-        $entry = $xml->entry;
-        $cols = $entry->xpath('gsx:*');
-        foreach ($cols as $col) {
+        foreach($xml->entry->xpath('gsx:*') as $col) {
             $ret[] = $col->getName();
         }
         return $ret;

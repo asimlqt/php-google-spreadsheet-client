@@ -33,7 +33,7 @@ class SpreadsheetFeed extends ArrayIterator
      * 
      * @var \SimpleXMLElement
      */
-    private $xml;
+    protected $xml;
 
     /**
      * Initializes the the spreadsheet feed object
@@ -52,12 +52,13 @@ class SpreadsheetFeed extends ArrayIterator
     }
 
     /**
-     * Gets a spreadhseet from the feed by its title. i.e. the name of the spreadsheet
-     * in google drive
+     * Gets a spreadhseet from the feed by its title. i.e. the name of 
+     * the spreadsheet in google drive. This method will return only the
+     * first spreadsheet found with the specified title.
      * 
-     * @param  string $title
+     * @param string $title
      * 
-     * @return \Google\Spreadsheet\Spreadsheet will return null if no spreadhseet found with the specified title
+     * @return \Google\Spreadsheet\Spreadsheet|null
      */
     public function getByTitle($title)
     {

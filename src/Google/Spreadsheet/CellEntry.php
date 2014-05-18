@@ -16,7 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use ArrayIterator;
 use SimpleXMLElement;
 
 /**
@@ -26,7 +25,7 @@ use SimpleXMLElement;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class CellEntry extends ArrayIterator
+class CellEntry
 {
     /**
      * Xml element for a cell entry
@@ -43,6 +42,20 @@ class CellEntry extends ArrayIterator
     protected $postUrl;
 
     /**
+     * The row number of this cell
+     *
+     * @var int
+     */
+    protected $row;
+    
+    /**
+     * The row number of this cell
+     *
+     * @var int
+     */
+    protected $column;
+    
+    /**
      * Constructor
      * 
      * @param \SimpleXMLElement $xml
@@ -52,8 +65,29 @@ class CellEntry extends ArrayIterator
     {
         $this->xml = $xml;
         $this->postUrl = $postUrl;
+        $this->setCellLocation();
     }
 
+    /**
+     * Get the row number fo this cell
+     * 
+     * @return int
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
+    
+    /**
+     * Get the column number fo this cell
+     * 
+     * @return int
+     */
+    public function getColumn()
+    {
+        return $this->column;
+    }
+    
     /**
      * Set the post url
      * 
@@ -83,10 +117,7 @@ class CellEntry extends ArrayIterator
      */
     public function getContent()
     {
-        if(strlen($this->cellValue) == 0 && $this->xml instanceof SimpleXMLElement)
-            $this->cellValue = $this->xml->content->__toString();
-
-        return $this->cellValue;
+        return $this->xml->content->__toString();
     }
 
     /**
@@ -98,15 +129,13 @@ class CellEntry extends ArrayIterator
      */
     public function update($value)
     {
-        $location = $this->getCellLocation();
-
         $entry = sprintf('
             <entry xmlns="http://www.w3.org/2005/Atom"
                 xmlns:gs="http://schemas.google.com/spreadsheets/2006">
               <gs:cell row="%u" col="%u" inputValue="%s"/>
             </entry>',
-            $location['row'],
-            $location['col'],
+            $this->row,
+            $this->column,
             $value
         );
 
@@ -119,18 +148,17 @@ class CellEntry extends ArrayIterator
      * 
      * @return array
      */
-    protected function getCellLocation()
+    protected function setCellLocation()
     {
         $id = $this->xml->id->__toString();
         preg_match('@/R(\d)C(\d)@', $id, $matches);
 
-        if(count($matches) !== 3)
+        if(count($matches) !== 3) {
             throw new Exception('Filed to get the location of the cell');
+        }
 
-        return array(
-            'row' => $matches[1],
-            'col' => $matches[2],
-        );
+        $this->row = (int) $matches[1];
+        $this->column = (int) $matches[2];
     }
 
 }

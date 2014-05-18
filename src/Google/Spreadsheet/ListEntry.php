@@ -88,6 +88,14 @@ class ListEntry
     }
 
     /**
+     * Delete the current entry.
+     */
+    public function delete()
+    {
+        ServiceRequestFactory::getInstance()->delete($this->getEditUrl());
+    }
+    
+    /**
      * Get the edit url
      * 
      * @return string

@@ -161,25 +161,11 @@ $spreadsheetFeed = $spreadsheetService->getSpreadsheets();
 $spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
 $worksheetFeed = $spreadsheet->getWorksheets();
 $worksheet = $worksheetFeed->getByTitle('Sheet 1');
+$cellFeed = $worksheet->getCellFeed();
 
-$worksheet->editCell(1,1, "Row1Col1 Header");
-$worksheet->editCell(1,2, "Row1Col2 Header");
-$worksheet->editCell(1,3, "Row1Col3 Header");
-$worksheet->editCell(1,4, "Row1Col4 Header");
-
-```
-
-You can also do
-```php
-
-$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
-$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
-$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
-$worksheetFeed = $spreadsheet->getWorksheets();
-$worksheet = $worksheetFeed->getByTitle('Sheet 1');
-
-$headerArray = new array("Row1Col1 Header", "Row1Col2 Header", "Row1Col3 Header", "Row1Col4 Header");
-
-$worksheet->createHeader($headerArray);
+$cellFeed->editCell(1,1, "Row1Col1Header");
+$cellFeed->editCell(1,2, "Row1Col2Header");
+$cellFeed->editCell(1,3, "Row1Col3Header");
+$cellFeed->editCell(1,4, "Row1Col4Header");
 
 ```

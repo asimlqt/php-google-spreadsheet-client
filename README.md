@@ -149,7 +149,7 @@ $values['name'] = 'Joe';
 $listEntry->update($values);
 ```
 
-### Adding headers to a new workseet
+### Adding headers to a new worksheet
 
 The Google Spreadsheet API does not allow you to update a list row if headers are not already assigned. So, when you create a new worksheet, before you can add data to a worksheet using the 'Adding/Updating a list row' methods above, you need to add headers.
 

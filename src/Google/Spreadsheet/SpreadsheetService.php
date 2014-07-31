@@ -17,6 +17,7 @@
 namespace Google\Spreadsheet;
 
 use InvalidArgumentException;
+use SimpleXMLElement;
 
 /**
  * Spreadsheet Service.
@@ -50,6 +51,6 @@ class SpreadsheetService
     public function getSpreadsheetById($id)
     {
         $res = ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/'. $id);
-        return new Spreadsheet($res);
+        return new Spreadsheet(new SimpleXMLElement($res));
     }
 }

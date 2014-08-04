@@ -151,7 +151,7 @@ class CellEntry
     protected function setCellLocation()
     {
         $id = $this->xml->id->__toString();
-        preg_match('@/R(\d)C(\d)@', $id, $matches);
+        preg_match('@/R(\d+)C(\d+)@', $id, $matches);
 
         if(count($matches) !== 3) {
             throw new Exception('Filed to get the location of the cell');

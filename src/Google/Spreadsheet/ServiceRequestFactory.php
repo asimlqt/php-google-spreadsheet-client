@@ -17,7 +17,7 @@
 namespace Google\Spreadsheet;
 
 /**
- * Request
+ * ServiceRequestFactory
  *
  * @package    Google
  * @subpackage Spreadsheet
@@ -41,6 +41,8 @@ class ServiceRequestFactory
      * [getInstance description]
      * 
      * @return ServiceRequestInterface
+     * 
+     * @throws \Google\Spreadsheet\Exception
      */
     public static function getInstance()
     {

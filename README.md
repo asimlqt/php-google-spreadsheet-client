@@ -13,6 +13,8 @@ I strongly recommend you read through the [official Google Spreadsheet API docum
 
 ## Installation
 
+The following requires [composer](https://getcomposer.org/)
+
 Create a composer.json file in your project and add the following:
 
 ```json
@@ -28,6 +30,8 @@ Create a composer.json file in your project and add the following:
     }
 }
 ```
+
+Then run "composer install"
 
 ## Bootstrapping
 

@@ -13,33 +13,42 @@ I strongly recommend you read through the [official Google Spreadsheet API docum
 
 ## Installation
 
-The following requires [composer](https://getcomposer.org/)
+Using [composer](https://getcomposer.org/) is the recommended way to install it.
 
-Create a composer.json file in your project and add the following:
+1. Add "asimlqt/php-google-spreadsheet-client" as a dependency in your project's composer.json file.
 
 ```json
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/asimlqt/php-google-spreadsheet-client"
-        }
-    ],
     "require": {
         "asimlqt/php-google-spreadsheet-client": "2.1.*"
     }
 }
 ```
 
-Then run "composer install"
+2. Download and install Composer.
+
+```
+curl -sS https://getcomposer.org/installer | php
+```
+
+3, Install your dependencies.
+
+```
+php composer.phar install
+```
+
+4. Require Composer's autoloader.
+
+```
+require 'vendor/autoload.php';
+```
+
 
 ## Bootstrapping
 
-The first thing you will need to do is include the autoloader and initialize the service request factory:
+The first thing you will need to do is initialize the service request factory:
 
 ```php
-require 'vendor/autoload.php';
-
 use Google\Spreadsheet\DefaultServiceRequest;
 use Google\Spreadsheet\ServiceRequestFactory;
 

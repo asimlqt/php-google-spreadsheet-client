@@ -15,7 +15,7 @@ I strongly recommend you read through the [official Google Spreadsheet API docum
 
 Using [composer](https://getcomposer.org/) is the recommended way to install it.
 
-1. Add "asimlqt/php-google-spreadsheet-client" as a dependency in your project's composer.json file.
+1 - Add "asimlqt/php-google-spreadsheet-client" as a dependency in your project's composer.json file.
 
 ```json
 {
@@ -25,19 +25,19 @@ Using [composer](https://getcomposer.org/) is the recommended way to install it.
 }
 ```
 
-2. Download and install Composer.
+2 - Download and install Composer.
 
 ```
 curl -sS https://getcomposer.org/installer | php
 ```
 
-3, Install your dependencies.
+3 - Install your dependencies.
 
 ```
 php composer.phar install
 ```
 
-4. Require Composer's autoloader.
+4 - Require Composer's autoloader.
 
 ```
 require 'vendor/autoload.php';

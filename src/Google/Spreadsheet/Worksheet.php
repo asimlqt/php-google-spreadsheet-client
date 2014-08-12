@@ -168,4 +168,14 @@ class Worksheet
     {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
     }
+
+    /**
+     * Get the export csv feed url
+     *
+     * @return stirng
+     */
+    public function getExportCsvFeedUrl()
+    {
+        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+    }
 }

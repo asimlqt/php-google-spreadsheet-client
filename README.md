@@ -20,7 +20,7 @@ Using [composer](https://getcomposer.org/) is the recommended way to install it.
 ```json
 {
     "require": {
-        "asimlqt/php-google-spreadsheet-client": "2.1.*"
+        "asimlqt/php-google-spreadsheet-client": "2.2.*"
     }
 }
 ```

@@ -56,6 +56,13 @@ class CellEntry
     protected $column;
     
     /**
+     * The contents of this cell
+     *
+     * @var string
+     */
+    protected $content;
+    
+    /**
      * Constructor
      * 
      * @param \SimpleXMLElement $xml
@@ -66,8 +73,22 @@ class CellEntry
         $this->xml = $xml;
         $this->postUrl = $postUrl;
         $this->setCellLocation();
+        $this->content = $this->xml->content->__toString();
     }
 
+    /**
+     * 
+     * @return string
+     */
+    public function getCellIdString()
+    {
+        return sprintf(
+            "R%sC%s",
+            $this->row,
+            $this->column
+        );
+    }
+        
     /**
      * Get the row number fo this cell
      * 
@@ -117,9 +138,19 @@ class CellEntry
      */
     public function getContent()
     {
-        return $this->xml->content->__toString();
+        return $this->content;
     }
 
+    /**
+     * Set the contents of this cell
+     * 
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+    
     /**
      * Update the cell value
      *
@@ -161,4 +192,14 @@ class CellEntry
         $this->column = (int) $matches[2];
     }
 
+    /**
+     * Get the edit url of the cell
+     * 
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return Util::getLinkHref($this->xml, 'edit');
+    }
+    
 }

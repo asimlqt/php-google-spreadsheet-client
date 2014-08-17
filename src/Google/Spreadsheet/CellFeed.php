@@ -17,6 +17,8 @@
 namespace Google\Spreadsheet;
 
 use SimpleXMLElement;
+use Google\Spreadsheet\Batch\BatchRequest;
+use Google\Spreadsheet\Batch\BatchResponse;
 
 /**
  * Worksheet Data.
@@ -35,6 +37,12 @@ class CellFeed
     protected $xml;
 
     /**
+     *
+     * @var array
+     */
+    protected $entries;
+    
+    /**
      * Constructor
      * 
      * @param string $xml
@@ -42,6 +50,7 @@ class CellFeed
     public function __construct($xml)
     {
         $this->xml = new SimpleXMLElement($xml);
+        $this->entries = array();
     }
 
     /**
@@ -51,16 +60,46 @@ class CellFeed
      */
     public function getEntries()
     {
-        $entries = array();
+        if(count($this->entries) > 0) {
+            return $this->entries;
+        }
+            
         $postUrl = $this->getPostUrl();
 
         foreach ($this->xml->entry as $entry) {
-            $entries[] = new CellEntry($entry, $postUrl);
+            $cell = new CellEntry($entry, $postUrl);
+            $this->entries[$cell->getCellIdString()] = $cell;
         }
 
-        return $entries;
+        return $this->entries;
     }
 
+    /**
+     * 
+     * @param type $row
+     * @param type $col
+     * 
+     * @return CellEntry|null
+     */
+    public function getCell($row, $col)
+    {
+        if(count($this->entries) === 0) {
+            $this->getEntries();
+        }
+        
+        $id = sprintf(
+            "R%sC%s",
+            $row,
+            $col
+        );
+        
+        if(isset($this->entries[$id])) {
+            return $this->entries[$id];
+        }
+        
+        return null;
+    }
+    
     /**
      * Edit a single cell. the row and column indexing start at 1.
      * So the first column of the first row will be (1,1).
@@ -86,6 +125,19 @@ class CellFeed
     }
 
     /**
+     * 
+     * @param \Google\Spreadsheet\Batch\BatchRequest $batchRequest
+     * 
+     * @return \Google\Spreadsheet\Batch\BatchResponse
+     */
+    public function updateBatch(BatchRequest $batchRequest)
+    {
+        $xml = $batchRequest->createRequestXml($this);
+        $response = ServiceRequestFactory::getInstance()->post($this->getBatchUrl(), $xml);
+        return new BatchResponse(new SimpleXMLElement($response));
+    }
+    
+    /**
      * Get the feed post url
      * 
      * @return string
@@ -95,4 +147,13 @@ class CellFeed
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
     }
 
+    /**
+     * 
+     * @return string
+     */
+    public function getBatchUrl()
+    {
+        return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#batch');
+    }
+    
 }

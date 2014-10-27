@@ -96,6 +96,9 @@ class ListFeed
                 $vals = array();
                 foreach($cols as $col) {
                     $vals[] = $col->__toString();
+					if (count($vals)===count($colNames)) {
+						break;
+					}
                 }
                 $rows[] = new ListEntry($entry, array_combine($colNames, $vals));
                 

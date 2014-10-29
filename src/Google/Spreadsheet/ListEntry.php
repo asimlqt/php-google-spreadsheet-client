@@ -75,7 +75,7 @@ class ListEntry
 
         foreach($values as $colName => $value) {
             $entry .= sprintf(
-                '<gsx:%s>%s</gsx:%s>',
+                '<gsx:%s><![CDATA[%s]]></gsx:%s>',
                 $colName,
                 $value,
                 $colName

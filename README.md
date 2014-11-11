@@ -4,7 +4,7 @@ This library provides a simple interface to the Google Spreadsheet API.
 
 There are a couple of important things to note.
 
-* This library requires a valid OAuth access token to work but does not provide any means of generating one. The [Google APIs Client Library for PHP](https://code.google.com/p/google-api-php-client/) has all the functionality required for for generating and refreshing tokens so it would have been a waste of time duplicating the official google library.
+* This library requires a valid OAuth access token to work but does not provide any means of generating one. The [Google APIs Client Library for PHP](https://github.com/google/google-api-php-client) has all the functionality required for for generating and refreshing tokens so it would have been a waste of time duplicating the official google library.
 * You can not create spreadsheets using this (PHP Google Spreadsheet Client) library, as creating spreadsheets is not part of the Spreadsheet API and the functionality already exists in the official Google Client Library.
 
 I strongly recommend you read through the [official Google Spreadsheet API documentation](https://developers.google.com/google-apps/spreadsheets) to get a grasp of the concepts.

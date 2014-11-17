@@ -68,7 +68,7 @@ class ListFeed
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
         foreach($row as $colName => $value) {
             $entry .= sprintf(
-                '<gsx:%s>%s</gsx:%s>',
+                '<gsx:%s><![CDATA[%s]]></gsx:%s>',
                 $colName,
                 $value,
                 $colName

@@ -33,6 +33,13 @@ class DefaultServiceRequest implements ServiceRequestInterface
     protected $accessToken;
 
     /**
+     * Token type (defaults to OAuth for BC)
+     *
+     * @var string
+     */
+    protected $tokenType;
+
+    /**
      * Request headers
      * 
      * @var array
@@ -58,9 +65,10 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * 
      * @param \Google\Spreadsheet\Request $request
      */
-    public function __construct($accessToken)
+    public function __construct($accessToken, $tokenType = 'OAuth')
     {
         $this->accessToken = $accessToken;
+        $this->tokenType = $tokenType;
     }
 
     /**
@@ -201,7 +209,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
                 $headers[] = "$k: $v";
             }
         }
-        $headers[] = "Authorization: OAuth " . $this->accessToken;
+        $headers[] = "Authorization: " . $this->tokenType . " " . $this->accessToken;
         $headers = array_merge($headers, $requestHeaders);
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

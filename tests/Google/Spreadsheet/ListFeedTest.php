@@ -28,7 +28,7 @@ class ListFeedTest extends PHPUnit_Framework_TestCase
             ->method('post')
             ->with(
                 $this->equalTo('https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full'),
-                $this->stringContains('<gsx:occupation>software engineer</gsx:occupation>')
+                $this->stringContains('<gsx:occupation><![CDATA[software engineer]]></gsx:occupation>')
             );
         
         ServiceRequestFactory::setInstance($mockServiceRequest);

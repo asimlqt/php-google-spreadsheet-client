@@ -90,15 +90,21 @@ class ListFeed
 
         if(count($this->xml->entry) > 0) {
             $colNames = $this->getColumnNames($this->xml);
-
+            $colNamesCount = count($colNames);
+            
             foreach ($this->xml->entry as $entry) {
                 $cols = $entry->xpath('gsx:*');
                 $vals = array();
+                
                 foreach($cols as $col) {
                     $vals[] = $col->__toString();
                 }
-                $rows[] = new ListEntry($entry, array_combine($colNames, $vals));
                 
+                if(count($vals) < $colNamesCount) {
+                    $vals = array_pad($vals, $colNamesCount, null);
+                }
+                
+                $rows[] = new ListEntry($entry, array_combine($colNames, $vals));
             }
         }
         return $rows;

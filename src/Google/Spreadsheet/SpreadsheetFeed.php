@@ -70,4 +70,21 @@ class SpreadsheetFeed extends ArrayIterator
         return null;
     }
 
+    /**
+     * Gets a spreadhseet from the feed by its id. i.e. the id of 
+     * the spreadsheet in google drive.
+     * 
+     * @param string $id
+     * 
+     * @return \Google\Spreadsheet\Spreadsheet|null
+     */
+    public function getById($id)
+    {
+        foreach($this->xml->entry as $entry) {
+            if($entry->id->__toString() == $id) {
+                return new Spreadsheet($entry);
+            }
+        }
+        return null;
+    }
 }

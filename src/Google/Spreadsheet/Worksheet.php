@@ -51,6 +51,15 @@ class Worksheet
     }
 
     /**
+     * Returns Worksheet's XML representation as from Google API
+     * @return \SimpleXMLElement
+     */
+    public function getRawXml()
+    {
+        return $xml;
+    }
+
+    /**
      * Get the worksheet id. Returns the full url. 
      * 
      * @return string

@@ -117,10 +117,9 @@ class ListFeed
      * 
      * @return array
      */
-    public function getColumnNames($xml = false)
+    public function getColumnNames(SimpleXMLElement $xml = null)
     {
-        if($xml === false)
-        {
+        if($xml === null) {
             $xml = $this->xml;
         }
 		

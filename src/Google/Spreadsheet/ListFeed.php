@@ -37,7 +37,7 @@ class ListFeed
     /**
      * Constructor
      * 
-     * @param string $xmlStr
+     * @param string $xmlString
      */
     public function __construct($xmlString)
     {
@@ -89,44 +89,18 @@ class ListFeed
         $rows = array();
 
         if(count($this->xml->entry) > 0) {
-            $colNames = $this->getColumnNames($this->xml);
-            $colNamesCount = count($colNames);
             
             foreach ($this->xml->entry as $entry) {
-                $cols = $entry->xpath('gsx:*');
-                $vals = array();
-                
-                foreach($cols as $col) {
-                    $vals[] = $col->__toString();
+                $data = array();
+                foreach($entry->xpath('gsx:*') as $col) {
+                    $data[$col->getName()] = $col->__toString();
                 }
                 
-                if(count($vals) < $colNamesCount) {
-                    $vals = array_pad($vals, $colNamesCount, null);
-                }
-                
-                $rows[] = new ListEntry($entry, array_combine($colNames, $vals));
+                $rows[] = new ListEntry($entry, $data);
             }
         }
+        
         return $rows;
     }
 
-    /**
-     * Get the column names
-     * 
-     * @param \SimpleXMLElement $xml
-     * 
-     * @return array
-     */
-    public function getColumnNames(SimpleXMLElement $xml = null)
-    {
-        if($xml === null) {
-            $xml = $this->xml;
-        }
-		
-        $ret = array();
-        foreach($xml->entry->xpath('gsx:*') as $col) {
-            $ret[] = $col->getName();
-        }
-        return $ret;
-    }
 }

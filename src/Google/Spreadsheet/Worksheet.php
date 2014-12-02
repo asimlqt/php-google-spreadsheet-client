@@ -105,11 +105,18 @@ class Worksheet
     /**
      * Get the list feed of this worksheet
      * 
+     * @param array $query add additional query params to the url to sort/filter the results
+     * 
      * @return \Google\Spreadsheet\List\Feed
      */
-    public function getListFeed()
+    public function getListFeed(array $query = array())
     {
-        $res = ServiceRequestFactory::getInstance()->get($this->getListFeedUrl());
+        $feedUrl = $this->getListFeedUrl();
+        if(count($query) > 0) {
+            $feedUrl .= "?" . http_build_query($query);
+        }
+        
+        $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new ListFeed($res);
     }
 

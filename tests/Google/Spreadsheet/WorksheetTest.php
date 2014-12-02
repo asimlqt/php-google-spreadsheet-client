@@ -31,4 +31,46 @@ class WorksheetTest extends TestBase
         $this->assertEquals('Test', $worksheet->getTitle());
     }
 
+    public function testGetListFeedDefault()
+    {
+        $feedUrl = "https://spreadsheets.google.com/feeds/list/tA3TdJ0RIVEem3xQZhG2Ceg/od8/private/full";
+        
+        $mockServiceRequest = $this->getMockBuilder('Google\Spreadsheet\DefaultServiceRequest')
+                ->setMethods(array("get"))
+                ->disableOriginalConstructor()
+                ->getMock();
+        
+        $mockServiceRequest
+            ->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo($feedUrl))
+            ->willReturn(file_get_contents(__DIR__.'/xml/list-feed.xml'));
+        
+        ServiceRequestFactory::setInstance($mockServiceRequest);
+        
+        $worksheet = new Worksheet(new SimpleXMLElement(file_get_contents(__DIR__.'/xml/worksheet.xml')));
+        $worksheet->getListFeed();
+    }
+    
+    public function testGetListFeedWithQuery()
+    {
+        $feedUrl = "https://spreadsheets.google.com/feeds/list/tA3TdJ0RIVEem3xQZhG2Ceg/od8/private/full?reverse=true&sq=age+%3E+45";
+        
+        $mockServiceRequest = $this->getMockBuilder('Google\Spreadsheet\DefaultServiceRequest')
+                ->setMethods(array("get"))
+                ->disableOriginalConstructor()
+                ->getMock();
+        
+        $mockServiceRequest
+            ->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo($feedUrl))
+            ->willReturn(file_get_contents(__DIR__.'/xml/list-feed.xml'));
+        
+        ServiceRequestFactory::setInstance($mockServiceRequest);
+        
+        $worksheet = new Worksheet(new SimpleXMLElement(file_get_contents(__DIR__.'/xml/worksheet.xml')));
+        $worksheet->getListFeed(array("reverse" => "true", "sq" => "age > 45"));
+    }
+    
 }

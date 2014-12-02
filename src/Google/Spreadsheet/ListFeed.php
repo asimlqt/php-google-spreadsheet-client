@@ -117,8 +117,13 @@ class ListFeed
      * 
      * @return array
      */
-    protected function getColumnNames($xml)
+    public function getColumnNames($xml = false)
     {
+        if($xml === false)
+        {
+            $xml = $this->xml;
+        }
+		
         $ret = array();
         foreach($xml->entry->xpath('gsx:*') as $col) {
             $ret[] = $col->getName();

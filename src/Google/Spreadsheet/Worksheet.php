@@ -125,9 +125,14 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\Cell\Feed
      */
-    public function getCellFeed()
+    public function getCellFeed(array $query = array())
     {
-        $res = ServiceRequestFactory::getInstance()->get($this->getCellFeedUrl());
+        $feedUrl = $this->getCellFeedUrl();
+        if(count($query) > 0) {
+            $feedUrl .= "?" . http_build_query($query);
+        }
+        
+        $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new CellFeed($res);
     }
 

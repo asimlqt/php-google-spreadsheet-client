@@ -136,6 +136,19 @@ class CellFeed
         $response = ServiceRequestFactory::getInstance()->post($this->getBatchUrl(), $xml);
         return new BatchResponse(new SimpleXMLElement($response));
     }
+
+    /**
+     *
+     * @param \Google\Spreadsheet\Batch\BatchRequest $batchRequest
+     *
+     * @return \Google\Spreadsheet\Batch\BatchResponse
+     */
+    public function insertBatch(BatchRequest $batchRequest)
+    {
+        $xml = $batchRequest->createRequestXml($this);
+        $response = ServiceRequestFactory::getInstance()->post($this->getBatchUrl(), $xml, array("If-Match: *"));
+        return new BatchResponse(new SimpleXMLElement($response));
+    }
     
     /**
      * Get the feed post url
@@ -154,6 +167,29 @@ class CellFeed
     public function getBatchUrl()
     {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#batch');
+    }
+
+    /**
+     * Create a entry to insert data
+     *
+     * @param int $row
+     * @param int $col
+     * @param string $content
+     * @return CellEntry
+     */
+    public function createInsertionCell($row, $col, $content) {
+        $xml = new SimpleXMLElement('<entry></entry>');
+        $child = $xml->addChild('content', $content);
+        $child->addAttribute('type', 'text');
+        $child = $xml->addChild('title');
+        $child->addAttribute('type', 'text');
+        $xml->addChild('id', $this->getPostUrl() . '/R' . $row . 'C' . $col);
+        $link = $xml->addChild('link');
+        $link->addAttribute('rel', 'edit');
+        $link->addAttribute('type', 'application/atom+xml');
+        $link->addAttribute('href', $this->getPostUrl() . '/R' . $row . 'C' . $col);
+
+        return new CellEntry($xml, $this->getPostUrl());
     }
     
 }

@@ -236,10 +236,15 @@ class DefaultServiceRequest implements ServiceRequestInterface
         $httpCode = (int)$info['http_code'];
 
         if($httpCode > 299) {
-            if($httpCode === 401) {
-                throw new UnauthorizedException('Access token is invalid', 401);
-            } else {
-                throw new Exception('Error in Google Request', $info['http_code']);
+            switch ($httpCode) {
+                case 401:
+                    throw new UnauthorizedException('Access token is invalid', 401);
+                    break;
+                case 404:
+                    throw new UnauthorizedException('You need permission', 404);
+                    break;
+                default:
+                    throw new Exception('Error in Google Request', $info['http_code']);
             }
         }
 

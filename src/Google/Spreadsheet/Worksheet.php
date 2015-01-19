@@ -61,6 +61,21 @@ class Worksheet
     }
 
     /**
+     * Get the worksheet GID
+     *
+     * @return int
+     */
+    public function getGid()
+    {
+        parse_str(
+            parse_url($this->getExportCsvUrl(), PHP_URL_QUERY),
+            $query
+        );
+
+        return (int) $query['gid'];
+    }
+
+    /**
      * Get the updated date
      * 
      * @return DateTime

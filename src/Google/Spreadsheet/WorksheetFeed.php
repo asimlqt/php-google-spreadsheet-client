@@ -65,12 +65,21 @@ class WorksheetFeed extends ArrayIterator
 
     /**
      * Get the cell feed url
-     * 
-     * @return stirng
+     *
+     * @return string
      */
     public function getCellFeedUrl()
     {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+    }
+
+    /**
+     * Get the export csv url
+     *
+     * @return string
+     */
+    public function getExportCsvUrl() {
+        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
     }
 
     /**

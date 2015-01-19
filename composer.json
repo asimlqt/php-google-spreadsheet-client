@@ -1,9 +1,9 @@
 {
-    "name": "asimlqt/php-google-spreadsheet-client",
+    "name": "lemats/php-google-spreadsheet-client",
     "type": "library",
     "description": "Google Spreadsheet PHP Client",
     "keywords": ["google", "spreadsheet"],
-    "homepage": "https://github.com/asimlqt/php-google-spreadsheet-client",
+    "homepage": "https://github.com/lemats/php-google-spreadsheet-client",
     "license": "Apache-2.0",
     "authors": [
         {

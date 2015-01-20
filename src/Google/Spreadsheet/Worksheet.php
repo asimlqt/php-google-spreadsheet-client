@@ -107,7 +107,7 @@ class Worksheet
      * 
      * @param array $query add additional query params to the url to sort/filter the results
      * 
-     * @return \Google\Spreadsheet\List\Feed
+     * @return \Google\Spreadsheet\ListFeed
      */
     public function getListFeed(array $query = array())
     {
@@ -123,7 +123,7 @@ class Worksheet
     /**
      * Get the cell feed of this worksheet
      * 
-     * @return \Google\Spreadsheet\Cell\Feed
+     * @return \Google\Spreadsheet\CellFeed
      */
     public function getCellFeed(array $query = array())
     {

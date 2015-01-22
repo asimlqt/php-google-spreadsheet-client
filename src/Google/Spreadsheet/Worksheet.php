@@ -137,6 +137,20 @@ class Worksheet
     }
 
     /**
+     * Get csv data of this worksheet
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getCsv()
+    {
+        $url = $this->getExportCsvUrl();
+
+        $res = ServiceRequestFactory::getInstance()->get($url);
+        return $res;
+    }
+
+    /**
      * Delete this worksheet
      *
      * @return null

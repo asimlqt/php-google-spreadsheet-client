@@ -30,7 +30,7 @@ class Worksheet
 {
     /**
      * A worksheet xml object
-     * 
+     *
      * @var \SimpleXMLElement
      */
     private $xml;
@@ -41,7 +41,7 @@ class Worksheet
 
     /**
      * Initializes the worksheet object.
-     * 
+     *
      * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
@@ -51,8 +51,8 @@ class Worksheet
     }
 
     /**
-     * Get the worksheet id. Returns the full url. 
-     * 
+     * Get the worksheet id. Returns the full url.
+     *
      * @return string
      */
     public function getId()
@@ -62,7 +62,7 @@ class Worksheet
 
     /**
      * Get the updated date
-     * 
+     *
      * @return DateTime
      */
     public function getUpdated()
@@ -72,7 +72,7 @@ class Worksheet
 
     /**
      * Get the title of the worksheet
-     * 
+     *
      * @return string
      */
     public function getTitle()
@@ -104,9 +104,9 @@ class Worksheet
 
     /**
      * Get the list feed of this worksheet
-     * 
+     *
      * @param array $query add additional query params to the url to sort/filter the results
-     * 
+     *
      * @return \Google\Spreadsheet\List\Feed
      */
     public function getListFeed(array $query = array())
@@ -115,14 +115,14 @@ class Worksheet
         if(count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
-        
+
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new ListFeed($res);
     }
 
     /**
      * Get the cell feed of this worksheet
-     * 
+     *
      * @return \Google\Spreadsheet\Cell\Feed
      */
     public function getCellFeed(array $query = array())
@@ -131,7 +131,7 @@ class Worksheet
         if(count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
-        
+
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new CellFeed($res);
     }
@@ -153,7 +153,7 @@ class Worksheet
 
     /**
      * Get the edit url of the worksheet
-     * 
+     *
      * @return string
      */
     public function getEditUrl()
@@ -163,7 +163,7 @@ class Worksheet
 
     /**
      * The url which is used to fetch the data of a worksheet as a list
-     * 
+     *
      * @return string
      */
     public function getListFeedUrl()
@@ -173,11 +173,23 @@ class Worksheet
 
     /**
      * Get the cell feed url
-     * 
+     *
      * @return stirng
      */
     public function getCellFeedUrl()
     {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
     }
+
+    /**
+     * Get the export csv url
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getExportCsvUrl()
+    {
+        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+    }
+
 }

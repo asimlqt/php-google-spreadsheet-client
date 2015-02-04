@@ -87,8 +87,8 @@ class Worksheet
      */
     public function getRowCount()
     {
-        $el = current($this->xml->xpath('//gs:rowCount'));
-        return (int) $el->__toString();
+        $result = $this->xml->xpath('gs:rowCount');
+        return (int) $result[0]->__toString();
     }
 
     /**
@@ -98,8 +98,8 @@ class Worksheet
      */
     public function getColCount()
     {
-        $el = current($this->xml->xpath('//gs:colCount'));
-        return (int) $el->__toString();
+        $result = $this->xml->xpath('gs:colCount');
+        return (int) $result[0]->__toString();
     }
 
     /**

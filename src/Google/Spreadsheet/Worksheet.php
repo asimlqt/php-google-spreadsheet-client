@@ -137,6 +137,35 @@ class Worksheet
     }
 
     /**
+     * Update worksheet
+     *
+     * @param string $title will not be updated if null or omitted.
+     * @param int $colCount will not be updated if null or omitted.
+     * @param int $rowCount will not be updated if null or omitted.
+     *
+     * @return void
+     */
+    public function update($title = null, $colCount = null, $rowCount = null){
+
+        $title = $title ? $title : $this->getTitle();
+        $colCount = $colCount ? $colCount : $this->getColCount();
+        $rowCount = $rowCount ? $rowCount : $this->getRowCount();
+
+        $entry = sprintf('
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+                <title type="text">%s</title>
+                <gs:colCount>%s</gs:colCount>
+                <gs:rowCount>%s</gs:rowCount>
+            </entry>',
+            $title,
+            $colCount,
+            $rowCount
+        );
+
+        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
+    }
+
+    /**
      * Delete this worksheet
      *
      * @return null

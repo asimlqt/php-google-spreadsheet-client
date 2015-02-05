@@ -66,7 +66,10 @@ class ListFeed
     public function insert($row)
     {
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
+        $htmlspchrsFlags = defined('ENT_XML1') ? ENT_COMPAT | ENT_XML1 : ENT_COMPAT; // backward compatibility for PHP5.3
         foreach($row as $colName => $value) {
+            $value = htmlspecialchars($value, $htmlspchrsFlags, ini_get("default_charset"), false);
+            $colName = htmlspecialchars($colName, $htmlspchrsFlags, ini_get("default_charset"), false);
             $entry .= sprintf(
                 '<gsx:%s><![CDATA[%s]]></gsx:%s>',
                 $colName,

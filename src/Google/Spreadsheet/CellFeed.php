@@ -112,6 +112,9 @@ class CellFeed
      */
     public function editCell($rowNum, $colNum, $value)
     {
+        $htmlspchrsFlags = defined('ENT_XML1') ? ENT_COMPAT | ENT_XML1 : ENT_COMPAT; // backward compatibility for PHP5.3
+        $value = htmlspecialchars($value, $htmlspchrsFlags, ini_get("default_charset"), false);
+
         $entry = sprintf('
             <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
               <gs:cell row="%u" col="%u" inputValue="%s"/>

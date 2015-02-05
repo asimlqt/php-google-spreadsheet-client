@@ -73,7 +73,10 @@ class ListEntry
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
         $entry .= '<id>'.$this->xml->id->__toString().'</id>';
 
+        $htmlspchrsFlags = defined('ENT_XML1') ? ENT_COMPAT | ENT_XML1 : ENT_COMPAT; // backward compatibility for PHP5.3
         foreach($values as $colName => $value) {
+            $value = htmlspecialchars($value, $htmlspchrsFlags, ini_get("default_charset"), false);
+            $colName = htmlspecialchars($colName, $htmlspchrsFlags, ini_get("default_charset"), false);
             $entry .= sprintf(
                 '<gsx:%s><![CDATA[%s]]></gsx:%s>',
                 $colName,

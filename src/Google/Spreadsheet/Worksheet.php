@@ -30,7 +30,7 @@ class Worksheet
 {
     /**
      * A worksheet xml object
-     * 
+     *
      * @var \SimpleXMLElement
      */
     private $xml;
@@ -41,7 +41,7 @@ class Worksheet
 
     /**
      * Initializes the worksheet object.
-     * 
+     *
      * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
@@ -51,8 +51,8 @@ class Worksheet
     }
 
     /**
-     * Get the worksheet id. Returns the full url. 
-     * 
+     * Get the worksheet id. Returns the full url.
+     *
      * @return string
      */
     public function getId()
@@ -77,7 +77,7 @@ class Worksheet
 
     /**
      * Get the updated date
-     * 
+     *
      * @return DateTime
      */
     public function getUpdated()
@@ -87,7 +87,7 @@ class Worksheet
 
     /**
      * Get the title of the worksheet
-     * 
+     *
      * @return string
      */
     public function getTitle()
@@ -119,7 +119,7 @@ class Worksheet
 
     /**
      * Get the list feed of this worksheet
-     * 
+     *
      * @param array $query add additional query params to the url to sort/filter the results
      * 
      * @return \Google\Spreadsheet\ListFeed
@@ -130,7 +130,7 @@ class Worksheet
         if(count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
-        
+
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new ListFeed($res);
     }
@@ -146,9 +146,21 @@ class Worksheet
         if(count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
-        
+
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
         return new CellFeed($res);
+    }
+
+    /**
+     * Get csv data of this worksheet
+     *
+     * @return string
+     * 
+     * @throws Exception
+     */
+    public function getCsv()
+    {
+        return ServiceRequestFactory::getInstance()->get($this->getExportCsvUrl());
     }
 
     /**
@@ -168,7 +180,7 @@ class Worksheet
 
     /**
      * Get the edit url of the worksheet
-     * 
+     *
      * @return string
      */
     public function getEditUrl()
@@ -178,7 +190,7 @@ class Worksheet
 
     /**
      * The url which is used to fetch the data of a worksheet as a list
-     * 
+     *
      * @return string
      */
     public function getListFeedUrl()

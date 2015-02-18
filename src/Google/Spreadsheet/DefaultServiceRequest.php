@@ -61,6 +61,15 @@ class DefaultServiceRequest implements ServiceRequestInterface
     protected $userAgent = 'PHP Google Spreadsheet Api';
 
     /**
+     * Max retries of redirected request
+     *
+     * @var int
+     */
+    protected $retryRedirectsLimit = 3;
+
+
+
+    /**
      * Initializes the service request object.
      * 
      * @param \Google\Spreadsheet\Request $request
@@ -114,6 +123,28 @@ class DefaultServiceRequest implements ServiceRequestInterface
     public function setUserAgent($userAgent)
     {
         $this->userAgent = $userAgent;
+        return $this;
+    }
+
+    /**
+     * get retryRedirectsLimit
+     *
+     * @return int
+     */
+    public function getRetryRedirectsLimit() {
+        return $this->retryRedirectsLimit;
+    }
+
+    /**
+     * Sometimes Google returns a mysterious 302.
+     * If so, the request will be retried. Use this method to define the maximum number of retries.
+     *
+     * @param int $retryRedirectsLimit
+     *
+     * @return Google\Spreadsheet\DefaultServiceRequest
+     */
+    public function setRetryRedirectsLimit($retryRedirectsLimit) {
+        $this->retryRedirectsLimit = $retryRedirectsLimit;
         return $this;
     }
 
@@ -235,13 +266,23 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     protected function execute($ch)
     {
-        $ret = curl_exec($ch);
+        $retry_count = 0;
+        $response_success = false;
 
-        $info = curl_getinfo($ch);
-        $httpCode = (int)$info['http_code'];
+        while ($retry_count < $this->retryRedirectsLimit && $response_success == false) {
+            $ret = curl_exec($ch);
+            $info = curl_getinfo($ch);
+            $httpCode = (int) $info['http_code'];
 
-        if($httpCode > 299) {
-            if($httpCode === 401) {
+            if ($httpCode > 299) {
+                $retry_count ++;
+            } else {
+                $response_success = true;
+            }
+        }
+
+        if ($httpCode > 299) {
+            if ($httpCode === 401) {
                 throw new UnauthorizedException('Access token is invalid', 401);
             } else {
                 throw new Exception('Error in Google Request', $info['http_code']);

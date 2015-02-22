@@ -48,7 +48,7 @@ class BatchResponse
      */
     public function getXml()
     {
-        return $this->getXml();
+        return $this->xml;
     }
     
     /**

@@ -135,18 +135,13 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * Perform a post request
      *
      * @param string $url
-     * @param mixed $postData
-     * @param array $extraHeaders
+     * @param mixed  $postData
+     * 
      * @return string
      */
-    public function post($url, $postData, $extraHeaders = array())
+    public function post($url, $postData)
     {
-        $headers = array_merge(
-            array('Content-Type: application/atom+xml'),
-            $extraHeaders
-        );
-
-        $ch = $this->initRequest($url, $headers);
+        $ch = $this->initRequest($url, array('Content-Type: application/atom+xml'));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         return $this->execute($ch);

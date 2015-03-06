@@ -189,7 +189,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     {
         $curlParams = array (
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => 0,
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_FAILONERROR => false,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_VERBOSE => false,

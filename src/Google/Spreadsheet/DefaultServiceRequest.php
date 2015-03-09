@@ -140,8 +140,12 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * @return string
      */
     public function post($url, $postData)
-    {
-        $ch = $this->initRequest($url, array('Content-Type: application/atom+xml'));
+    {   
+        $headers = array(
+            'Content-Type: application/atom+xml',
+            'Content-Length: ' . strlen($postData),
+        );
+        $ch = $this->initRequest($url, $headers);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         return $this->execute($ch);
@@ -157,7 +161,11 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     public function put($url, $postData)
     {
-        $ch = $this->initRequest($url, array('Content-Type: application/atom+xml'));
+        $headers = array(
+            'Content-Type: application/atom+xml',
+            'Content-Length: ' . strlen($postData),
+        );
+        $ch = $this->initRequest($url, $headers);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         return $this->execute($ch);

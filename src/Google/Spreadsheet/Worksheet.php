@@ -37,8 +37,6 @@ class Worksheet
 
     private $postUrl;
 
-    private $editCellPostUrl;
-
     /**
      * Initializes the worksheet object.
      *
@@ -60,6 +58,20 @@ class Worksheet
         return $this->xml->id->__toString();
     }
 
+    /**
+     * Get the worksheet id. Extracts the actual string id of the worksheet
+     * as opposed to the full url as in getId().
+     *
+     * @return string
+     */
+    public function getWorksheetId()
+    {
+        $parts = explode("/", $this->xml->id->__toString());
+        if(count($parts) === 9) {
+            return $parts[5];
+        }
+    }
+    
     /**
      * Get the worksheet GID
      *

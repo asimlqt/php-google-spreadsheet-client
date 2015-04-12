@@ -55,4 +55,36 @@ class SpreadsheetService
             )
         );
     }
+    
+    /**
+     * Returns a list feed of the specified worksheet.
+     * 
+     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
+     * 
+     * @param string $worksheetId
+     * 
+     * @return \Google\Spreadsheet\ListFeed
+     */
+    public function getListFeed($worksheetId)
+    {
+        return new ListFeed(
+            ServiceRequestFactory::getInstance()->get("feeds/list/{$worksheetId}/od6/private/full")
+        );
+    }
+    
+    /**
+     * Returns a cell feed of the specified worksheet.
+     * 
+     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
+     * 
+     * @param string $worksheetId
+     * 
+     * @return \Google\Spreadsheet\CellFeed
+     */
+    public function getCellFeed($worksheetId)
+    {
+        return new CellFeed(
+            ServiceRequestFactory::getInstance()->get("feeds/cells/{$worksheetId}/od6/private/full")
+        );
+    }
 }

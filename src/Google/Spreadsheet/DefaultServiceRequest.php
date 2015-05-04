@@ -230,7 +230,9 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     protected function execute($ch)
     {
-        $ret = curl_exec($ch);
+        if (false == ($ret = curl_exec($ch))) {
+            throw new \RuntimeException(sprintf('Error on curl_exec: %s', curl_error($ch)));
+        }
 
         $info = curl_getinfo($ch);
         $httpCode = (int)$info['http_code'];

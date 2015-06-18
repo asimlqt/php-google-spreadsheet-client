@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Exception\FactoryException;
+
 /**
  * ServiceRequestFactory
  *
@@ -28,27 +30,28 @@ class ServiceRequestFactory
     private static $instance;
 
     /**
+     * [getInstance description]
+     *
+     * @return ServiceRequestInterface
+     *
+     * @throws FactoryException
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            throw new FactoryException('Stored instance is null/');
+        }
+
+        return self::$instance;
+    }
+
+    /**
      * [setInstance description]
-     * 
+     *
      * @param ServiceRequestInterface $instance
      */
     public static function setInstance(ServiceRequestInterface $instance = null)
     {
         self::$instance = $instance;
-    }
-
-    /**
-     * [getInstance description]
-     * 
-     * @return ServiceRequestInterface
-     * 
-     * @throws \Google\Spreadsheet\Exception
-     */
-    public static function getInstance()
-    {
-        if(is_null(self::$instance)) {
-            throw new Exception();
-        }
-        return self::$instance;
     }
 }

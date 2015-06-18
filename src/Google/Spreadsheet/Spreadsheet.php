@@ -16,8 +16,10 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
 use DateTime;
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
+use SimpleXMLElement;
 
 /**
  * Spreadsheet. Represents a single spreadsheet.
@@ -32,14 +34,14 @@ class Spreadsheet
 
     /**
      * The spreadsheet xml object
-     * 
+     *
      * @var \SimpleXMLElement
      */
     protected $xml;
 
     /**
      * Initializes the spreadsheet object
-     * 
+     *
      * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
@@ -49,7 +51,7 @@ class Spreadsheet
 
     /**
      * Get the spreadsheet id
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -59,7 +61,7 @@ class Spreadsheet
 
     /**
      * Get the updated date
-     * 
+     *
      * @return DateTime
      */
     public function getUpdated()
@@ -69,7 +71,7 @@ class Spreadsheet
 
     /**
      * Returns the title (name) of the spreadsheet
-     * 
+     *
      * @return string
      */
     public function getTitle()
@@ -79,25 +81,28 @@ class Spreadsheet
 
     /**
      * Get all the worksheets which belong to this spreadsheet
-     * 
+     *
      * @return \Google\Spreadsheet\WorksheetFeed
      */
     public function getWorksheets()
     {
         $res = ServiceRequestFactory::getInstance()->get($this->getWorksheetsFeedUrl());
+
         return new WorksheetFeed($res);
     }
 
     /**
      * Add a new worksheet to this spreadsheet
-     * 
+     *
      * @param string $title
      * @param int    $rowCount default is 100
      * @param int    $colCount default is 10
      *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\Worksheet
      */
-    public function addWorksheet($title, $rowCount=100, $colCount=10)
+    public function addWorksheet($title, $rowCount = 100, $colCount = 10)
     {
         $entry = sprintf('
             <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
@@ -110,18 +115,31 @@ class Spreadsheet
             $colCount
         );
 
-        $response = ServiceRequestFactory::getInstance()->post($this->getWorksheetsFeedUrl(), $entry);
+        try {
+            $response = ServiceRequestFactory::getInstance()->post($this->getWorksheetsFeedUrl(), $entry);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
+
         return new Worksheet(new SimpleXMLElement($response));
     }
 
     /**
      * Returns the feed url of the spreadsheet
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getWorksheetsFeedUrl()
     {
-        return Util::getLinkHref($this->xml, self::REL_WORKSHEETS_FEED);
+        try {
+            return Util::getLinkHref($this->xml, self::REL_WORKSHEETS_FEED);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
 }

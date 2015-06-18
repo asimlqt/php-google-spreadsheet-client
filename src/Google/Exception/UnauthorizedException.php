@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Spreadsheet;
+namespace Google\Exception;
 
 /**
  * Exception
  *
  * @package    Google
- * @subpackage Spreadsheet
+ * @subpackage Exception
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class UnauthorizedException extends Exception
+class UnauthorizedException extends GoogleException
 {
 }

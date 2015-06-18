@@ -16,8 +16,10 @@
  */
 namespace Google\Spreadsheet\Batch;
 
-use Google\Spreadsheet\CellFeed;
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
 use Google\Spreadsheet\CellEntry;
+use Google\Spreadsheet\CellFeed;
 
 
 /**
@@ -34,77 +36,86 @@ class BatchRequest
      * @var CellEntry[]
      */
     protected $entries;
-    
-    
+
+
     public function __construct()
     {
         $this->entries = array();
     }
-    
+
     /**
-     * 
+     *
      * @param \Google\Spreadsheet\CellEntry $cellEntry
      */
     public function addEntry(CellEntry $cellEntry)
     {
         $this->entries[] = $cellEntry;
     }
-    
+
     /**
-     * 
+     *
      * @param \Google\Spreadsheet\CellFeed $cellFeed
-     * 
+     *
      * @return string|null
      */
     public function createRequestXml(CellFeed $cellFeed)
     {
-        if(count($this->entries) === 0) {
+        if (count($this->entries) === 0) {
             return null;
         }
-        
+
         $xml = '<?xml version="1.0" encoding="UTF-8" ?>
             <feed xmlns="http://www.w3.org/2005/Atom"
             xmlns:batch="http://schemas.google.com/gdata/batch"
             xmlns:gs="http://schemas.google.com/spreadsheets/2006">';
-        
-        $xml .= '<id>'. $cellFeed->getPostUrl() .'/batch</id>';
-        
+
+        $xml .= '<id>' . $cellFeed->getPostUrl() . '/batch</id>';
+
         $i = 1;
-        foreach($this->entries as $cellEntry) {
+        foreach ($this->entries as $cellEntry) {
             $xml .= $this->createEntry($cellEntry, $i++, $cellFeed);
         }
-        
+
         $xml .= '</feed>';
-        
+
         return $xml;
     }
 
     /**
-     * 
+     *
      * @param \Google\Spreadsheet\CellEntry $cellEntry
      * @param string                        $index
      * @param \Google\Spreadsheet\CellFeed  $cellFeed
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     protected function createEntry(CellEntry $cellEntry, $index, CellFeed $cellFeed)
     {
-        return sprintf(
-            '<entry>
-                <batch:id>%s</batch:id>
-                <batch:operation type="update"/>
-                <id>%s</id>
-                <link rel="edit" type="application/atom+xml"
-                  href="%s"/>
-                <gs:cell row="%s" col="%s" inputValue="%s"/>
-            </entry>',
-            'A'.$index,
-            $cellFeed->getPostUrl() . "/" . $cellEntry->getCellIdString(),
-            $cellEntry->getEditUrl(),
-            $cellEntry->getRow(),
-            $cellEntry->getColumn(),
-            $cellEntry->getContent()
-        );
+        try {
+            return sprintf(
+                '<entry>
+					<batch:id>%s</batch:id>
+					<batch:operation type="update"/>
+					<id>%s</id>
+					<link rel="edit" type="application/atom+xml"
+					  href="%s"/>
+					<gs:cell row="%s" col="%s" inputValue="%s"/>
+				</entry>',
+                'A' . $index,
+                $cellFeed->getPostUrl() . "/" . $cellEntry->getCellIdString(),
+                $cellEntry->getEditUrl(),
+                $cellEntry->getRow(),
+                $cellEntry->getColumn(),
+                $cellEntry->getContent()
+            );
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException(sprintf('Error occurred while creating entry for index "%s"', $index),
+                0,
+                $exception);
+        }
     }
-    
+
 }

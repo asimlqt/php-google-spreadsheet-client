@@ -16,8 +16,10 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
 use DateTime;
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
+use SimpleXMLElement;
 
 /**
  * Worksheet.
@@ -67,11 +69,11 @@ class Worksheet
     public function getWorksheetId()
     {
         $parts = explode("/", $this->xml->id->__toString());
-        if(count($parts) === 9) {
+        if (count($parts) === 9) {
             return $parts[5];
         }
     }
-    
+
     /**
      * Get the worksheet GID
      *
@@ -115,6 +117,7 @@ class Worksheet
     public function getRowCount()
     {
         $result = $this->xml->xpath('gs:rowCount');
+
         return (int) $result[0]->__toString();
     }
 
@@ -126,6 +129,7 @@ class Worksheet
     public function getColCount()
     {
         $result = $this->xml->xpath('gs:colCount');
+
         return (int) $result[0]->__toString();
     }
 
@@ -133,33 +137,49 @@ class Worksheet
      * Get the list feed of this worksheet
      *
      * @param array $query add additional query params to the url to sort/filter the results
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\ListFeed
      */
     public function getListFeed(array $query = array())
     {
         $feedUrl = $this->getListFeedUrl();
-        if(count($query) > 0) {
+        if (count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
 
-        $res = ServiceRequestFactory::getInstance()->get($feedUrl);
+        try {
+            $res = ServiceRequestFactory::getInstance()->get($feedUrl);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
+
         return new ListFeed($res);
     }
 
     /**
      * Get the cell feed of this worksheet
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\CellFeed
      */
     public function getCellFeed(array $query = array())
     {
         $feedUrl = $this->getCellFeedUrl();
-        if(count($query) > 0) {
+        if (count($query) > 0) {
             $feedUrl .= "?" . http_build_query($query);
         }
 
-        $res = ServiceRequestFactory::getInstance()->get($feedUrl);
+        try {
+            $res = ServiceRequestFactory::getInstance()->get($feedUrl);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
+
         return new CellFeed($res);
     }
 
@@ -167,26 +187,33 @@ class Worksheet
      * Get csv data of this worksheet
      *
      * @return string
-     * 
-     * @throws Exception
+     *
+     * @throws SpreadsheetException
      */
     public function getCsv()
     {
-        return ServiceRequestFactory::getInstance()->get($this->getExportCsvUrl());
+        try {
+            return ServiceRequestFactory::getInstance()->get($this->getExportCsvUrl());
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 
-    /*
+    /**
      * Update worksheet
      *
-     * @param string $title will not be updated if null or omitted.
-     * @param int $colCount will not be updated if null or omitted.
-     * @param int $rowCount will not be updated if null or omitted.
+     * @param string $title    will not be updated if null or omitted.
+     * @param int    $colCount will not be updated if null or omitted.
+     * @paramthrows Spre int $rowCount will not be updated if null or omitted.
+     *
+     * @throws SpreadsheetException
      *
      * @return void
      */
     public function update($title = null, $colCount = null, $rowCount = null)
     {
-        $title = $title ? $title : $this->getTitle();
+        $title    = $title ? $title : $this->getTitle();
         $colCount = $colCount ? $colCount : $this->getColCount();
         $rowCount = $rowCount ? $rowCount : $this->getRowCount();
 
@@ -201,17 +228,29 @@ class Worksheet
             $rowCount
         );
 
-        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
+        try {
+            ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 
     /**
      * Delete this worksheet
      *
+     * @throws SpreadsheetException
+     *
      * @return null
      */
     public function delete()
     {
-        ServiceRequestFactory::getInstance()->delete($this->getEditUrl());
+        try {
+            ServiceRequestFactory::getInstance()->delete($this->getEditUrl());
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 
     public function setPostUrl($url)
@@ -222,42 +261,69 @@ class Worksheet
     /**
      * Get the edit url of the worksheet
      *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getEditUrl()
     {
-        return Util::getLinkHref($this->xml, 'edit');
+        try {
+            return Util::getLinkHref($this->xml, 'edit');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * The url which is used to fetch the data of a worksheet as a list
      *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getListFeedUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#listfeed');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * Get the cell feed url
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getCellFeedUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * Get the export csv url
      *
+     * @throws SpreadsheetException
+     *
      * @return string
-     * @throws Exception
      */
     public function getExportCsvUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
 }

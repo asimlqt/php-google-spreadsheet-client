@@ -44,7 +44,7 @@ class WorksheetTest extends TestBase
             ->expects($this->once())
             ->method('get')
             ->with($this->equalTo($feedUrl))
-            ->willReturn(file_get_contents(__DIR__.'/xml/list-feed.xml'));
+            ->will(self::returnValue(file_get_contents(__DIR__.'/xml/list-feed.xml')));
         
         ServiceRequestFactory::setInstance($mockServiceRequest);
         
@@ -65,7 +65,7 @@ class WorksheetTest extends TestBase
             ->expects($this->once())
             ->method('get')
             ->with($this->equalTo($feedUrl))
-            ->willReturn(file_get_contents(__DIR__.'/xml/list-feed.xml'));
+			->will(self::returnValue(file_get_contents(__DIR__.'/xml/list-feed.xml')));
         
         ServiceRequestFactory::setInstance($mockServiceRequest);
         

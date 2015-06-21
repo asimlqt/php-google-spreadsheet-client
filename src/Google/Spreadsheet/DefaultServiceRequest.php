@@ -63,11 +63,17 @@ class DefaultServiceRequest implements ServiceRequestInterface
     /**
      * Initializes the service request object.
      * 
+     * @link https://developers.google.com/gmail/markup/actions/verifying-bearer-tokens  Bearer Token
+     * 
+     * @param string $accessToken   Result from ```$client->getAccessToken();```
+     * @param string $tokenType     A Bearer Token is set in the Authorization header of every Inline Action HTTP Request.
+     * 
      * @param \Google\Spreadsheet\Request $request
      */
-    public function __construct($accessToken, $tokenType = 'OAuth')
+    public function __construct($accessToken, $tokenType = 'Bearer')
     {
-        $this->accessToken = $accessToken;
+        $accessToken = json_decode($accessToken);
+        $this->accessToken = $accessToken->access_token;
         $this->tokenType = $tokenType;
     }
 
@@ -217,7 +223,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
                 $headers[] = "$k: $v";
             }
         }
-        $headers[] = "Authorization: " . $this->tokenType . " " . $this->accessToken;
+        $headers[] = 'Authorization: ' . $this->tokenType . ' ' . $this->accessToken;
         $headers = array_merge($headers, $requestHeaders);
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

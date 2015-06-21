@@ -63,7 +63,8 @@ class DefaultServiceRequest implements ServiceRequestInterface
     /**
      * Initializes the service request object.
      * 
-     * @param \Google\Spreadsheet\Request $request
+     * @param string $accessToken
+     * @param string $tokenType
      */
     public function __construct($accessToken, $tokenType = 'OAuth')
     {

@@ -42,7 +42,7 @@ class ServiceRequestFactory
      * 
      * @return ServiceRequestInterface
      * 
-     * @throws \Google\Spreadsheet\Exception
+     * @throws Exception
      */
     public static function getInstance()
     {

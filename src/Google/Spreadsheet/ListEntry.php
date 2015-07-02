@@ -16,7 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
-use Google\Spreadsheet\Util;
+use SimpleXMLElement;
 
 /**
  * List Entry
@@ -30,7 +30,7 @@ class ListEntry
     /**
      * The xml representation of this list entry
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -44,7 +44,7 @@ class ListEntry
     /**
      * Constructor
      * 
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement  $xml
      * @param array             $data
      */
     public function __construct($xml, $data)

@@ -31,7 +31,7 @@ class SpreadsheetFeed extends ArrayIterator
     /**
      * The spreadsheet feed xml object
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -52,17 +52,19 @@ class SpreadsheetFeed extends ArrayIterator
     }
 
     /**
-     * Gets a spreadhseet from the feed by its title. i.e. the name of 
+     * Gets a spreadsheet from the feed by its title. i.e. the name of
      * the spreadsheet in google drive. This method will return only the
      * first spreadsheet found with the specified title.
      * 
      * @param string $title
      * 
-     * @return \Google\Spreadsheet\Spreadsheet|null
+     * @return Spreadsheet|null
      */
     public function getByTitle($title)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         foreach($this->xml->entry as $entry) {
+            /** @noinspection PhpUndefinedFieldInspection */
             if($entry->title->__toString() == $title) {
                 return new Spreadsheet($entry);
             }

@@ -33,7 +33,7 @@ class Spreadsheet
     /**
      * The spreadsheet xml object
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -54,6 +54,7 @@ class Spreadsheet
      */
     public function getId()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->xml->id->__toString();
     }
 
@@ -64,6 +65,7 @@ class Spreadsheet
      */
     public function getUpdated()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return new DateTime($this->xml->updated->__toString());
     }
 
@@ -74,13 +76,14 @@ class Spreadsheet
      */
     public function getTitle()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->xml->title->__toString();
     }
 
     /**
      * Get all the worksheets which belong to this spreadsheet
      * 
-     * @return \Google\Spreadsheet\WorksheetFeed
+     * @return WorksheetFeed
      */
     public function getWorksheets()
     {
@@ -95,7 +98,7 @@ class Spreadsheet
      * @param int    $rowCount default is 100
      * @param int    $colCount default is 10
      *
-     * @return \Google\Spreadsheet\Worksheet
+     * @return Worksheet
      */
     public function addWorksheet($title, $rowCount=100, $colCount=10)
     {

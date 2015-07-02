@@ -30,7 +30,7 @@ class ListFeed
     /**
      * Xml representation of this feed
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -82,7 +82,7 @@ class ListFeed
     /**
      * Get the entries of this feed
      * 
-     * @return array \Google\Spreadsheet\ListEntry
+     * @return array ListEntry
      */
     public function getEntries()
     {

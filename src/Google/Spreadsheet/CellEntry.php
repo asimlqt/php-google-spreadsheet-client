@@ -30,7 +30,7 @@ class CellEntry
     /**
      * Xml element for a cell entry
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -65,7 +65,7 @@ class CellEntry
     /**
      * Constructor
      * 
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement  $xml
      * @param string            $postUrl
      */
     public function __construct($xml, $postUrl)
@@ -73,6 +73,7 @@ class CellEntry
         $this->xml = $xml;
         $this->postUrl = $postUrl;
         $this->setCellLocation();
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->content = $this->xml->content->__toString();
     }
 
@@ -128,6 +129,7 @@ class CellEntry
      */
     public function getTitle()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->xml->title->__toString();
     }
 
@@ -176,11 +178,12 @@ class CellEntry
 
     /**
      * Get the location of the cell.
-     * 
-     * @return array
+     *
+     * @throws Exception
      */
     protected function setCellLocation()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $id = $this->xml->id->__toString();
         preg_match('@/R(\d+)C(\d+)@', $id, $matches);
 

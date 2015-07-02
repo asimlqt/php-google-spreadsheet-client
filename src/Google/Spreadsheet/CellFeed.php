@@ -32,7 +32,7 @@ class CellFeed
     /**
      * The xml representation of the feed
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     protected $xml;
 
@@ -56,7 +56,7 @@ class CellFeed
     /**
      * Get the feed entries
      * 
-     * @return array \Google\Spreadsheet\CellEntry
+     * @return CellEntry[]
      */
     public function getEntries()
     {
@@ -66,6 +66,7 @@ class CellFeed
             
         $postUrl = $this->getPostUrl();
 
+        /** @noinspection PhpUndefinedFieldInspection */
         foreach ($this->xml->entry as $entry) {
             $cell = new CellEntry($entry, $postUrl);
             $this->entries[$cell->getCellIdString()] = $cell;
@@ -76,8 +77,8 @@ class CellFeed
 
     /**
      * 
-     * @param type $row
-     * @param type $col
+     * @param int $row
+     * @param int $col
      * 
      * @return CellEntry|null
      */
@@ -126,9 +127,9 @@ class CellFeed
 
     /**
      * 
-     * @param \Google\Spreadsheet\Batch\BatchRequest $batchRequest
+     * @param BatchRequest $batchRequest
      * 
-     * @return \Google\Spreadsheet\Batch\BatchResponse
+     * @return BatchResponse
      */
     public function updateBatch(BatchRequest $batchRequest)
     {
@@ -139,9 +140,9 @@ class CellFeed
 
     /**
      *
-     * @param \Google\Spreadsheet\Batch\BatchRequest $batchRequest
+     * @param BatchRequest $batchRequest
      *
-     * @return \Google\Spreadsheet\Batch\BatchResponse
+     * @return BatchResponse
      */
     public function insertBatch(BatchRequest $batchRequest)
     {

@@ -25,8 +25,50 @@ namespace Google\Spreadsheet;
  */
 interface ServiceRequestInterface
 {
+    /**
+     * Perform a get request
+     *
+     * @param string $url
+     *
+     * @return string
+     */
     public function get($url);
+
+    /**
+     * Perform a post request
+     *
+     * @param string $url
+     * @param mixed  $postData
+     *
+     * @return string
+     */
     public function post($url, $postData);
+
+    /**
+     * Perform a put request
+     *
+     * @param string $url
+     * @param mixed  $postData
+     *
+     * @return string
+     */
     public function put($url, $postData);
+
+    /**
+     * Perform a delete request
+     *
+     * @param string $url
+     *
+     * @return string
+     */
     public function delete($url);
+
+    /**
+     * Set optional request headers.
+     *
+     * @param array $headers associative array of key value pairs
+     *
+     * @return DefaultServiceRequest
+     */
+    public function setHeaders(array $headers);
 }

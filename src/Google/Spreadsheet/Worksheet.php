@@ -31,7 +31,7 @@ class Worksheet
     /**
      * A worksheet xml object
      *
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     private $xml;
 
@@ -55,6 +55,7 @@ class Worksheet
      */
     public function getId()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->xml->id->__toString();
     }
 
@@ -66,10 +67,13 @@ class Worksheet
      */
     public function getWorksheetId()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $parts = explode("/", $this->xml->id->__toString());
         if(count($parts) === 9) {
             return $parts[5];
         }
+
+        return null;
     }
     
     /**
@@ -94,6 +98,7 @@ class Worksheet
      */
     public function getUpdated()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return new DateTime($this->xml->updated->__toString());
     }
 
@@ -104,6 +109,7 @@ class Worksheet
      */
     public function getTitle()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->xml->title->__toString();
     }
 
@@ -134,7 +140,7 @@ class Worksheet
      *
      * @param array $query add additional query params to the url to sort/filter the results
      * 
-     * @return \Google\Spreadsheet\ListFeed
+     * @return ListFeed
      */
     public function getListFeed(array $query = array())
     {
@@ -149,8 +155,9 @@ class Worksheet
 
     /**
      * Get the cell feed of this worksheet
-     * 
-     * @return \Google\Spreadsheet\CellFeed
+     *
+     * @param   array   $query
+     * @return  CellFeed
      */
     public function getCellFeed(array $query = array())
     {

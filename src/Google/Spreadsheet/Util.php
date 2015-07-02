@@ -41,15 +41,17 @@ class Util
 
     /**
      * Extracts the href for a specific rel from an xml object.
-     * 
-     * @param  \SimpleXMLElement $xml
-     * @param  string            $rel the value of the rel attribute whose href you want
-     * 
+     *
+     * @param  SimpleXMLElement $xml
+     * @param  string $rel the value of the rel attribute whose href you want
      * @return string
+     * @throws Exception
      */
     public static function getLinkHref(SimpleXMLElement $xml, $rel)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         foreach($xml->link as $link) {
+            /** @var SimpleXMLElement[] $attributes */
             $attributes = $link->attributes();
             if($attributes['rel']->__toString() === $rel) {
                 return $attributes['href']->__toString();

@@ -26,9 +26,9 @@ namespace Google\Spreadsheet;
 class DefaultServiceRequest implements ServiceRequestInterface
 {
     /**
-     * Request object
+     * Access token
      * 
-     * @var \Google\Spreadsheet\Request
+     * @var string
      */
     protected $accessToken;
 
@@ -83,11 +83,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
     
     /**
-     * Set optional request headers. 
-     * 
-     * @param array $headers associative array of key value pairs
-     *
-     * @return Google\Spreadsheet\DefaultServiceRequest
+     * {@inheritdoc}
      */
     public function setHeaders(array $headers)
     {
@@ -110,7 +106,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * 
      * @param string $userAgent
      *
-     * @return Google\Spreadsheet\DefaultServiceRequest
+     * @return DefaultServiceRequest
      */
     public function setUserAgent($userAgent)
     {
@@ -119,11 +115,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
-     * Perform a get request
-     * 
-     * @param string $url
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function get($url)
     {
@@ -133,12 +125,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
-     * Perform a post request
-     *
-     * @param string $url
-     * @param mixed  $postData
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function post($url, $postData)
     {   
@@ -153,12 +140,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
-     * Perform a put request
-     * 
-     * @param string $url
-     * @param mixed  $postData
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function put($url, $postData)
     {
@@ -173,11 +155,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
-     * Perform a delete request
-     * 
-     * @param string $url
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function delete($url)
     {
@@ -228,14 +206,15 @@ class DefaultServiceRequest implements ServiceRequestInterface
 
     /**
      * Executes the api request.
-     * 
+     *
+     * @param  resource $ch
      * @return string the xml response
      *
-     * @throws \Google\Spreadsheet\Exception If the was a problem with the request.
-     *                                       Will throw an exception if the response
-     *                                       code is 300 or greater
-     *                                       
-     * @throws \Google\Spreadsheet\UnauthorizedException
+     * @throws Exception If the was a problem with the request.
+     *                   Will throw an exception if the response
+     *                   code is 300 or greater
+     *
+     * @throws UnauthorizedException
      */
     protected function execute($ch)
     {

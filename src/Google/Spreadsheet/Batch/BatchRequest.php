@@ -43,7 +43,7 @@ class BatchRequest
     
     /**
      * 
-     * @param \Google\Spreadsheet\CellEntry $cellEntry
+     * @param CellEntry $cellEntry
      */
     public function addEntry(CellEntry $cellEntry)
     {
@@ -52,7 +52,7 @@ class BatchRequest
     
     /**
      * 
-     * @param \Google\Spreadsheet\CellFeed $cellFeed
+     * @param CellFeed $cellFeed
      * 
      * @return string|null
      */
@@ -81,9 +81,9 @@ class BatchRequest
 
     /**
      * 
-     * @param \Google\Spreadsheet\CellEntry $cellEntry
-     * @param string                        $index
-     * @param \Google\Spreadsheet\CellFeed  $cellFeed
+     * @param CellEntry $cellEntry
+     * @param string    $index
+     * @param CellFeed  $cellFeed
      * 
      * @return string
      */

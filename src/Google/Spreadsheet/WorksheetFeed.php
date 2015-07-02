@@ -31,7 +31,7 @@ class WorksheetFeed extends ArrayIterator
     /**
      * Worksheet feed xml object
      * 
-     * @var \SimpleXMLElement
+     * @var SimpleXMLElement
      */
     private $xml;
 
@@ -45,6 +45,7 @@ class WorksheetFeed extends ArrayIterator
         $this->xml = new SimpleXMLElement($xml);
 
         $worksheets = array();
+        /** @noinspection PhpUndefinedFieldInspection */
         foreach ($this->xml->entry as $entry) {
             $worksheet = new Worksheet($entry);
             $worksheet->setPostUrl($this->getPostUrl());
@@ -87,11 +88,13 @@ class WorksheetFeed extends ArrayIterator
      * 
      * @param string $title name of the worksheet
      * 
-     * @return \Google\Spreadsheet\Worksheet
+     * @return Worksheet
      */
     public function getByTitle($title)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         foreach ($this->xml->entry as $entry) {
+            /** @noinspection PhpUndefinedFieldInspection */
             if ($entry->title->__toString() == $title) {
                 $worksheet = new Worksheet($entry);
                 $worksheet->setPostUrl($this->getPostUrl());

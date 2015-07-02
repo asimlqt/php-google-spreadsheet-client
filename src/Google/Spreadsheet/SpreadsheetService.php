@@ -28,9 +28,9 @@ use SimpleXMLElement;
 class SpreadsheetService
 {
     /**
-     * Fetches a list of spreadhsheet spreadsheets from google drive.
+     * Fetches a list of spreadsheet spreadsheets from google drive.
      *
-     * @return \Google\Spreadsheet\SpreadsheetFeed
+     * @return SpreadsheetFeed
      */
     public function getSpreadsheets()
     {
@@ -45,7 +45,7 @@ class SpreadsheetService
      *
      * @param string $id the url of the spreadsheet
      *
-     * @return \Google\Spreadsheet\Spreadsheet
+     * @return Spreadsheet
      */
     public function getSpreadsheetById($id)
     {
@@ -59,11 +59,11 @@ class SpreadsheetService
     /**
      * Returns a list feed of the specified worksheet.
      * 
-     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
+     * @see Worksheet::getWorksheetId()
      * 
      * @param string $worksheetId
      * 
-     * @return \Google\Spreadsheet\ListFeed
+     * @return ListFeed
      */
     public function getListFeed($worksheetId)
     {
@@ -75,11 +75,11 @@ class SpreadsheetService
     /**
      * Returns a cell feed of the specified worksheet.
      * 
-     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
+     * @see Worksheet::getWorksheetId()
      * 
      * @param string $worksheetId
      * 
-     * @return \Google\Spreadsheet\CellFeed
+     * @return CellFeed
      */
     public function getCellFeed($worksheetId)
     {

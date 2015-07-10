@@ -100,5 +100,26 @@ class WorksheetFeed extends ArrayIterator
         }
         return null;
     }
+    
+    /**
+     * Get a worksheet by id
+     *
+     * @param string $id of the worksheet
+     *
+     * @return \Google\Spreadsheet\Worksheet
+     */
+    public function getById($id)
+    {
+        $spreadsheetId = $this->xml->id->__toString();
+
+        foreach ($this->xml->entry as $entry) {
+            if ($entry->id == $spreadsheetId . '/' . $id) {
+                $worksheet = new Worksheet($entry);
+                $worksheet->setPostUrl($this->getPostUrl());
+                return $worksheet;
+            }
+        }
+        return null;
+    }
 
 }

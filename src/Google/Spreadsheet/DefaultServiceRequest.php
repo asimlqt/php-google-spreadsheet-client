@@ -61,6 +61,13 @@ class DefaultServiceRequest implements ServiceRequestInterface
     protected $userAgent = 'PHP Google Spreadsheet Api';
 
     /**
+     * Additional cURL parameters, or overrides for default parameters.
+     * 
+     * @var array
+     */
+    protected $curlParams = array();
+
+    /**
      * Initializes the service request object.
      * 
      * @param string $accessToken
@@ -115,6 +122,33 @@ class DefaultServiceRequest implements ServiceRequestInterface
     public function setUserAgent($userAgent)
     {
         $this->userAgent = $userAgent;
+        return $this;
+    }
+
+    /**
+     * Get explicitly-set cURL parameters.
+     * Does not include the default parameters - just the parameters explicitly set
+     * by the user.
+     * 
+     * @return array
+     */
+    public function getCurlParams()
+    {
+        return $this->curlParams;
+    }
+    
+    /**
+     * Set optional cURL parameters, which can add to or override the default
+     * parameters used for our web requests.
+     * WARNING: Certain over-rides may prevent the code from working.  Use with care!
+     * 
+     * @param array $curlParams associative array of key value pairs
+     *
+     * @return Google\Spreadsheet\DefaultServiceRequest
+     */
+    public function setCurlParams(array $curlParams)
+    {
+        $this->curlParams = $curlParams;
         return $this;
     }
 
@@ -203,6 +237,10 @@ class DefaultServiceRequest implements ServiceRequestInterface
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_VERBOSE => false,
         );
+
+        // Need to use array addition, rather than array_merge(), as the array is
+        // indexed by numeric keys which we don't want to end up re-indexing.
+        $curlParams = $this->getCurlParams() + $curlParams;
 
         if(substr($url, 0, 4) !== 'http') {
             $url = $this->serviceUrl . $url;

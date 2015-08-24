@@ -73,6 +73,16 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
+     * Get access token
+     * 
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
      * Get request headers
      * 
      * @return array

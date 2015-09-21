@@ -75,7 +75,25 @@ class CellFeed
     }
 
     /**
-     * 
+     * Returns the feed entries as a two-dimensional array, indexed by row/column
+     * number.  Array may be sparse, if returned cell data is sparse.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $entries = $this->getEntries();
+
+        $result = array();
+        foreach ($entries as $entry) {
+            $result[$entry->getRow()][$entry->getColumn()] = $entry->getContent();
+        }
+
+        return $result;
+    }
+
+    /**
+     *
      * @param type $row
      * @param type $col
      * 

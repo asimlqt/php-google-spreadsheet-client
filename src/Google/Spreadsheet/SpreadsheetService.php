@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
 use SimpleXMLElement;
 
 /**
@@ -30,13 +32,20 @@ class SpreadsheetService
     /**
      * Fetches a list of spreadhsheet spreadsheets from google drive.
      *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\SpreadsheetFeed
      */
     public function getSpreadsheets()
     {
-        return new SpreadsheetFeed(
-            ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full')
-        );
+        try {
+            return new SpreadsheetFeed(
+                ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full')
+            );
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 
     /**
@@ -45,46 +54,67 @@ class SpreadsheetService
      *
      * @param string $id the url of the spreadsheet
      *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\Spreadsheet
      */
     public function getSpreadsheetById($id)
     {
-        return new Spreadsheet(
-            new SimpleXMLElement(
-                ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/'. $id)
-            )
-        );
+        try {
+            return new Spreadsheet(
+                new SimpleXMLElement(
+                    ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/' . $id)
+                )
+            );
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
-    
+
     /**
      * Returns a list feed of the specified worksheet.
-     * 
+     *
      * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
-     * 
+     *
      * @param string $worksheetId
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\ListFeed
      */
     public function getListFeed($worksheetId)
     {
-        return new ListFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/list/{$worksheetId}/od6/private/full")
-        );
+        try {
+            return new ListFeed(
+                ServiceRequestFactory::getInstance()->get("feeds/list/{$worksheetId}/od6/private/full")
+            );
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
-    
+
     /**
      * Returns a cell feed of the specified worksheet.
-     * 
+     *
      * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
-     * 
+     *
      * @param string $worksheetId
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return \Google\Spreadsheet\CellFeed
      */
     public function getCellFeed($worksheetId)
     {
-        return new CellFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/cells/{$worksheetId}/od6/private/full")
-        );
+        try {
+            return new CellFeed(
+                ServiceRequestFactory::getInstance()->get("feeds/cells/{$worksheetId}/od6/private/full")
+            );
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 }

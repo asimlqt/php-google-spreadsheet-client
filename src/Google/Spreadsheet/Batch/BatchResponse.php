@@ -32,38 +32,38 @@ class BatchResponse
      * @var SimpleXMLElement
      */
     protected $xml;
-    
+
     /**
-     * 
+     *
      * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
     {
         $this->xml = $xml;
     }
-    
+
     /**
-     * 
+     *
      * @return SimpleXMLElement
      */
     public function getXml()
     {
         return $this->xml;
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function hasErrors()
     {
         foreach ($this->xml->xpath("//batch:status/@code") as $el) {
-            if($el->__toString() !== "200") {
+            if ($el->__toString() !== "200") {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
 }

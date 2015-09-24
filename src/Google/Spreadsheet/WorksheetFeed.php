@@ -17,6 +17,8 @@
 namespace Google\Spreadsheet;
 
 use ArrayIterator;
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
 use SimpleXMLElement;
 
 /**
@@ -30,14 +32,14 @@ class WorksheetFeed extends ArrayIterator
 {
     /**
      * Worksheet feed xml object
-     * 
+     *
      * @var \SimpleXMLElement
      */
     private $xml;
 
     /**
      * Initializes thie worksheet feed object
-     * 
+     *
      * @param string $xml
      */
     public function __construct($xml)
@@ -55,38 +57,61 @@ class WorksheetFeed extends ArrayIterator
 
     /**
      * Get the worksheet feed post url
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     private function getPostUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * Get the cell feed url
      *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getCellFeedUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
+
     }
 
     /**
      * Get the export csv url
      *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
-    public function getExportCsvUrl() {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+    public function getExportCsvUrl()
+    {
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * Get a worksheet by title (name)
-     * 
+     *
      * @param string $title name of the worksheet
-     * 
+     *
      * @return \Google\Spreadsheet\Worksheet
      */
     public function getByTitle($title)
@@ -95,9 +120,11 @@ class WorksheetFeed extends ArrayIterator
             if ($entry->title->__toString() == $title) {
                 $worksheet = new Worksheet($entry);
                 $worksheet->setPostUrl($this->getPostUrl());
+
                 return $worksheet;
             }
         }
+
         return null;
     }
 

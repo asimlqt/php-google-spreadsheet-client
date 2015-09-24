@@ -16,6 +16,9 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Exception\CellException;
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
 use SimpleXMLElement;
 
 /**
@@ -29,14 +32,14 @@ class CellEntry
 {
     /**
      * Xml element for a cell entry
-     * 
+     *
      * @var \SimpleXMLElement
      */
     protected $xml;
 
     /**
      * The url for making a post request
-     * 
+     *
      * @var string
      */
     protected $postUrl;
@@ -47,37 +50,44 @@ class CellEntry
      * @var int
      */
     protected $row;
-    
+
     /**
      * The row number of this cell
      *
      * @var int
      */
     protected $column;
-    
+
     /**
      * The contents of this cell
      *
      * @var string
      */
     protected $content;
-    
+
     /**
      * Constructor
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @param \SimpleXMLElement $xml
      * @param string            $postUrl
      */
     public function __construct($xml, $postUrl)
     {
-        $this->xml = $xml;
+        $this->xml     = $xml;
         $this->postUrl = $postUrl;
-        $this->setCellLocation();
+        try {
+            $this->setCellLocation();
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Problem with setting cell location.', 0, $exception);
+        }
         $this->content = $this->xml->content->__toString();
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getCellIdString()
@@ -88,30 +98,30 @@ class CellEntry
             $this->column
         );
     }
-        
+
     /**
      * Get the row number fo this cell
-     * 
+     *
      * @return int
      */
     public function getRow()
     {
         return $this->row;
     }
-    
+
     /**
      * Get the column number fo this cell
-     * 
+     *
      * @return int
      */
     public function getColumn()
     {
         return $this->column;
     }
-    
+
     /**
      * Set the post url
-     * 
+     *
      * @param string
      *
      * @return void
@@ -123,7 +133,7 @@ class CellEntry
 
     /**
      * Get the cell identifier e.g. A1
-     * 
+     *
      * @return string
      */
     public function getTitle()
@@ -133,7 +143,7 @@ class CellEntry
 
     /**
      * Get the contents of the cell
-     * 
+     *
      * @return string
      */
     public function getContent()
@@ -143,19 +153,21 @@ class CellEntry
 
     /**
      * Set the contents of this cell
-     * 
+     *
      * @param string $content
      */
     public function setContent($content)
     {
         $this->content = $content;
     }
-    
+
     /**
      * Update the cell value
      *
      * @param string $value
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return null
      */
     public function update($value)
@@ -170,13 +182,20 @@ class CellEntry
             $value
         );
 
-        $res = ServiceRequestFactory::getInstance()->post($this->postUrl, $entry);
+        try {
+            $res = ServiceRequestFactory::getInstance()->post($this->postUrl, $entry);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
         $this->xml = new SimpleXMLElement($res);
     }
 
     /**
      * Get the location of the cell.
-     * 
+     *
+     * @throws CellException
+     *
      * @return array
      */
     protected function setCellLocation()
@@ -184,22 +203,29 @@ class CellEntry
         $id = $this->xml->id->__toString();
         preg_match('@/R(\d+)C(\d+)@', $id, $matches);
 
-        if(count($matches) !== 3) {
-            throw new Exception('Filed to get the location of the cell');
+        if (count($matches) !== 3) {
+            throw new CellException(sprintf('Filed to get the location of the "%s" cell', $id));
         }
 
-        $this->row = (int) $matches[1];
+        $this->row    = (int) $matches[1];
         $this->column = (int) $matches[2];
     }
 
     /**
      * Get the edit url of the cell
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getEditUrl()
     {
-        return Util::getLinkHref($this->xml, 'edit');
+        try {
+            return Util::getLinkHref($this->xml, 'edit');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
-    
+
 }

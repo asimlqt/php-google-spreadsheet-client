@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Exception\GoogleException;
+use Google\Exception\SpreadsheetException;
 use SimpleXMLElement;
 
 /**
@@ -29,14 +31,14 @@ class ListFeed
 {
     /**
      * Xml representation of this feed
-     * 
+     *
      * @var \SimpleXMLElement
      */
     protected $xml;
 
     /**
      * Constructor
-     * 
+     *
      * @param string $xmlString
      */
     public function __construct($xmlString)
@@ -48,25 +50,34 @@ class ListFeed
 
     /**
      * Get the post url for this feed
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return string
      */
     public function getPostUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
+        try {
+            return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error occurred while retrieving url.', 0, $exception);
+        }
     }
 
     /**
      * Insert a new row into this feed
-     * 
+     *
      * @param array $row
-     * 
+     *
+     * @throws SpreadsheetException
+     *
      * @return void
      */
     public function insert($row)
     {
         $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
-        foreach($row as $colName => $value) {
+        foreach ($row as $colName => $value) {
             $entry .= sprintf(
                 '<gsx:%s><![CDATA[%s]]></gsx:%s>',
                 $colName,
@@ -75,31 +86,35 @@ class ListFeed
             );
         }
         $entry .= '</entry>';
-
-        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
+        try {
+            ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
+        }
+        catch (GoogleException $exception) {
+            throw new SpreadsheetException('Error while getting instance of ServiceRequestFactory.', 0, $exception);
+        }
     }
 
     /**
      * Get the entries of this feed
-     * 
-     * @return array \Google\Spreadsheet\ListEntry
+     *
+     * @return \Google\Spreadsheet\ListEntry[]
      */
     public function getEntries()
     {
         $rows = array();
 
-        if(count($this->xml->entry) > 0) {
-            
+        if (count($this->xml->entry) > 0) {
+
             foreach ($this->xml->entry as $entry) {
                 $data = array();
-                foreach($entry->xpath('gsx:*') as $col) {
+                foreach ($entry->xpath('gsx:*') as $col) {
                     $data[$col->getName()] = $col->__toString();
                 }
-                
+
                 $rows[] = new ListEntry($entry, $data);
             }
         }
-        
+
         return $rows;
     }
 

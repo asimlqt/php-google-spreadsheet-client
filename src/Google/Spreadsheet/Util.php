@@ -16,6 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Exception\RequestException;
 use SimpleXMLElement;
 
 /**
@@ -29,9 +30,9 @@ class Util
 {
     /**
      * Extracts the endpoint from a full google spreadsheet url.
-     * 
+     *
      * @param string $url
-     * 
+     *
      * @return string
      */
     public static function extractEndpoint($url)
@@ -41,21 +42,23 @@ class Util
 
     /**
      * Extracts the href for a specific rel from an xml object.
-     * 
+     *
      * @param  \SimpleXMLElement $xml
      * @param  string            $rel the value of the rel attribute whose href you want
-     * 
+     *
+     * @throws RequestException
+     *
      * @return string
      */
     public static function getLinkHref(SimpleXMLElement $xml, $rel)
     {
-        foreach($xml->link as $link) {
+        foreach ($xml->link as $link) {
             $attributes = $link->attributes();
-            if($attributes['rel']->__toString() === $rel) {
+            if ($attributes['rel']->__toString() === $rel) {
                 return $attributes['href']->__toString();
             }
         }
-        throw new Exception('No link found with rel "'.$rel.'"');
+        throw new RequestException(sprintf('No link found with rel "%s".', $rel));
     }
 
 }

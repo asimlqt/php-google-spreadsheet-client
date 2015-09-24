@@ -20,7 +20,7 @@ use ArrayIterator;
 use SimpleXMLElement;
 
 /**
- * Spreadsheet feed. 
+ * Spreadsheet feed.
  *
  * @package    Google
  * @subpackage Spreadsheet
@@ -30,14 +30,14 @@ class SpreadsheetFeed extends ArrayIterator
 {
     /**
      * The spreadsheet feed xml object
-     * 
+     *
      * @var \SimpleXMLElement
      */
     protected $xml;
 
     /**
      * Initializes the the spreadsheet feed object
-     * 
+     *
      * @param string $xml the raw xml string of a spreadsheet feed
      */
     public function __construct($xml)
@@ -52,21 +52,22 @@ class SpreadsheetFeed extends ArrayIterator
     }
 
     /**
-     * Gets a spreadhseet from the feed by its title. i.e. the name of 
+     * Gets a spreadhseet from the feed by its title. i.e. the name of
      * the spreadsheet in google drive. This method will return only the
      * first spreadsheet found with the specified title.
-     * 
+     *
      * @param string $title
-     * 
+     *
      * @return \Google\Spreadsheet\Spreadsheet|null
      */
     public function getByTitle($title)
     {
-        foreach($this->xml->entry as $entry) {
-            if($entry->title->__toString() == $title) {
+        foreach ($this->xml->entry as $entry) {
+            if ($entry->title->__toString() == $title) {
                 return new Spreadsheet($entry);
             }
         }
+
         return null;
     }
 

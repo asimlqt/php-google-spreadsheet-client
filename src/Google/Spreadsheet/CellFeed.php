@@ -164,9 +164,13 @@ class CellFeed
     public function insertBatch(BatchRequest $batchRequest)
     {
         $xml = $batchRequest->createRequestXml($this);
+
         $response = ServiceRequestFactory::getInstance()
-            ->setHeaders(array("If-Match" => "*"))
+            ->addHeader("If-Match", "*")
             ->post($this->getBatchUrl(), $xml);
+            
+        ServiceRequestFactory::getInstance()->removeHeader("If-Match");
+
         return new BatchResponse(new SimpleXMLElement($response));
     }
     

@@ -118,6 +118,36 @@ class Spreadsheet
     }
 
     /**
+     * Fetch all the Worksheet Cells at Once, using parallel requests do the API
+     * @param array $worksheets
+     * @return array
+     * @throws Exception
+     */
+    public function getWorksheetCellFeeds(array $worksheets)
+    {
+        $urls = $this->getWorksheetCellsUrls($worksheets);
+        $cellsData = ServiceRequestFactory::getInstance()->getMulti($urls);
+        $cellFeeds = [];
+        foreach ($cellsData as $title => $cellData) {
+            $cellFeeds[$title] = new CellFeed($cellData);
+        }
+        return $cellFeeds;
+    }
+    /**
+     * @param Worksheet[] $worksheets
+     * @return array
+     * @throws Exception
+     */
+    private function getWorksheetCellsUrls(array $worksheets)
+    {
+        $urls = [];
+        foreach ($worksheets as $title => $workSheet) {
+            $urls[$title] = $workSheet->getCellFeedUrl();
+        }
+        return $urls;
+    }
+
+    /**
      * Add a new worksheet to this spreadsheet
      * 
      * @param string $title

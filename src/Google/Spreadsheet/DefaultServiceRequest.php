@@ -242,6 +242,42 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
+     * Perform multiple get requests in parallel
+     *
+     * @param $urls
+     * @return array
+     */
+    public function getMulti($urls)
+    {
+        $mh = curl_multi_init();
+        $requests = [];
+        foreach ($urls as $title => $url) {
+            $ch = $this->initRequest($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_multi_add_handle($mh, $ch);
+            $requests[$title] = $ch;
+        }
+        do {
+            $mrc = curl_multi_exec($mh, $active);
+        } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+        while ($active && $mrc == CURLM_OK) {
+            if (curl_multi_select($mh) != -1) {
+                do {
+                    $mrc = curl_multi_exec($mh, $active);
+                } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+            }
+        }
+        $responses = [];
+        foreach ($requests as $title => $ch) {
+            curl_multi_remove_handle($mh, $ch);
+            $responses[$title] = curl_multi_getcontent($ch);
+        }
+        curl_multi_close($mh);
+
+        return $responses;
+    }
+
+    /**
      * Perform a post request
      *
      * @param string $url

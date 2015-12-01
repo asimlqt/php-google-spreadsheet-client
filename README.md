@@ -125,7 +125,7 @@ Once you have a list feed you can loop over each entry.
 
 ```php
 foreach ($listFeed->getEntries() as $entry) {
-	$values = $entry->getValues();
+    $values = $entry->getValues();
 }
 ```
 
@@ -194,4 +194,25 @@ $cellFeed->editCell(1,2, "Row1Col2Header");
 $cellFeed->editCell(1,3, "Row1Col3Header");
 $cellFeed->editCell(1,4, "Row1Col4Header");
 
+```
+
+### Updating multiple cells with a batch request
+
+When attempting to insert multiple cells then consider using the batch request functionality to improve performance.
+
+```php
+$spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
+
+$spreadsheetFeed = $spreadsheetService->getSpreadsheets();
+$spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
+
+$worksheet = $spreadsheet->getWorksheets()->getByTitle('Sheet1');
+$cellFeed = $worksheet->getCellFeed();
+
+$batchRequest = new Google\Spreadsheet\Batch\BatchRequest();
+$batchRequest->addEntry($cellFeed->createInsertionCell(2, 1, "111"));
+$batchRequest->addEntry($cellFeed->createInsertionCell(3, 1, "222"));
+$batchRequest->addEntry($cellFeed->createInsertionCell(4, 1, "333"));
+
+$batchResponse = $cellFeed->insertBatch($batchRequest);
 ```

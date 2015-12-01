@@ -198,7 +198,7 @@ $cellFeed->editCell(1,4, "Row1Col4Header");
 
 ### Updating multiple cells with a batch request
 
-When attempting to insert multiple cells then consider using the batch request functionality to improve performance.
+When attempting to insert data into multiple cells then consider using the batch request functionality to improve performance.
 
 ```php
 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();

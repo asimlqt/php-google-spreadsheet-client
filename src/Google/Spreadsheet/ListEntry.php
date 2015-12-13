@@ -54,6 +54,16 @@ class ListEntry
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Get the values of this list entry
      * 
      * @return array

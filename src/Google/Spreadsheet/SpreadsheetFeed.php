@@ -52,6 +52,16 @@ class SpreadsheetFeed extends ArrayIterator
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Gets a spreadhseet from the feed by its title. i.e. the name of 
      * the spreadsheet in google drive. This method will return only the
      * first spreadsheet found with the specified title.

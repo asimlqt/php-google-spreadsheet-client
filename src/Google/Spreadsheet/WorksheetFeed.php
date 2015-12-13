@@ -54,6 +54,16 @@ class WorksheetFeed extends ArrayIterator
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Get the worksheet feed post url
      * 
      * @return string

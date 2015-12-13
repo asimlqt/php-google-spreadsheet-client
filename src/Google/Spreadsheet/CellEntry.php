@@ -88,7 +88,17 @@ class CellEntry
             $this->column
         );
     }
-        
+
+    /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
     /**
      * Get the row number fo this cell
      * 

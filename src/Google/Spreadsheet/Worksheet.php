@@ -49,6 +49,16 @@ class Worksheet
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Get the worksheet id. Returns the full url.
      *
      * @return string

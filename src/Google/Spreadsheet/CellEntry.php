@@ -132,6 +132,19 @@ class CellEntry
     }
 
     /**
+     * Get the row number fo this cell
+     * 
+     * @return int
+     */
+    public function getInputValue()
+    {
+
+      $inputValue = Util::extractAttributeFromXml($this->xml, 'inputValue', 'gs', 'cell');
+      return $inputValue;
+
+    }
+    
+    /**
      * Get the cell identifier e.g. A1
      * 
      * @return string

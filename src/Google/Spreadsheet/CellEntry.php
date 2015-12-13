@@ -138,10 +138,7 @@ class CellEntry
      */
     public function getInputValue()
     {
-
-      $inputValue = Util::extractAttributeFromXml($this->xml, 'inputValue', 'gs', 'cell');
-      return $inputValue;
-
+        return Util::extractAttributeFromXml($this->xml, 'inputValue', 'gs', 'cell');
     }
 
     /**

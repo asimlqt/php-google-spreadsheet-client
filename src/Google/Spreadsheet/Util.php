@@ -60,21 +60,21 @@ class Util
 
     /**
      * Get a specific attribute in a namespaced tag
+     * 
      * @param  \SimpleXMLElement $xml            
-     * @param  string $attributeFocus 
-     * @param  string $namespaceFocus 
-     * @param  string $tagFocus       
+     * @param  string            $attributeFocus 
+     * @param  string            $namespaceFocus 
+     * @param  string            $tagFocus
+     * 
      * @return string 
      */
-    public static function extractAttributeFromXml($xml, $attributeFocus, $namespaceFocus, $tagFocus)
+    public static function extractAttributeFromXml(SimpleXMLElement $xml, $attributeFocus, $namespaceFocus, $tagFocus)
     {
+        $namespace = $xml->getNamespaces(true);
+        $attributes = $xml->children($namespace[$namespaceFocus])->{$tagFocus}->attributes();
 
-      $namespace = $xml->getNamespaces(true);
-      $attributes = $xml->children($namespace[$namespaceFocus])->{$tagFocus}->attributes();
-      
-      $finalAttribute = $attributes[$attributeFocus];
-      return $finalAttribute->__toString();
-
+        $finalAttribute = $attributes[$attributeFocus];
+        return $finalAttribute->__toString();
     }
     
 }

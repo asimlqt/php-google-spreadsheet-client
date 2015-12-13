@@ -132,9 +132,9 @@ class CellEntry
     }
 
     /**
-     * Get the row number fo this cell
+     * Get the the <gs:cell inputValue="FORMULA"> of this cell from its XML
      * 
-     * @return int
+     * @return string
      */
     public function getInputValue()
     {
@@ -143,7 +143,7 @@ class CellEntry
       return $inputValue;
 
     }
-    
+
     /**
      * Get the cell identifier e.g. A1
      * 

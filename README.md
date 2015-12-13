@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/asimlqt/php-google-spreadsheet-client.svg?branch=master)](https://travis-ci.org/asimlqt/php-google-spreadsheet-client)
+
 # Introduction
 
 This library provides a simple interface to the Google Spreadsheet API.

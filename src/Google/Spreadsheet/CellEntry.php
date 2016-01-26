@@ -88,7 +88,17 @@ class CellEntry
             $this->column
         );
     }
-        
+
+    /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+
     /**
      * Get the row number fo this cell
      * 
@@ -119,6 +129,16 @@ class CellEntry
     public function setPostUrl($url)
     {
         $this->postUrl = $url;
+    }
+
+    /**
+     * Get the the <gs:cell inputValue="FORMULA"> of this cell from its XML
+     * 
+     * @return string
+     */
+    public function getInputValue()
+    {
+        return Util::extractAttributeFromXml($this->xml, 'inputValue', 'gs', 'cell');
     }
 
     /**

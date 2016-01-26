@@ -58,4 +58,23 @@ class Util
         throw new Exception('No link found with rel "'.$rel.'"');
     }
 
+    /**
+     * Get a specific attribute in a namespaced tag
+     * 
+     * @param  \SimpleXMLElement $xml            
+     * @param  string            $attributeFocus 
+     * @param  string            $namespaceFocus 
+     * @param  string            $tagFocus
+     * 
+     * @return string 
+     */
+    public static function extractAttributeFromXml(SimpleXMLElement $xml, $attributeFocus, $namespaceFocus, $tagFocus)
+    {
+        $namespace = $xml->getNamespaces(true);
+        $attributes = $xml->children($namespace[$namespaceFocus])->{$tagFocus}->attributes();
+
+        $finalAttribute = $attributes[$attributeFocus];
+        return $finalAttribute->__toString();
+    }
+    
 }

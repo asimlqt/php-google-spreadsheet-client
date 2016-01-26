@@ -54,6 +54,16 @@ class CellFeed
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Get the feed entries
      * 
      * @return array \Google\Spreadsheet\CellEntry
@@ -164,9 +174,13 @@ class CellFeed
     public function insertBatch(BatchRequest $batchRequest)
     {
         $xml = $batchRequest->createRequestXml($this);
+
         $response = ServiceRequestFactory::getInstance()
-            ->setHeaders(array("If-Match" => "*"))
+            ->addHeader("If-Match", "*")
             ->post($this->getBatchUrl(), $xml);
+            
+        ServiceRequestFactory::getInstance()->removeHeader("If-Match");
+
         return new BatchResponse(new SimpleXMLElement($response));
     }
     

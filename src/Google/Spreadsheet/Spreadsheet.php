@@ -48,6 +48,16 @@ class Spreadsheet
     }
 
     /**
+     * Get the raw XML
+     * 
+     * @return int
+     */
+    public function getXml()
+    {
+        return $this->xml;
+    }
+    
+    /**
      * Get the spreadsheet id
      * 
      * @return string

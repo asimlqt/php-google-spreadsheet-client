@@ -96,6 +96,35 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
+     * Add a header to the headers array
+     * 
+     * @param string $name
+     * @param string $value
+     *
+     * @return Google\Spreadsheet\DefaultServiceRequest
+     */
+    public function addHeader($name, $value)
+    {
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param string $name
+     * 
+     * @return Google\Spreadsheet\DefaultServiceRequest
+     */
+    public function removeHeader($name)
+    {
+        if(array_key_exists($name, $this->headers)) {
+            unset($this->headers[$name]);
+        }
+        
+        return $this;
+    }
+
+    /**
      * Get the user agent
      * 
      * @return string

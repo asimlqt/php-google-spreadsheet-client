@@ -61,6 +61,13 @@ class DefaultServiceRequest implements ServiceRequestInterface
     protected $userAgent = 'PHP Google Spreadsheet Api';
 
     /**
+     * SSL verify peer
+     * 
+     * @var boolean
+     */
+    protected $sslVerifyPeer = true;
+
+    /**
      * Initializes the service request object.
      * 
      * @param string $accessToken
@@ -148,6 +155,29 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
+     * Get the value for verifying the peers ssl certificate.
+     * 
+     * @return bool
+     */
+    public function getSslVerifyPeer()
+    {
+        return $this->sslVerifyPeer;
+    }
+    
+    /**
+     * Verify the peer's ssl certificate
+     * 
+     * @param bool $sslVerifyPeer
+     * 
+     * @return DefaultServiceRequest
+     */
+    public function setSslVerifyPeer($sslVerifyPeer)
+    {
+        $this->sslVerifyPeer = (bool) $sslVerifyPeer;
+        return $this;
+    }
+
+    /**
      * Perform a get request
      * 
      * @param string $url
@@ -229,7 +259,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_FAILONERROR => false,
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => $this->sslVerifyPeer,
             CURLOPT_VERBOSE => false,
         );
 

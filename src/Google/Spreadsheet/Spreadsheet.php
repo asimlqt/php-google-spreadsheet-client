@@ -109,6 +109,9 @@ class Spreadsheet
      */
     public function addWorksheet($title, $rowCount=100, $colCount=10)
     {
+        $htmlspchrsFlags = defined('ENT_XML1') ? ENT_COMPAT | ENT_XML1 : ENT_COMPAT; // backward compatibility for PHP5.3
+        $title = htmlspecialchars($title, $htmlspchrsFlags, ini_get("default_charset"), false);
+
         $entry = sprintf('
             <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
                 <title>%s</title>

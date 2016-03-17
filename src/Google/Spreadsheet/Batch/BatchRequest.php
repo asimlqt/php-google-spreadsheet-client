@@ -89,6 +89,9 @@ class BatchRequest
      */
     protected function createEntry(CellEntry $cellEntry, $index, CellFeed $cellFeed)
     {
+        $htmlspchrsFlags = defined('ENT_XML1') ? ENT_COMPAT | ENT_XML1 : ENT_COMPAT; // backward compatibility for PHP5.3
+        $value = htmlspecialchars($cellEntry->getContent(), $htmlspchrsFlags, ini_get("default_charset"), false);
+
         return sprintf(
             '<entry>
                 <batch:id>%s</batch:id>
@@ -103,7 +106,7 @@ class BatchRequest
             $cellEntry->getEditUrl(),
             $cellEntry->getRow(),
             $cellEntry->getColumn(),
-            $cellEntry->getContent()
+            $value
         );
     }
     

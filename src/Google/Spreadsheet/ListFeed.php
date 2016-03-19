@@ -113,4 +113,22 @@ class ListFeed
         return $rows;
     }
 
+    public function getTotalResults()
+    {
+        $xml = $this->xml->children('openSearch', true);
+        return intval($xml->totalResults);
+    }
+
+    public function getItemsPerPage()
+    {
+        $xml = $this->xml->children('openSearch', true);
+        return intval($xml->itemsPerPage);
+    }
+
+    public function getStartIndex()
+    {
+        $xml = $this->xml->children('openSearch', true);
+        return intval($xml->startIndex);
+    }
+
 }

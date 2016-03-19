@@ -92,7 +92,7 @@ class ListFeed
     /**
      * Get the entries of this feed
      * 
-     * @return array \Google\Spreadsheet\ListEntry
+     * @return \Google\Spreadsheet\ListEntry[]
      */
     public function getEntries()
     {

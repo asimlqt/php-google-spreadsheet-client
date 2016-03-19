@@ -285,7 +285,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
                     throw new Exception('Error in Google Request', $info['http_code']);
             }
         }
-
+        curl_close($ch);
         return $ret;
     }
 

@@ -104,8 +104,8 @@ class CellFeed
 
     /**
      *
-     * @param type $row
-     * @param type $col
+     * @param int $row
+     * @param int $col
      * 
      * @return CellEntry|null
      */

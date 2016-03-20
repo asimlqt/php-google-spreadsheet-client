@@ -4,15 +4,16 @@ namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 use Google\Spreadsheet\SpreadsheetFeed;
 use Google\Spreadsheet\Spreadsheet;
 
-class SpreadsheetFeedTest extends \PHPUnit_Framework_TestCase
+class SpreadsheetFeedTest extends TestBase
 {
     public function testGetByTitle()
     {
-        $xml = file_get_contents(__DIR__.'/xml/spreadsheet-feed.xml');
-        $spreadsheetFeed = new SpreadsheetFeed($xml);
+        $spreadsheetFeed = new SpreadsheetFeed(
+            $this->getSimpleXMLElement("spreadsheet-feed")
+        );
 
-        $this->assertTrue($spreadsheetFeed->getByTitle('Test Spreadsheet') instanceof Spreadsheet);
-        $this->assertTrue(is_null($spreadsheetFeed->getByTitle('No Spreadsheet')));
+        $this->assertTrue($spreadsheetFeed->getByTitle("Test Spreadsheet") instanceof Spreadsheet);
+        $this->assertNull($spreadsheetFeed->getByTitle("No Spreadsheet"));
     }
 
 }

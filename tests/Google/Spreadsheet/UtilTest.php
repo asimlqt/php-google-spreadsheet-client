@@ -1,17 +1,15 @@
 <?php
 
-namespace GGoogleSpreadsheet\Tests\oogle\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
-use SimpleXMLElement;
 use Google\Spreadsheet\Util;
 
-class UtilTest extends PHPUnit_Framework_TestCase
+class UtilTest extends TestBase
 {
     public function testExtractEndpoint()
     {
-        $url = 'https://spreadsheets.google.com/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8';
-        $expected = '/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8';
+        $url = "https://spreadsheets.google.com/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8";
+        $expected = "/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8";
         $actual = Util::extractEndpoint($url);
         
         $this->assertEquals($expected, $actual);        
@@ -19,9 +17,9 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
     public function testGetLinkHref()
     {
-        $xml = new SimpleXMLElement(file_get_contents(__DIR__.'/xml/worksheet.xml'));
-        $expected = 'https://spreadsheets.google.com/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8';
-        $actual = Util::getLinkHref($xml, 'self');
+        $xml = $this->getSimpleXMLElement("worksheet");
+        $expected = "https://spreadsheets.google.com/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8";
+        $actual = Util::getLinkHref($xml, "self");
 
         $this->assertEquals($expected, $actual);
     }

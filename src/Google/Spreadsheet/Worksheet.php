@@ -16,7 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
 use DateTime;
 
 /**
@@ -38,9 +37,9 @@ class Worksheet
     /**
      * Initializes the worksheet object.
      *
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
         $xml->registerXPathNamespace('gs', 'http://schemas.google.com/spreadsheets/2006');
         $this->xml = $xml;
@@ -144,7 +143,7 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\ListFeed
      */
-    public function getListFeed(array $query = array())
+    public function getListFeed(array $query = [])
     {
         $feedUrl = $this->getListFeedUrl();
         if(count($query) > 0) {
@@ -152,7 +151,7 @@ class Worksheet
         }
 
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
-        return new ListFeed($res);
+        return new ListFeed(new \SimpleXMLElement($res));
     }
 
     /**
@@ -160,7 +159,7 @@ class Worksheet
      * 
      * @return \Google\Spreadsheet\CellFeed
      */
-    public function getCellFeed(array $query = array())
+    public function getCellFeed(array $query = [])
     {
         $feedUrl = $this->getCellFeedUrl();
         if(count($query) > 0) {
@@ -168,7 +167,7 @@ class Worksheet
         }
 
         $res = ServiceRequestFactory::getInstance()->get($feedUrl);
-        return new CellFeed($res);
+        return new CellFeed(new \SimpleXMLElement($res));
     }
 
     /**
@@ -198,7 +197,7 @@ class Worksheet
         $colCount = $colCount ? $colCount : $this->getColCount();
         $rowCount = $rowCount ? $rowCount : $this->getRowCount();
 
-        $entry = new SimpleXMLElement("
+        $entry = new \SimpleXMLElement("
             <entry
                 xmlns=\"http://www.w3.org/2005/Atom\"
                 xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">

@@ -1,28 +1,51 @@
 <?php
 namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
 use Google\Spreadsheet\WorksheetFeed;
 use Google\Spreadsheet\Worksheet;
 
-class WorksheetFeedTest extends PHPUnit_Framework_TestCase
+class WorksheetFeedTest extends TestBase
 {
     public function testGetByTitle()
     {
-        $xml = file_get_contents(__DIR__.'/xml/worksheet-feed.xml');
-        $worksheetFeed = new WorksheetFeed($xml);
+        $worksheetFeed = new WorksheetFeed(
+            $this->getSimpleXMLElement("worksheet-feed")
+        );
 
-        $this->assertTrue($worksheetFeed->getByTitle('Sheet1') instanceof Worksheet);
-        $this->assertTrue(is_null($worksheetFeed->getByTitle('Sheet3')));
+        $this->assertTrue($worksheetFeed->getByTitle("Sheet1") instanceof Worksheet);
     }
-    
+
+    /**
+     * @expectedException Google\Spreadsheet\Exception\WorksheetNotFoundException
+     */
+    public function testGetByTitleException()
+    {
+        $worksheetFeed = new WorksheetFeed(
+            $this->getSimpleXMLElement("worksheet-feed")
+        );
+
+        $this->assertNull($worksheetFeed->getByTitle("Sheet3"));
+    }
+
     public function testGetById()
     {
-        $xml = file_get_contents(__DIR__.'/xml/worksheet-feed.xml');
-        $worksheetFeed = new WorksheetFeed($xml);
+        $worksheetFeed = new WorksheetFeed(
+            $this->getSimpleXMLElement("worksheet-feed")
+        );
 
-        $this->assertTrue($worksheetFeed->getById('od6') instanceof Worksheet);
-        $this->assertTrue(is_null($worksheetFeed->getById('od7')));
+        $this->assertTrue($worksheetFeed->getById("od6") instanceof Worksheet);
+    }
+
+    /**
+     * @expectedException Google\Spreadsheet\Exception\WorksheetNotFoundException
+     */
+    public function testGetByIdException()
+    {
+        $worksheetFeed = new WorksheetFeed(
+            $this->getSimpleXMLElement("worksheet-feed")
+        );
+
+        $this->assertTrue(is_null($worksheetFeed->getById("od7")));
     }
 
 }

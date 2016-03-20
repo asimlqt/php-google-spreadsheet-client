@@ -9,7 +9,7 @@ class SpreadsheetServiceTest extends TestBase
 {
     public function testGetSpreadsheets()
     {
-        $this->setServiceRequest('spreadsheet-feed.xml');
+        $this->setServiceRequest("spreadsheet-feed.xml");
 
         $spreadsheetService = new SpreadsheetService();
         $feed = $spreadsheetService->getSpreadsheets();
@@ -19,7 +19,7 @@ class SpreadsheetServiceTest extends TestBase
 
     public function testGetResourceById()
     {
-        $this->setServiceRequest('spreadsheet.xml', false);
+        $this->setServiceRequest("spreadsheet.xml", false);
 
         $spreadsheetService = new SpreadsheetService();
         $spreadsheet = $spreadsheetService->getResourceById(

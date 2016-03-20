@@ -16,8 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
-use DateTime;
 use Google\Spreadsheet\Exception\WorksheetNotFoundException;
 
 /**
@@ -41,9 +39,9 @@ class Spreadsheet
     /**
      * Initializes the spreadsheet object
      * 
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
         $this->xml = $xml;
     }
@@ -75,7 +73,7 @@ class Spreadsheet
      */
     public function getUpdated()
     {
-        return new DateTime($this->xml->updated->__toString());
+        return new \DateTime($this->xml->updated->__toString());
     }
 
     /**
@@ -91,12 +89,12 @@ class Spreadsheet
     /**
      * Get all the worksheets which belong to this spreadsheet
      * 
-     * @return \Google\Spreadsheet\WorksheetFeed
+     * @return WorksheetFeed
      */
-    public function getWorksheets()
+    public function getWorksheetFeed()
     {
         $res = ServiceRequestFactory::getInstance()->get($this->getWorksheetsFeedUrl());
-        return new WorksheetFeed($res);
+        return new WorksheetFeed(new \SimpleXMLElement($res));
     }
 
     /**
@@ -110,7 +108,7 @@ class Spreadsheet
      */
     public function getWorksheetByTitle($title)
     {
-        foreach ($this->getWorksheets() as $worksheet) {
+        foreach ($this->getWorksheetFeed()->getEntries() as $worksheet) {
             if ($worksheet->getTitle() === $title) {
                 return $worksheet;
             }
@@ -130,7 +128,7 @@ class Spreadsheet
      */
     public function addWorksheet($title, $rowCount=100, $colCount=10)
     {
-        $entry = new SimpleXMLElement("
+        $entry = new \SimpleXMLElement("
             <entry
                 xmlns=\"http://www.w3.org/2005/Atom\"
                 xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
@@ -146,7 +144,7 @@ class Spreadsheet
             $entry->asXML()
         );
 
-        return new Worksheet(new SimpleXMLElement($response));
+        return new Worksheet(new \SimpleXMLElement($response));
     }
 
     /**

@@ -4,44 +4,42 @@ namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 use Google\Spreadsheet\ListFeed;
 use Google\Spreadsheet\ServiceRequestFactory;
 
-class ListFeedTest extends \PHPUnit_Framework_TestCase
+class ListFeedTest extends TestBase
 {
     
     public function testGetPostUrl()
     {
-        $xml = file_get_contents(__DIR__.'/xml/list-feed.xml');
-        $listFeed = new ListFeed($xml);
+        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
 
         $this->assertEquals(
-            'https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full',
+            "https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full",
             $listFeed->getPostUrl()
         );
     }
     
     public function testInsert()
     {
-        $mockServiceRequest = $this->getMockBuilder('Google\Spreadsheet\DefaultServiceRequest')
+        $mockServiceRequest = $this->getMockBuilder("Google\Spreadsheet\DefaultServiceRequest")
                 ->setMethods(array("post"))
                 ->disableOriginalConstructor()
                 ->getMock();
         
         $mockServiceRequest->expects($this->once())
-            ->method('post')
+            ->method("post")
             ->with(
-                $this->equalTo('https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full'),
-                $this->stringContains('<gsx:occupation>software engineer</gsx:occupation>')
+                $this->equalTo("https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full"),
+                $this->stringContains("<gsx:occupation>software engineer</gsx:occupation>")
             );
         
         ServiceRequestFactory::setInstance($mockServiceRequest);
         
-        $listFeed = new ListFeed(file_get_contents(__DIR__.'/xml/list-feed.xml'));
+        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
         $listFeed->insert(["name" => "asim", "occupation" => "software engineer"]);
     }
     
     public function testGetEntries()
     {
-        $xml = file_get_contents(__DIR__.'/xml/list-feed.xml');
-        $listFeed = new ListFeed($xml);
+        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
 
         $this->assertEquals(4, count($listFeed->getEntries()));
     }

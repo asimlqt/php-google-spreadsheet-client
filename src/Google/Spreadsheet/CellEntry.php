@@ -16,7 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
+use Google\Spreadsheet\Exception\Exception;
 
 /**
  * Worksheet Data.
@@ -180,7 +180,7 @@ class CellEntry
      */
     public function update($value)
     {
-        $entry = new SimpleXMLElement("
+        $entry = new \SimpleXMLElement("
             <entry
                 xmlns=\"http://www.w3.org/2005/Atom\"
                 xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
@@ -193,7 +193,7 @@ class CellEntry
         $child->addAttribute('inputValue', $value);
 
         $res = ServiceRequestFactory::getInstance()->post($this->postUrl, $entry->asXML());
-        $this->xml = new SimpleXMLElement($res);
+        $this->xml = new \SimpleXMLElement($res);
     }
 
     /**

@@ -16,7 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
 use Google\Spreadsheet\Batch\BatchRequest;
 use Google\Spreadsheet\Batch\BatchResponse;
 
@@ -45,11 +44,11 @@ class CellFeed
     /**
      * Constructor
      * 
-     * @param string $xml
+     * @param \SimpleXMLElement $xml
      */
-    public function __construct($xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
-        $this->xml = new SimpleXMLElement($xml);
+        $this->xml = $xml;
         $this->entries = array();
     }
 
@@ -150,7 +149,7 @@ class CellFeed
      */
     public function editCell($rowNum, $colNum, $value)
     {
-        $entry = new SimpleXMLElement("
+        $entry = new \SimpleXMLElement("
             <entry
                 xmlns=\"http://www.w3.org/2005/Atom\"
                 xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
@@ -227,7 +226,7 @@ class CellFeed
      */
     public function createInsertionCell($row, $col, $content)
     {
-        $xml = new SimpleXMLElement('<entry></entry>');
+        $xml = new \SimpleXMLElement('<entry></entry>');
         $child = $xml->addChild('content', $content);
         $child->addAttribute('type', 'text');
         $child = $xml->addChild('title');

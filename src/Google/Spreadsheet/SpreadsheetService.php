@@ -16,6 +16,9 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Spreadsheet\Exception\BadRequestException;
+use Google\Spreadsheet\Exception\ResourceNotFoundException;
+
 /**
  * Spreadsheet Service.
  *
@@ -26,15 +29,17 @@ namespace Google\Spreadsheet;
 class SpreadsheetService
 {
     /**
-     * Fetches a list of spreadhsheet spreadsheets from google drive.
+     * Fetches a list of spreadsheets from google drive.
      *
      * @return SpreadsheetFeed
      */
     public function getSpreadsheets()
     {
         return new SpreadsheetFeed(
-            ServiceRequestFactory::getInstance()->get(
-                "feeds/spreadsheets/private/full"
+            new \SimpleXMLElement(
+                ServiceRequestFactory::getInstance()->get(
+                    "feeds/spreadsheets/private/full"
+                )
             )
         );
     }
@@ -42,7 +47,7 @@ class SpreadsheetService
     /**
      * Fetch a resource directly with having to traverse the tree from
      * the top. This will provide a huge performance benefit to the
-     * application.
+     * application if you already have the id.
      *
      * All classes which have a "getId()" method can be used. e.g.
      *     - SpreadsheetFeed
@@ -56,14 +61,20 @@ class SpreadsheetService
      * @param string $id       the id (full url) of the resource
      * 
      * @return Object
+     *
+     * @throws ResourceNotFoundException
      */
     public function getResourceById($resource, $id)
     {
-        return new $resource(
-            new \SimpleXMLElement(
-                ServiceRequestFactory::getInstance()->get($id)
-            )
-        );
+        try {
+            return new $resource(
+                new \SimpleXMLElement(
+                    ServiceRequestFactory::getInstance()->get($id)
+                )
+            );
+        } catch (BadRequestException $e) {
+            throw new ResourceNotFoundException($e->getMessage());
+        }
     }
 
 }

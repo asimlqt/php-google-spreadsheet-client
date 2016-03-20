@@ -16,8 +16,7 @@
  */
 namespace Google\Spreadsheet;
 
-use ArrayIterator;
-use SimpleXMLElement;
+use Google\Spreadsheet\Exception\WorksheetNotFoundException;
 
 /**
  * Worksheet Feed.
@@ -26,7 +25,7 @@ use SimpleXMLElement;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class WorksheetFeed extends ArrayIterator
+class WorksheetFeed
 {
     /**
      * Worksheet feed xml object
@@ -38,17 +37,11 @@ class WorksheetFeed extends ArrayIterator
     /**
      * Initializes thie worksheet feed object
      * 
-     * @param string $xml
+     * @param SimpleXMLElement $xml
      */
-    public function __construct($xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
-        $this->xml = new SimpleXMLElement($xml);
-
-        $worksheets = array();
-        foreach ($this->xml->entry as $entry) {
-            $worksheets[] = new Worksheet($entry);
-        }
-        parent::__construct($worksheets);
+        $this->xml = $xml;
     }
 
     /**
@@ -71,6 +64,15 @@ class WorksheetFeed extends ArrayIterator
         return $this->xml->id->__toString();
     }
     
+    public function getEntries()
+    {
+        $worksheets = [];
+        foreach ($this->xml->entry as $entry) {
+            $worksheets[] = new Worksheet($entry);
+        }
+        return $worksheets;
+    }
+
     /**
      * Get the worksheet feed post url
      * 
@@ -96,7 +98,8 @@ class WorksheetFeed extends ArrayIterator
      *
      * @return string
      */
-    public function getExportCsvUrl() {
+    public function getExportCsvUrl()
+    {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
     }
 
@@ -105,7 +108,9 @@ class WorksheetFeed extends ArrayIterator
      * 
      * @param string $title name of the worksheet
      * 
-     * @return \Google\Spreadsheet\Worksheet
+     * @return Worksheet
+     *
+     * @throws WorksheetNotFoundException
      */
     public function getByTitle($title)
     {
@@ -114,7 +119,8 @@ class WorksheetFeed extends ArrayIterator
                 return new Worksheet($entry);
             }
         }
-        return null;
+        
+        throw new WorksheetNotFoundException();
     }
     
     /**
@@ -122,7 +128,9 @@ class WorksheetFeed extends ArrayIterator
      *
      * @param string $id of the worksheet
      *
-     * @return \Google\Spreadsheet\Worksheet
+     * @return Worksheet
+     *
+     * @throws WorksheetNotFoundException
      */
     public function getById($id)
     {
@@ -133,7 +141,8 @@ class WorksheetFeed extends ArrayIterator
                 return new Worksheet($entry);
             }
         }
-        return null;
+
+        throw new WorksheetNotFoundException();
     }
 
 }

@@ -17,6 +17,7 @@
 namespace Google\Spreadsheet;
 
 use SimpleXMLElement;
+use Google\Spreadsheet\Exception\Exception;
 
 /**
  * Utility class. Provides several methods which are common to multiple classes.

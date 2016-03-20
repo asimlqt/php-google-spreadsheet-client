@@ -57,6 +57,16 @@ class ListFeed
     }
     
     /**
+     * Get the feed id. Returns the full url.
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->xml->id->__toString();
+    }
+    
+    /**
      * Get the post url for this feed
      * 
      * @return string

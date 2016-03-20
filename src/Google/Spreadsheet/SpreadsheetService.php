@@ -16,8 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
-
 /**
  * Spreadsheet Service.
  *
@@ -30,61 +28,42 @@ class SpreadsheetService
     /**
      * Fetches a list of spreadhsheet spreadsheets from google drive.
      *
-     * @return \Google\Spreadsheet\SpreadsheetFeed
+     * @return SpreadsheetFeed
      */
     public function getSpreadsheets()
     {
         return new SpreadsheetFeed(
-            ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full')
+            ServiceRequestFactory::getInstance()->get(
+                "feeds/spreadsheets/private/full"
+            )
         );
     }
 
     /**
-     * Fetches a single spreadsheet from google drive by id if you decide
-     * to store the id locally. This can help reduce api calls.
+     * Fetch a resource directly with having to traverse the tree from
+     * the top. This will provide a huge performance benefit to the
+     * application.
      *
-     * @param string $id the url of the spreadsheet
-     *
-     * @return \Google\Spreadsheet\Spreadsheet
+     * All classes which have a "getId()" method can be used. e.g.
+     *     - SpreadsheetFeed
+     *     - Spreadsheet
+     *     - WorksheetFeed
+     *     - Worksheet
+     *     - ListFeed
+     *     - CellFeed
+     * 
+     * @param string $resource the full path of the class
+     * @param string $id       the id (full url) of the resource
+     * 
+     * @return Object
      */
-    public function getSpreadsheetById($id)
+    public function getResourceById($resource, $id)
     {
-        return new Spreadsheet(
-            new SimpleXMLElement(
-                ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/'. $id)
+        return new $resource(
+            new \SimpleXMLElement(
+                ServiceRequestFactory::getInstance()->get($id)
             )
         );
     }
-    
-    /**
-     * Returns a list feed of the specified worksheet.
-     * 
-     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
-     * 
-     * @param string $worksheetId
-     * 
-     * @return \Google\Spreadsheet\ListFeed
-     */
-    public function getListFeed($worksheetId)
-    {
-        return new ListFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/list/{$worksheetId}/od6/private/full")
-        );
-    }
-    
-    /**
-     * Returns a cell feed of the specified worksheet.
-     * 
-     * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
-     * 
-     * @param string $worksheetId
-     * 
-     * @return \Google\Spreadsheet\CellFeed
-     */
-    public function getCellFeed($worksheetId)
-    {
-        return new CellFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/cells/{$worksheetId}/od6/private/full")
-        );
-    }
+
 }

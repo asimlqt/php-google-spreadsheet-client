@@ -16,8 +16,6 @@
  */
 namespace Google\Spreadsheet\Exception;
 
-use Exception as BaseException;
-
 /**
  * Exception
  *
@@ -25,6 +23,6 @@ use Exception as BaseException;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class WorksheetNotFoundException extends BaseException
+class WorksheetNotFoundException extends Exception
 {
 }

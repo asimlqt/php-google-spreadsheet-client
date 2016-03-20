@@ -35,8 +35,6 @@ class Worksheet
      */
     private $xml;
 
-    private $postUrl;
-
     /**
      * Initializes the worksheet object.
      *
@@ -185,12 +183,12 @@ class Worksheet
         return ServiceRequestFactory::getInstance()->get($this->getExportCsvUrl());
     }
 
-    /*
+    /**
      * Update worksheet
      *
-     * @param string $title will not be updated if null or omitted.
-     * @param int $colCount will not be updated if null or omitted.
-     * @param int $rowCount will not be updated if null or omitted.
+     * @param string $title
+     * @param int    $colCount
+     * @param int    $rowCount
      *
      * @return void
      */
@@ -199,17 +197,6 @@ class Worksheet
         $title = $title ? $title : $this->getTitle();
         $colCount = $colCount ? $colCount : $this->getColCount();
         $rowCount = $rowCount ? $rowCount : $this->getRowCount();
-
-        // $entry = sprintf('
-        //     <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-        //         <title type="text">%s</title>
-        //         <gs:colCount>%s</gs:colCount>
-        //         <gs:rowCount>%s</gs:rowCount>
-        //     </entry>',
-        //     $title,
-        //     $colCount,
-        //     $rowCount
-        // );
 
         $entry = new SimpleXMLElement("
             <entry
@@ -233,11 +220,6 @@ class Worksheet
     public function delete()
     {
         ServiceRequestFactory::getInstance()->delete($this->getEditUrl());
-    }
-
-    public function setPostUrl($url)
-    {
-        $this->postUrl = $url;
     }
 
     /**

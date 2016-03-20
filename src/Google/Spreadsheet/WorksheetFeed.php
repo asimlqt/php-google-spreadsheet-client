@@ -46,9 +46,7 @@ class WorksheetFeed extends ArrayIterator
 
         $worksheets = array();
         foreach ($this->xml->entry as $entry) {
-            $worksheet = new Worksheet($entry);
-            $worksheet->setPostUrl($this->getPostUrl());
-            $worksheets[] = $worksheet;
+            $worksheets[] = new Worksheet($entry);
         }
         parent::__construct($worksheets);
     }
@@ -61,6 +59,16 @@ class WorksheetFeed extends ArrayIterator
     public function getXml()
     {
         return $this->xml;
+    }
+    
+    /**
+     * Get the feed id. Returns the full url.
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->xml->id->__toString();
     }
     
     /**
@@ -103,9 +111,7 @@ class WorksheetFeed extends ArrayIterator
     {
         foreach ($this->xml->entry as $entry) {
             if ($entry->title->__toString() == $title) {
-                $worksheet = new Worksheet($entry);
-                $worksheet->setPostUrl($this->getPostUrl());
-                return $worksheet;
+                return new Worksheet($entry);
             }
         }
         return null;
@@ -124,9 +130,7 @@ class WorksheetFeed extends ArrayIterator
 
         foreach ($this->xml->entry as $entry) {
             if ($entry->id == $spreadsheetId . '/' . $id) {
-                $worksheet = new Worksheet($entry);
-                $worksheet->setPostUrl($this->getPostUrl());
-                return $worksheet;
+                return new Worksheet($entry);
             }
         }
         return null;

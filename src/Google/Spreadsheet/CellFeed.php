@@ -64,6 +64,16 @@ class CellFeed
     }
     
     /**
+     * Get the feed id. Returns the full url.
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->xml->id->__toString();
+    }
+
+    /**
      * Get the feed entries
      * 
      * @return array \Google\Spreadsheet\CellEntry
@@ -104,8 +114,8 @@ class CellFeed
 
     /**
      *
-     * @param type $row
-     * @param type $col
+     * @param int $row
+     * @param int $col
      * 
      * @return CellEntry|null
      */

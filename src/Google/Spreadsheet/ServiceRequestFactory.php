@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Spreadsheet\Exception\Exception;
+
 /**
  * ServiceRequestFactory
  *

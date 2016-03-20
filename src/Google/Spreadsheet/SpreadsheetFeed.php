@@ -62,6 +62,16 @@ class SpreadsheetFeed extends ArrayIterator
     }
     
     /**
+     * Get the feed id. Returns the full url.
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->xml->id->__toString();
+    }
+    
+    /**
      * Gets a spreadhseet from the feed by its title. i.e. the name of 
      * the spreadsheet in google drive. This method will return only the
      * first spreadsheet found with the specified title.

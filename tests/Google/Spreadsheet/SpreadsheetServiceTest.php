@@ -17,12 +17,15 @@ class SpreadsheetServiceTest extends TestBase
         $this->assertTrue($feed instanceof SpreadsheetFeed);
     }
 
-    public function testGetSpreadsheetById()
+    public function testGetResourceById()
     {
         $this->setServiceRequest('spreadsheet.xml', false);
 
         $spreadsheetService = new SpreadsheetService();
-        $spreadsheet = $spreadsheetService->getSpreadsheetById('spreadsheet-id');
+        $spreadsheet = $spreadsheetService->getResourceById(
+            Spreadsheet::class,
+            "https://spreadsheets.google.com/feeds/spreadsheets/private/full/tFEgU8ywJkkjcZjG"
+        );
 
         $this->assertTrue($spreadsheet instanceof Spreadsheet);
     }

@@ -1,9 +1,10 @@
 <?php
 
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
 use PHPUnit_Framework_TestCase;
 use SimpleXMLElement;
+use Google\Spreadsheet\ServiceRequestFactory;
 
 class TestBase extends PHPUnit_Framework_TestCase
 {

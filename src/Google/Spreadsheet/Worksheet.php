@@ -200,18 +200,29 @@ class Worksheet
         $colCount = $colCount ? $colCount : $this->getColCount();
         $rowCount = $rowCount ? $rowCount : $this->getRowCount();
 
-        $entry = sprintf('
-            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-                <title type="text">%s</title>
-                <gs:colCount>%s</gs:colCount>
-                <gs:rowCount>%s</gs:rowCount>
-            </entry>',
-            $title,
-            $colCount,
-            $rowCount
-        );
+        // $entry = sprintf('
+        //     <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+        //         <title type="text">%s</title>
+        //         <gs:colCount>%s</gs:colCount>
+        //         <gs:rowCount>%s</gs:rowCount>
+        //     </entry>',
+        //     $title,
+        //     $colCount,
+        //     $rowCount
+        // );
 
-        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
+        $entry = new SimpleXMLElement("
+            <entry
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
+            </entry>
+        ");
+
+        $entry->title = $title;
+        $entry->addChild("xmlns:gs:rowCount", (int) $rowCount);
+        $entry->addChild("xmlns:gs:colCount", (int) $colCount);
+
+        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry->asXML());
     }
 
     /**

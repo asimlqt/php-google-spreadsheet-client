@@ -1,5 +1,9 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
+
+use Google\Spreadsheet\SpreadsheetService;
+use Google\Spreadsheet\Spreadsheet;
+use Google\Spreadsheet\SpreadsheetFeed;
 
 class SpreadsheetServiceTest extends TestBase
 {

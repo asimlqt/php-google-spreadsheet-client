@@ -1,7 +1,9 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
 use PHPUnit_Framework_TestCase;
+use Google\Spreadsheet\WorksheetFeed;
+use Google\Spreadsheet\Worksheet;
 
 class WorksheetFeedTest extends PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,12 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
 use DateTime;
 use SimpleXMLElement;
+use Google\Spreadsheet\Spreadsheet;
+use Google\Spreadsheet\WorksheetFeed;
+use Google\Spreadsheet\Exception\WorksheetNotFoundException;
+use Google\Spreadsheet\Worksheet;
 
 class SpreadsheetTest extends TestBase
 {
@@ -39,6 +43,29 @@ class SpreadsheetTest extends TestBase
         $spreadsheet = new Spreadsheet(new SimpleXMLElement($xml));
 
         $this->assertTrue($spreadsheet->getWorksheets() instanceof WorksheetFeed);
+    }
+
+    public function testGetWorksheetByTitle()
+    {
+        $this->setServiceRequest('worksheet-feed.xml');
+
+        $xml = file_get_contents(__DIR__.'/xml/spreadsheet.xml');
+        $spreadsheet = new Spreadsheet(new SimpleXMLElement($xml));
+
+        $this->assertTrue($spreadsheet->getWorksheetByTitle("Sheet2") instanceof Worksheet);
+    }
+
+    /**
+     * @expectedException Google\Spreadsheet\Exception\WorksheetNotFoundException
+     */
+    public function testGetWorksheetByTitleNotFound()
+    {
+        $this->setServiceRequest('worksheet-feed.xml');
+
+        $xml = file_get_contents(__DIR__.'/xml/spreadsheet.xml');
+        $spreadsheet = new Spreadsheet(new SimpleXMLElement($xml));
+
+        $this->assertTrue($spreadsheet->getWorksheetByTitle("Sheet10") instanceof Worksheet);
     }
 
     public function testAddWorksheet()

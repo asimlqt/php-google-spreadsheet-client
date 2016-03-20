@@ -1,9 +1,10 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
+use Google\Spreadsheet\ServiceRequestFactory;
+use Google\Spreadsheet\ServiceRequestInterface;
 
-class ServiceRequestFactoryTest extends PHPUnit_Framework_TestCase
+class ServiceRequestFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testGetInstance()

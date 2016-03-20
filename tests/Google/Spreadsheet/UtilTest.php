@@ -1,9 +1,10 @@
 <?php
 
-namespace Google\Spreadsheet;
+namespace GGoogleSpreadsheet\Tests\oogle\Spreadsheet;
 
 use PHPUnit_Framework_TestCase;
 use SimpleXMLElement;
+use Google\Spreadsheet\Util;
 
 class UtilTest extends PHPUnit_Framework_TestCase
 {

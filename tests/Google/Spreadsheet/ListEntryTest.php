@@ -1,9 +1,10 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
+use Google\Spreadsheet\ListFeed;
+use Google\Spreadsheet\ServiceRequestFactory;
 
-class ListEntryTest extends PHPUnit_Framework_TestCase
+class ListEntryTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testGetEditUrl()
@@ -29,7 +30,7 @@ class ListEntryTest extends PHPUnit_Framework_TestCase
             ->method('put')
             ->with(
                 $this->equalTo('https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full/cokwr/bnkj8i7jo6c'),
-                $this->stringContains('<gsx:nname><![CDATA[Asim]]></gsx:nname>')
+                $this->stringContains('<gsx:nname>Asim</gsx:nname>')
             );
         
         ServiceRequestFactory::setInstance($mockServiceRequest);

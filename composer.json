@@ -25,6 +25,12 @@
         "phpunit/phpunit": "4.4.2"
     },
     "autoload": {
-        "psr-4": {"Google\\": "src/Google"}
+        "psr-4": {
+            "Google\\": "src/Google"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GoogleSpreadsheet\\Tests\\": "tests/"
+        }
     }
 }

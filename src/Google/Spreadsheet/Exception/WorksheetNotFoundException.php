@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Spreadsheet;
+namespace Google\Spreadsheet\Exception;
+
+use Exception as BaseException;
 
 /**
  * Exception
@@ -23,6 +25,6 @@ namespace Google\Spreadsheet;
  * @subpackage Spreadsheet
  * @author     Asim Liaquat <asimlqt22@gmail.com>
  */
-class UnauthorizedException extends Exception
+class WorksheetNotFoundException extends BaseException
 {
 }

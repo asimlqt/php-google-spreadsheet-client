@@ -1,8 +1,10 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
 use DateTime;
 use SimpleXMLElement;
+use Google\Spreadsheet\Worksheet;
+use Google\Spreadsheet\ServiceRequestFactory;
 
 class WorksheetTest extends TestBase
 {

@@ -17,6 +17,7 @@
 namespace Google\Spreadsheet;
 
 use Google\Spreadsheet\Util;
+use SimpleXMLElement;
 
 /**
  * List Entry
@@ -79,22 +80,21 @@ class ListEntry
      * @param array $values
      */
     public function update($values)
-    {        
-        $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
-        $entry .= '<id>'.$this->xml->id->__toString().'</id>';
+    {
+        $entry = new SimpleXMLElement("
+            <entry
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:gsx=\"http://schemas.google.com/spreadsheets/2006/extended\">
+            </entry>
+        ");
+
+        $entry->addChild("id", $this->xml->id->__toString());
 
         foreach($values as $colName => $value) {
-            $entry .= sprintf(
-                '<gsx:%s><![CDATA[%s]]></gsx:%s>',
-                $colName,
-                $value,
-                $colName
-            );
+            $entry->addChild("xmlns:gsx:$colName", $value);
         }
 
-        $entry .= '</entry>';
-
-        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry);
+        ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry->asXML());
     }
 
     /**

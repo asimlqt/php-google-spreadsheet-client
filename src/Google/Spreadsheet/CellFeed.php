@@ -132,24 +132,27 @@ class CellFeed
      * Edit a single cell. the row and column indexing start at 1.
      * So the first column of the first row will be (1,1).
      * 
-     * @param int    $rowNum
-     * @param int    $colNum
-     * @param string $value
+     * @param int    $rowNum Row number
+     * @param int    $colNum Column number
+     * @param string $value  Can also be a formula
      * 
-     * @return null
+     * @return void
      */
     public function editCell($rowNum, $colNum, $value)
     {
-        $entry = sprintf('
-            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
-              <gs:cell row="%u" col="%u" inputValue="%s"/>
-            </entry>',
-            $rowNum,
-            $colNum,
-            $value
-        );
+        $entry = new SimpleXMLElement("
+            <entry
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
+            </entry>
+        ");
 
-        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
+        $child = $entry->addChild("xmlns:gs:cell");
+        $child->addAttribute('row', $rowNum);
+        $child->addAttribute('col', $colNum);
+        $child->addAttribute('inputValue', $value);
+
+        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry->asXML());
     }
 
     /**

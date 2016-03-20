@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Spreadsheet\Exception\UnauthorizedException;
+
 /**
  * Service Request. The parent class of all services.
  *
@@ -294,7 +296,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
      *                                       Will throw an exception if the response
      *                                       code is 300 or greater
      *                                       
-     * @throws \Google\Spreadsheet\UnauthorizedException
+     * @throws UnauthorizedException
      */
     protected function execute($ch)
     {

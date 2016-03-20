@@ -1,5 +1,7 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
+
+use Google\Spreadsheet\ServiceRequestInterface;
 
 class TestServiceRequest implements ServiceRequestInterface
 {

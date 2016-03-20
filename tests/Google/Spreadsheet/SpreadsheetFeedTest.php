@@ -1,9 +1,10 @@
 <?php
-namespace Google\Spreadsheet;
+namespace GoogleSpreadsheet\Tests\Google\Spreadsheet;
 
-use PHPUnit_Framework_TestCase;
+use Google\Spreadsheet\SpreadsheetFeed;
+use Google\Spreadsheet\Spreadsheet;
 
-class SpreadsheetFeedTest extends PHPUnit_Framework_TestCase
+class SpreadsheetFeedTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetByTitle()
     {

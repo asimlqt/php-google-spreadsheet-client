@@ -75,18 +75,18 @@ class ListFeed
      */
     public function insert($row)
     {
-        $entry = '<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">';
-        foreach($row as $colName => $value) {
-            $entry .= sprintf(
-                '<gsx:%s><![CDATA[%s]]></gsx:%s>',
-                $colName,
-                $value,
-                $colName
-            );
-        }
-        $entry .= '</entry>';
+        $entry = new SimpleXMLElement("
+            <entry
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:gsx=\"http://schemas.google.com/spreadsheets/2006/extended\">
+            </entry>
+        ");
 
-        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry);
+        foreach($row as $colName => $value) {
+            $entry->addChild("xmlns:gsx:$colName", $value);
+        }
+
+        ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry->asXML());
     }
 
     /**

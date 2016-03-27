@@ -43,15 +43,15 @@ class SpreadsheetService
      * Fetches a single spreadsheet from google drive by id if you decide
      * to store the id locally. This can help reduce api calls.
      *
-     * @param string $id the url of the spreadsheet
+     * @param string $spreadsheetId the url of the spreadsheet
      *
      * @return \Google\Spreadsheet\Spreadsheet
      */
-    public function getSpreadsheetById($id)
+    public function getSpreadsheetById($spreadsheetId)
     {
         return new Spreadsheet(
             new SimpleXMLElement(
-                ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/'. $id)
+                ServiceRequestFactory::getInstance()->get('feeds/spreadsheets/private/full/' . $spreadsheetId)
             )
         );
     }
@@ -61,14 +61,15 @@ class SpreadsheetService
      * 
      * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
      * 
+     * @param string $spreadsheetId
      * @param string $worksheetId
      * 
      * @return \Google\Spreadsheet\ListFeed
      */
-    public function getListFeed($worksheetId)
+    public function getListFeed($spreadsheetId, $worksheetId='od6')
     {
         return new ListFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/list/{$worksheetId}/od6/private/full")
+            ServiceRequestFactory::getInstance()->get('feeds/list/' . $spreadsheetId . '/' . $worksheetId . '/private/full')
         );
     }
     
@@ -77,14 +78,15 @@ class SpreadsheetService
      * 
      * @see \Google\Spreadsheet\Worksheet::getWorksheetId()
      * 
+     * @param string $spreadsheetId
      * @param string $worksheetId
      * 
      * @return \Google\Spreadsheet\CellFeed
      */
-    public function getCellFeed($worksheetId)
+    public function getCellFeed($spreadsheetId, $worksheetId='od6')
     {
         return new CellFeed(
-            ServiceRequestFactory::getInstance()->get("feeds/cells/{$worksheetId}/od6/private/full")
+            ServiceRequestFactory::getInstance()->get('feeds/cells/' . $spreadsheetId . '/' . $worksheetId . '/private/full')
         );
     }
 }

@@ -16,8 +16,6 @@
  */
 namespace Google\Spreadsheet\Batch;
 
-use SimpleXMLElement;
-
 /**
  * BatchResponse
  *
@@ -35,9 +33,9 @@ class BatchResponse
     
     /**
      * 
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(\SimpleXMLElement $xml)
     {
         $this->xml = $xml;
     }

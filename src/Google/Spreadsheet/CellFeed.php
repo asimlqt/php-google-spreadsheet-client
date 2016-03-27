@@ -174,7 +174,7 @@ class CellFeed
     {
         $xml = $batchRequest->createRequestXml($this);
         $response = ServiceRequestFactory::getInstance()->post($this->getBatchUrl(), $xml);
-        return new BatchResponse(new SimpleXMLElement($response));
+        return new BatchResponse(new \SimpleXMLElement($response));
     }
 
     /**
@@ -189,11 +189,11 @@ class CellFeed
 
         $response = ServiceRequestFactory::getInstance()
             ->addHeader("If-Match", "*")
-            ->post($this->getBatchUrl(), $xml);
-            
+            ->post($this->getBatchUrl(), $xml->asXML());
+        
         ServiceRequestFactory::getInstance()->removeHeader("If-Match");
 
-        return new BatchResponse(new SimpleXMLElement($response));
+        return new BatchResponse(new \SimpleXMLElement($response));
     }
     
     /**

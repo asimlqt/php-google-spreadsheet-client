@@ -64,6 +64,11 @@ class WorksheetFeed
         return $this->xml->id->__toString();
     }
     
+    /**
+     * Get all worksheets in this feed
+     * 
+     * @return Worksheet[]
+     */
     public function getEntries()
     {
         $worksheets = [];
@@ -78,29 +83,9 @@ class WorksheetFeed
      * 
      * @return string
      */
-    private function getPostUrl()
+    public function getPostUrl()
     {
         return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
-    }
-
-    /**
-     * Get the cell feed url
-     *
-     * @return string
-     */
-    public function getCellFeedUrl()
-    {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
-    }
-
-    /**
-     * Get the export csv url
-     *
-     * @return string
-     */
-    public function getExportCsvUrl()
-    {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/spreadsheets/2006#exportcsv');
     }
 
     /**
@@ -134,10 +119,10 @@ class WorksheetFeed
      */
     public function getById($id)
     {
-        $spreadsheetId = $this->xml->id->__toString();
+        $feedId = $this->xml->id->__toString();
 
         foreach ($this->xml->entry as $entry) {
-            if ($entry->id == $spreadsheetId . '/' . $id) {
+            if ($entry->id == $feedId . '/' . $id) {
                 return new Worksheet($entry);
             }
         }

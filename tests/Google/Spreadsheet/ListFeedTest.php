@@ -6,7 +6,21 @@ use Google\Spreadsheet\ServiceRequestFactory;
 
 class ListFeedTest extends TestBase
 {
-    
+    public function testGetXml()
+    {
+        $feed = new ListFeed($this->getSimpleXMLElement("list-feed"));
+        $this->assertTrue($feed->getXml() instanceof \SimpleXMLElement);
+    }
+
+    public function testGetId()
+    {
+        $feed = new ListFeed($this->getSimpleXMLElement("list-feed"));
+        $this->assertEquals(
+            "https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full",
+            $feed->getId()
+        );
+    }
+
     public function testGetPostUrl()
     {
         $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));

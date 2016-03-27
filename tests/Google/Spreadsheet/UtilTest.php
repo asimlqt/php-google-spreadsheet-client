@@ -23,4 +23,14 @@ class UtilTest extends TestBase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @expectedException Google\Spreadsheet\Exception\Exception
+     */
+    public function testGetLinkHrefException()
+    {
+        $xml = $this->getSimpleXMLElement("worksheet");
+        $expected = "https://spreadsheets.google.com/feeds/worksheets/tA3TdJ0RIVEem3xQZhG2Ceg/private/full/od8";
+        Util::getLinkHref($xml, "selfie");
+    }
 }

@@ -8,6 +8,12 @@ use Google\Spreadsheet\Worksheet;
 
 class SpreadsheetTest extends TestBase
 {
+    public function testGetXml()
+    {
+        $spreadsheet = new Spreadsheet($this->getSimpleXMLElement("spreadsheet"));
+        $this->assertTrue($spreadsheet->getXml() instanceof \SimpleXMLElement);
+    }
+
     public function testGetId()
     {
         $spreadsheet = new Spreadsheet($this->getSimpleXMLElement("spreadsheet"));

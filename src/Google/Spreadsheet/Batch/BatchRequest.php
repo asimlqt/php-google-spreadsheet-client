@@ -18,7 +18,7 @@ namespace Google\Spreadsheet\Batch;
 
 use Google\Spreadsheet\CellFeed;
 use Google\Spreadsheet\CellEntry;
-
+use Google\Spreadsheet\Exception\EmptyBatchException;
 
 /**
  * BatchRequest.
@@ -43,7 +43,7 @@ class BatchRequest
     
     /**
      * 
-     * @param \Google\Spreadsheet\CellEntry $cellEntry
+     * @param CellEntry $cellEntry
      */
     public function addEntry(CellEntry $cellEntry)
     {
@@ -51,60 +51,63 @@ class BatchRequest
     }
     
     /**
+     * Get all entries in the batch
      * 
-     * @param \Google\Spreadsheet\CellFeed $cellFeed
-     * 
-     * @return string|null
+     * @return CellEntry[]
      */
-    public function createRequestXml(CellFeed $cellFeed)
+    public function getEntries()
     {
-        if(count($this->entries) === 0) {
-            return null;
-        }
-        
-        $xml = '<?xml version="1.0" encoding="UTF-8" ?>
-            <feed xmlns="http://www.w3.org/2005/Atom"
-            xmlns:batch="http://schemas.google.com/gdata/batch"
-            xmlns:gs="http://schemas.google.com/spreadsheets/2006">';
-        
-        $xml .= '<id>'. $cellFeed->getPostUrl() .'/batch</id>';
-        
-        $i = 1;
-        foreach($this->entries as $cellEntry) {
-            $xml .= $this->createEntry($cellEntry, $i++, $cellFeed);
-        }
-        
-        $xml .= '</feed>';
-        
-        return $xml;
+        return $this->entries;
     }
 
     /**
      * 
-     * @param \Google\Spreadsheet\CellEntry $cellEntry
-     * @param string                        $index
-     * @param \Google\Spreadsheet\CellFeed  $cellFeed
+     * @param CellFeed $cellFeed
      * 
-     * @return string
+     * @return \SimpleXMLElement
+     *
+     * @throws EmptyBatchException
      */
-    protected function createEntry(CellEntry $cellEntry, $index, CellFeed $cellFeed)
+    public function createRequestXml(CellFeed $cellFeed)
     {
-        return sprintf(
-            '<entry>
-                <batch:id>%s</batch:id>
-                <batch:operation type="update"/>
-                <id>%s</id>
-                <link rel="edit" type="application/atom+xml"
-                  href="%s"/>
-                <gs:cell row="%s" col="%s" inputValue="%s"/>
-            </entry>',
-            'A'.$index,
-            $cellFeed->getPostUrl() . "/" . $cellEntry->getCellIdString(),
-            $cellEntry->getEditUrl(),
-            $cellEntry->getRow(),
-            $cellEntry->getColumn(),
-            $cellEntry->getContent()
-        );
+        if(count($this->entries) === 0) {
+            throw new EmptyBatchException();
+            
+        }
+        
+        $feed = new \SimpleXMLElement("
+            <feed
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:batch=\"http://schemas.google.com/gdata/batch\"
+                xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
+            </feed>
+        ");
+
+        $feed->id = $cellFeed->getPostUrl();
+
+        $i = 1;
+        foreach($this->entries as $cellEntry) {
+            $entry = $feed->addChild("entry");
+
+            $entry->addChild("xmlns:batch:id", "A".$i++);
+
+            $op = $entry->addChild("xmlns:batch:operation");
+            $op->addAttribute("type", "update");
+
+            $entry->addChild("id", $cellFeed->getPostUrl() . "/" . $cellEntry->getCellIdString());
+
+            $link = $entry->addChild("link");
+            $link->addAttribute("rel", "edit");
+            $link->addAttribute("type", "application/atom+xml");
+            $link->addAttribute("href", $cellEntry->getEditUrl());
+
+            $cell = $entry->addChild("xmlns:gs:cell");
+            $cell->addAttribute("row", $cellEntry->getRow());
+            $cell->addAttribute("col", $cellEntry->getColumn());
+            $cell->addAttribute("inputValue", $cellEntry->getContent());
+        }
+
+        return $feed;
     }
     
 }

@@ -298,6 +298,8 @@ class DefaultServiceRequest implements ServiceRequestInterface
      *                                       code is 300 or greater
      *                                       
      * @throws UnauthorizedException
+     *
+     * @codeCoverageIgnore
      */
     protected function execute($ch)
     {

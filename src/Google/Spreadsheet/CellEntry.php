@@ -132,13 +132,23 @@ class CellEntry
     }
 
     /**
+     * Get post url
+     * 
+     * @return string
+     */
+    public function getPostUrl()
+    {
+        return $this->postUrl;
+    }
+
+    /**
      * Get the the <gs:cell inputValue="FORMULA"> of this cell from its XML
      * 
      * @return string
      */
     public function getInputValue()
     {
-        return Util::extractAttributeFromXml($this->xml, 'inputValue', 'gs', 'cell');
+        return Util::extractAttributeFromXml($this->xml, "inputValue", "gs", "cell");
     }
 
     /**
@@ -188,9 +198,9 @@ class CellEntry
         ");
 
         $child = $entry->addChild("xmlns:gs:cell");
-        $child->addAttribute('row', $this->row);
-        $child->addAttribute('col', $this->column);
-        $child->addAttribute('inputValue', $value);
+        $child->addAttribute("row", $this->row);
+        $child->addAttribute("col", $this->column);
+        $child->addAttribute("inputValue", $value);
 
         $res = ServiceRequestFactory::getInstance()->post($this->postUrl, $entry->asXML());
         $this->xml = new \SimpleXMLElement($res);
@@ -200,14 +210,17 @@ class CellEntry
      * Get the location of the cell.
      * 
      * @return array
+     *
+     * @codeCoverageIgnore
+     * This method is covered by getRow and getColumn tests
      */
     protected function setCellLocation()
     {
         $id = $this->xml->id->__toString();
-        preg_match('@/R(\d+)C(\d+)@', $id, $matches);
+        preg_match("@/R(\d+)C(\d+)@", $id, $matches);
 
         if(count($matches) !== 3) {
-            throw new Exception('Filed to get the location of the cell');
+            throw new Exception("Filed to get the location of the cell");
         }
 
         $this->row = (int) $matches[1];
@@ -221,7 +234,7 @@ class CellEntry
      */
     public function getEditUrl()
     {
-        return Util::getLinkHref($this->xml, 'edit');
+        return Util::getLinkHref($this->xml, "edit");
     }
     
 }

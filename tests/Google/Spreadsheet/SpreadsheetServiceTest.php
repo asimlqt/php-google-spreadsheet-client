@@ -10,12 +10,12 @@ use Google\Spreadsheet\DefaultServiceRequest;
 
 class SpreadsheetServiceTest extends TestBase
 {
-    public function testGetSpreadsheets()
+    public function testGetSpreadsheetFeed()
     {
         $this->setServiceRequest("spreadsheet-feed.xml");
 
         $spreadsheetService = new SpreadsheetService();
-        $feed = $spreadsheetService->getSpreadsheets();
+        $feed = $spreadsheetService->getSpreadsheetFeed();
 
         $this->assertTrue($feed instanceof SpreadsheetFeed);
     }

@@ -45,7 +45,13 @@ class SpreadsheetFeedTest extends TestBase
         $this->assertTrue(
             $this->spreadsheetFeed->getByTitle("Test Spreadsheet") instanceof Spreadsheet
         );
+    }
 
+    /**
+     * @expectedException Google\Spreadsheet\Exception\SpreadsheetNotFoundException
+     */
+    public function testGetByTitleException()
+    {
         $this->assertNull(
             $this->spreadsheetFeed->getByTitle("No Spreadsheet")
         );

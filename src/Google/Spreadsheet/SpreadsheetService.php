@@ -33,7 +33,7 @@ class SpreadsheetService
      *
      * @return SpreadsheetFeed
      */
-    public function getSpreadsheets()
+    public function getSpreadsheetFeed()
     {
         return new SpreadsheetFeed(
             new \SimpleXMLElement(

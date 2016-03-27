@@ -16,6 +16,8 @@
  */
 namespace Google\Spreadsheet;
 
+use Google\Spreadsheet\Exception\SpreadsheetNotFoundException;
+
 /**
  * Spreadsheet feed. 
  *
@@ -35,7 +37,7 @@ class SpreadsheetFeed
     /**
      * Initializes the spreadsheet feed object
      * 
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      */
     public function __construct(\SimpleXMLElement $xml)
     {
@@ -83,7 +85,9 @@ class SpreadsheetFeed
      * 
      * @param string $title
      * 
-     * @return \Google\Spreadsheet\Spreadsheet|null
+     * @return Spreadsheet
+     *
+     * @throws SpreadsheetNotFoundException
      */
     public function getByTitle($title)
     {
@@ -92,7 +96,8 @@ class SpreadsheetFeed
                 return new Spreadsheet($entry);
             }
         }
-        return null;
+
+        throw new SpreadsheetNotFoundException();
     }
 
 }

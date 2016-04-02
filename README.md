@@ -12,7 +12,7 @@
 * [Worksheet](#worksheet)
     * [Retrieving a list of worksheets](#retrieving-a-list-of-worksheets)
     * [Adding a worksheet](#adding-a-worksheet)
-    * [Adding headers to anew worksheet](#adding-headers-to-a-new-worksheet)
+    * [Adding headers to a new worksheet](#adding-headers-to-a-new-worksheet)
     * [Deleting a worksheet](#deleting-a-worksheet)
 * [List feed](#list-feed)
     * [Retrieving a list feed](#retrieving-a-list-feed)

@@ -2,6 +2,12 @@
 
 > Note: This library has been updated to v3 and it is not backwards compatible with v2 so please test/update your code appropriately before upgrading.
 
+# Contents
+* [Intrduction](#introduction)
+* [Installation](#installation)
+* [Bootstrapping](#bootstrapping)
+* [Retrieving a list of spreadsheets](#retrieving-a-list-of-spreadsheets)
+
 # Introduction
 
 This library provides a simple interface to the Google Spreadsheet API.

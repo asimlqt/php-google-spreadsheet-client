@@ -77,4 +77,24 @@ class SpreadsheetService
         }
     }
 
+    /**
+     * Get public spreadsheet
+     * 
+     * @param string $id Only the actual id and not the full url
+     * 
+     * @return WorksheetFeed
+     */
+    public function getPublicSpreadsheet($id)
+    {
+        $serviceRequest = ServiceRequestFactory::getInstance();
+
+        $url = sprintf(
+            "%sfeeds/worksheets/%s/public/full",
+            $serviceRequest->getServiceUrl(),
+            $id
+        );
+
+        return $this->getResourceById(WorksheetFeed::class, $url);
+    }
+
 }

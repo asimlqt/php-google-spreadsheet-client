@@ -83,6 +83,16 @@ class DefaultServiceRequest implements ServiceRequestInterface
     }
 
     /**
+     * Get the hostname of the spreadsheet service
+     * 
+     * @return string
+     */
+    public function getServiceUrl()
+    {
+        return $this->serviceUrl;
+    }
+
+    /**
      * Get request headers
      * 
      * @return array
@@ -313,11 +323,14 @@ class DefaultServiceRequest implements ServiceRequestInterface
                 case 401:
                     throw new UnauthorizedException("Access token is invalid", 401);
                     break;
+                case 403:
+                    throw new UnauthorizedException($ret, 403);
+                    break;
                 case 404:
                     throw new UnauthorizedException("You need permission", 404);
                     break;
                 default:
-                    throw new BadRequestException("Error in Google Request", $info["http_code"]);
+                    throw new BadRequestException($ret, $info["http_code"]);
             }
         }
 

@@ -157,9 +157,9 @@ class CellFeed
         ");
 
         $child = $entry->addChild("xmlns:gs:cell");
-        $child->addAttribute('row', $rowNum);
-        $child->addAttribute('col', $colNum);
-        $child->addAttribute('inputValue', $value);
+        $child->addAttribute("row", $rowNum);
+        $child->addAttribute("col", $colNum);
+        $child->addAttribute("inputValue", $value);
 
         ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry->asXML());
     }
@@ -203,7 +203,7 @@ class CellFeed
      */
     public function getPostUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#post');
+        return Util::getLinkHref($this->xml, "http://schemas.google.com/g/2005#post");
     }
 
     /**
@@ -212,7 +212,7 @@ class CellFeed
      */
     public function getBatchUrl()
     {
-        return Util::getLinkHref($this->xml, 'http://schemas.google.com/g/2005#batch');
+        return Util::getLinkHref($this->xml, "http://schemas.google.com/g/2005#batch");
     }
 
     /**
@@ -220,24 +220,38 @@ class CellFeed
      *
      * @param int    $row
      * @param int    $col
-     * @param string $content
+     * @param string $value
      * 
      * @return CellEntry
      */
-    public function createInsertionCell($row, $col, $content)
+    public function createCell($row, $col, $value)
     {
-        $xml = new \SimpleXMLElement('<entry></entry>');
-        $child = $xml->addChild('content', $content);
-        $child->addAttribute('type', 'text');
-        $child = $xml->addChild('title');
-        $child->addAttribute('type', 'text');
-        $xml->addChild('id', $this->getPostUrl() . '/R' . $row . 'C' . $col);
-        $link = $xml->addChild('link');
-        $link->addAttribute('rel', 'edit');
-        $link->addAttribute('type', 'application/atom+xml');
-        $link->addAttribute('href', $this->getPostUrl() . '/R' . $row . 'C' . $col);
+        $entry = new \SimpleXMLElement("
+            <entry
+                xmlns=\"http://www.w3.org/2005/Atom\"
+                xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
+            </entry>
+        ");
+        
+        $child = $entry->addChild("content", $value);
+        $child->addAttribute("type", "text");
+        $child = $entry->addChild("title");
+        $child->addAttribute("type", "text");
+        $entry->addChild("id", $this->getPostUrl() . "/R" . $row . "C" . $col);
+        $link = $entry->addChild("link");
+        $link->addAttribute("rel", "edit");
+        $link->addAttribute("type", "application/atom+xml");
+        $link->addAttribute("href", $this->getPostUrl() . "/R" . $row . "C" . $col);
 
-        return new CellEntry($xml, $this->getPostUrl());
+        $child = $entry->addChild("xmlns:gs:cell", $value);
+        $child->addAttribute("row", $row);
+        $child->addAttribute("col", $col);
+        $child->addAttribute("inputValue", $value);
+
+        return new CellEntry(
+            new \SimpleXMLElement($entry->asXML()),
+            $this->getPostUrl()
+        );
     }
     
 }

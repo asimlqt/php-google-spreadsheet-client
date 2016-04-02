@@ -56,6 +56,12 @@ class CellEntryTest extends TestBase
         $this->assertEquals("Name", $this->cellEntry->getInputValue());
     }
 
+    public function testSetInputValue()
+    {
+        $this->cellEntry->setInputValue("Test");
+        $this->assertEquals("Test", $this->cellEntry->getInputValue());
+    }
+
     public function testGetTitle()
     {
         $this->assertEquals("A1", $this->cellEntry->getTitle());
@@ -63,9 +69,7 @@ class CellEntryTest extends TestBase
 
     public function testGetSetContent()
     {
-        $content = "Firstname";
-        $this->cellEntry->setContent($content);
-        $this->assertEquals($content, $this->cellEntry->getContent());
+        $this->assertEquals("Name", $this->cellEntry->getContent());
     }
 
     public function testUpdate()

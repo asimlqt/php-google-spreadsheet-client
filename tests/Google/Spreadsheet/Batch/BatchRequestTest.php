@@ -31,10 +31,10 @@ class BatchRequestTest extends TestBase
     
     public function testCreateRequestXml()
     {
-        $cellEntry = $this->cellFeed->createInsertionCell(2, 1, "one");
+        $cellEntry = $this->cellFeed->createCell(2, 1, "one", true);
         $this->batchRequest->addEntry($cellEntry);
 
-        $cellEntry = $this->cellFeed->createInsertionCell(2, 2, "two");
+        $cellEntry = $this->cellFeed->createCell(2, 2, "two");
         $this->batchRequest->addEntry($cellEntry);
 
         $xml = $this->batchRequest->createRequestXml($this->cellFeed);

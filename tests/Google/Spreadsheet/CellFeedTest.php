@@ -171,7 +171,7 @@ class CellFeedTest extends TestBase
         );
     }
 
-    public function testCreateInsertionCell()
+    public function testCreateCell()
     {
         $mockCellFeed = $this->getMockBuilder(CellFeed::class)
             ->setMethods(["getPostUrl"])
@@ -181,7 +181,7 @@ class CellFeedTest extends TestBase
             ->method("getPostUrl")
             ->will($this->returnValue("https://spreadsheets.google.com/"));
 
-        $actual = $mockCellFeed->createInsertionCell(2, 1, "Someone");
+        $actual = $mockCellFeed->createCell(2, 1, "Someone");
         $this->assertTrue($actual instanceof CellEntry);
     }
 

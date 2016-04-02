@@ -63,6 +63,13 @@ class CellEntry
     protected $content;
     
     /**
+     * The input value of this cell
+     *
+     * @var string
+     */
+    protected $inputValue;
+
+    /**
      * Constructor
      * 
      * @param \SimpleXMLElement $xml
@@ -73,7 +80,8 @@ class CellEntry
         $this->xml = $xml;
         $this->postUrl = $postUrl;
         $this->setCellLocation();
-        $this->content = $this->xml->content->__toString();
+        $this->content = $xml->content->__toString();
+        $this->inputValue = Util::extractAttributeFromXml($xml, "gs", "inputValue");
     }
 
     /**
@@ -148,7 +156,17 @@ class CellEntry
      */
     public function getInputValue()
     {
-        return Util::extractAttributeFromXml($this->xml, "inputValue", "gs", "cell");
+        return $this->inputValue;
+    }
+
+    /**
+     * Set the input value of this cell
+     * 
+     * @param string $inputValue
+     */
+    public function setInputValue($inputValue)
+    {
+        $this->inputValue = $inputValue;
     }
 
     /**
@@ -170,21 +188,11 @@ class CellEntry
     {
         return $this->content;
     }
-
-    /**
-     * Set the contents of this cell
-     * 
-     * @param string $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-    }
     
     /**
      * Update the cell value
      *
-     * @param string $value
+     * @param string $value Can be a simple constant value or a formula
      * 
      * @return null
      */

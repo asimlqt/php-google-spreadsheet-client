@@ -16,7 +16,6 @@
  */
 namespace Google\Spreadsheet;
 
-use SimpleXMLElement;
 use Google\Spreadsheet\Exception\Exception;
 
 /**
@@ -48,7 +47,7 @@ class Util
      * 
      * @return string
      */
-    public static function getLinkHref(SimpleXMLElement $xml, $rel)
+    public static function getLinkHref(\SimpleXMLElement $xml, $rel)
     {
         foreach($xml->link as $link) {
             $attributes = $link->attributes();
@@ -69,13 +68,12 @@ class Util
      * 
      * @return string 
      */
-    public static function extractAttributeFromXml(SimpleXMLElement $xml, $attributeFocus, $namespaceFocus, $tagFocus)
-    {
-        $namespace = $xml->getNamespaces(true);
-        $attributes = $xml->children($namespace[$namespaceFocus])->{$tagFocus}->attributes();
-
-        $finalAttribute = $attributes[$attributeFocus];
-        return $finalAttribute->__toString();
+    public static function extractAttributeFromXml(
+        \SimpleXMLElement $xml,
+        $namespacePrefix,
+        $attribute
+    ) {
+        return $xml->children($namespacePrefix, true)->attributes()[$attribute]->__toString();
     }
     
 }

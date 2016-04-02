@@ -333,7 +333,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
                     throw new BadRequestException($ret, $info["http_code"]);
             }
         }
-
+        curl_close($ch);
         return $ret;
     }
 

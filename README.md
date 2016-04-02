@@ -7,6 +7,19 @@
 * [Installation](#installation)
 * [Bootstrapping](#bootstrapping)
 * [Retrieving a list of spreadsheets](#retrieving-a-list-of-spreadsheets)
+* [Retrieving a public spreadsheet](#retrieving-a-public-spreadsheet)
+* [Retrieving a list of worksheets](#retrieving-a-list-of-worksheets)
+* [Adding a worksheet](#adding-a-worksheet)
+* [Adding headers to anew worksheet](#adding-headers-to-a-new-worksheet)
+* [Deleting a worksheet](#deleting-a-worksheet)
+* [List feed](#working-with-list-feeds)
+    * [Retrieving a list feed](#retrieving-a-list-feed)
+    * [Adding a list row](#adding-a-list-row)
+    * [Updating a list row](#updating-a-list-row)
+* [Cell feed](#working-with-cell-based-feeds)
+    * [Retrieving a cell feed](#retrieving-a-cell-feed)
+    * [Updating a cell](#updating-a-cell)
+* [Batch request](#updating-multiple-cells-with-a-batch-request)
 
 # Introduction
 
@@ -123,6 +136,18 @@ To create a new worksheet simply use the 'addWorksheet()' method. This takes 3 a
 $spreadsheet->addWorksheet('New Worksheet', 50, 20);
 ```
 
+### Adding headers to a new worksheet
+
+The Google Spreadsheet API does not allow you to update a list row if headers are not already assigned. So, when you create a new worksheet, before you can add data to a worksheet using the 'Adding/Updating a list row' methods above, you need to add headers.
+
+To add headers to a worksheet, use the following:
+```php
+$cellFeed = $worksheet->getCellFeed();
+
+$cellFeed->editCell(1,1, "Row1Col1Header");
+$cellFeed->editCell(1,2, "Row1Col2Header");
+```
+
 The only required parameter is the worksheet name, The row and column count are optional. The default value for rows is 100 and columns is 10.
 
 ## Deleting a worksheet
@@ -133,7 +158,7 @@ It's also possible to delete a worksheet.
 $worksheet->delete();
 ```
 
-## Working with list-based feeds
+## Working with list feeds
 
 List feeds work at the row level. Each entry will contain the data for a specific row.
 
@@ -207,18 +232,6 @@ You can then update the cell value using the 'update' method. The value can be a
 
 ```php
 $cell->update("=SUM(B2:B9)");
-```
-
-### Adding headers to a new worksheet
-
-The Google Spreadsheet API does not allow you to update a list row if headers are not already assigned. So, when you create a new worksheet, before you can add data to a worksheet using the 'Adding/Updating a list row' methods above, you need to add headers.
-
-To add headers to a worksheet, use the following:
-```php
-$cellFeed = $worksheet->getCellFeed();
-
-$cellFeed->editCell(1,1, "Row1Col1Header");
-$cellFeed->editCell(1,2, "Row1Col2Header");
 ```
 
 ### Updating multiple cells with a batch request

@@ -6,17 +6,19 @@
 * [Introduction](#introduction)
 * [Installation](#installation)
 * [Bootstrapping](#bootstrapping)
-* [Retrieving a list of spreadsheets](#retrieving-a-list-of-spreadsheets)
-* [Retrieving a public spreadsheet](#retrieving-a-public-spreadsheet)
-* [Retrieving a list of worksheets](#retrieving-a-list-of-worksheets)
-* [Adding a worksheet](#adding-a-worksheet)
-* [Adding headers to anew worksheet](#adding-headers-to-a-new-worksheet)
-* [Deleting a worksheet](#deleting-a-worksheet)
-* [List feed](#working-with-list-feeds)
+* [Spreadsheet](#spreadsheet)
+    * [Retrieving a list of spreadsheets](#retrieving-a-list-of-spreadsheets)
+    * [Retrieving a public spreadsheet](#retrieving-a-public-spreadsheet)
+* [Worksheet](#worksheet)
+    * [Retrieving a list of worksheets](#retrieving-a-list-of-worksheets)
+    * [Adding a worksheet](#adding-a-worksheet)
+    * [Adding headers to anew worksheet](#adding-headers-to-a-new-worksheet)
+    * [Deleting a worksheet](#deleting-a-worksheet)
+* [List feed](#list-feed)
     * [Retrieving a list feed](#retrieving-a-list-feed)
     * [Adding a list row](#adding-a-list-row)
     * [Updating a list row](#updating-a-list-row)
-* [Cell feed](#working-with-cell-based-feeds)
+* [Cell feed](#cell-feed)
     * [Retrieving a cell feed](#retrieving-a-cell-feed)
     * [Updating a cell](#updating-a-cell)
 * [Batch request](#updating-multiple-cells-with-a-batch-request)
@@ -81,7 +83,9 @@ ServiceRequestFactory::setInstance($serviceRequest);
 
 > Note: For Windows users, you can disable the ssl verification by '$serviceRequest->setSslVerifyPeer(false)'
 
-## Retrieving a list of spreadsheets
+## Spreadsheet
+
+### Retrieving a list of spreadsheets
 
 ```php
 $spreadsheetService = new Google\Spreadsheet\SpreadsheetService();
@@ -96,7 +100,7 @@ $spreadsheet = $spreadsheetFeed->getByTitle('MySpreadsheet');
 
 > Note: The 'getByTitle' method will return the first spreadsheet found with that title if you have more than one spreadsheet with the same name.
 
-## Retrieving a public spreadsheet
+### Retrieving a public spreadsheet
 
 A public spreadsheet is one that has been "published to the web". This does not require authentication. e.g.
 
@@ -110,7 +114,9 @@ $worksheetFeed = $spreadsheetService->getPublicSpreadsheet("spreadsheet-id");
 
 The spreadsheet id can be copied from the url of the acual spreadsheet in Google Drive.
 
-## Retrieving a list of worksheets
+## Workshsheet
+
+### Retrieving a list of worksheets
 
 You can retrieve a list of worksheets from a spreadsheet by calling the getWorksheets() method.
 
@@ -125,7 +131,7 @@ You can loop over each worksheet using 'getEntries()' or retrieve a single works
 $worksheet = $worksheetFeed->getByTitle('Sheet1');
 ```
 
-## Adding a worksheet
+### Adding a worksheet
 
 To create a new worksheet simply use the 'addWorksheet()' method. This takes 3 arguments:
 - Worksheet name
@@ -150,7 +156,7 @@ $cellFeed->editCell(1,2, "Row1Col2Header");
 
 The only required parameter is the worksheet name, The row and column count are optional. The default value for rows is 100 and columns is 10.
 
-## Deleting a worksheet
+### Deleting a worksheet
 
 It's also possible to delete a worksheet.
 
@@ -158,7 +164,7 @@ It's also possible to delete a worksheet.
 $worksheet->delete();
 ```
 
-## Working with list feeds
+## List feed
 
 List feeds work at the row level. Each entry will contain the data for a specific row.
 
@@ -210,7 +216,7 @@ $values["name"] = "Joe";
 $listEntry->update($values);
 ```
 
-## Working with cell-based feeds
+## Cell feed
 
 Cell feed deals with individual cells. A cell feed is a collection of cells (of type CellEntry)
 

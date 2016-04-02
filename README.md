@@ -114,7 +114,7 @@ $worksheetFeed = $spreadsheetService->getPublicSpreadsheet("spreadsheet-id");
 
 The spreadsheet id can be copied from the url of the acual spreadsheet in Google Drive.
 
-## Workshsheet
+## Worksheet
 
 ### Retrieving a list of worksheets
 

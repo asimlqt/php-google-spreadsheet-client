@@ -64,6 +64,22 @@ class DefaultServiceRequestTest extends TestBase
         $this->assertFalse($request->getSslVerifyPeer());
     }
 
+    public function testGetCurlParams()
+    {
+        $request = new DefaultServiceRequest("token");
+        $this->assertTrue(count($request->getCurlParams()) === 5);
+    }
+
+    public function testAddCurlParam()
+    {
+        $request = new DefaultServiceRequest("token");
+        $request->addCurlParam(CURLOPT_SSL_VERIFYPEER, false);
+
+        $params = $request->getCurlParams();
+
+        $this->assertFalse($params[CURLOPT_SSL_VERIFYPEER]);
+    }
+
     public function testGet()
     {
         $mockRequest = $this->getMockBuilder(DefaultServiceRequest::class)

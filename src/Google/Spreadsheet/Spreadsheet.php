@@ -124,7 +124,7 @@ class Spreadsheet
      * @param int    $rowCount default is 100
      * @param int    $colCount default is 10
      *
-     * @return \Google\Spreadsheet\Worksheet
+     * @return Worksheet
      */
     public function addWorksheet($title, $rowCount=100, $colCount=10)
     {

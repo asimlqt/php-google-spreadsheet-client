@@ -6,28 +6,36 @@ use Google\Spreadsheet\ServiceRequestFactory;
 
 class ListFeedTest extends TestBase
 {
+    private $listFeed;
+
+    public function setUp()
+    {
+        $this->listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
+    }
+
+    public function tearDown()
+    {
+        $this->listFeed = null;
+    }
+
     public function testGetXml()
     {
-        $feed = new ListFeed($this->getSimpleXMLElement("list-feed"));
-        $this->assertTrue($feed->getXml() instanceof \SimpleXMLElement);
+        $this->assertTrue($this->listFeed->getXml() instanceof \SimpleXMLElement);
     }
 
     public function testGetId()
     {
-        $feed = new ListFeed($this->getSimpleXMLElement("list-feed"));
         $this->assertEquals(
             "https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full",
-            $feed->getId()
+            $this->listFeed->getId()
         );
     }
 
     public function testGetPostUrl()
     {
-        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
-
         $this->assertEquals(
             "https://spreadsheets.google.com/feeds/list/G3345eEsfsk60/od6/private/full",
-            $listFeed->getPostUrl()
+            $this->listFeed->getPostUrl()
         );
     }
     
@@ -47,15 +55,22 @@ class ListFeedTest extends TestBase
         
         ServiceRequestFactory::setInstance($mockServiceRequest);
         
-        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
-        $listFeed->insert(["name" => "asim", "occupation" => "software engineer"]);
+        $this->listFeed->insert(["name" => "asim", "occupation" => "software engineer"]);
     }
     
     public function testGetEntries()
     {
-        $listFeed = new ListFeed($this->getSimpleXMLElement("list-feed"));
+        $this->assertEquals(4, count($this->listFeed->getEntries()));
+    }
 
-        $this->assertEquals(4, count($listFeed->getEntries()));
+    public function testGetTotalResults()
+    {
+        $this->assertEquals(4, $this->listFeed->getTotalResults());
+    }
+
+    public function testGetStartIndex()
+    {
+        $this->assertEquals(1, $this->listFeed->getStartIndex());
     }
 
 }

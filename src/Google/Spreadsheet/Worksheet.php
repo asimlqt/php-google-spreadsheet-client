@@ -127,7 +127,7 @@ class Worksheet
      *
      * @param array $query add additional query params to the url to sort/filter the results
      * 
-     * @return \Google\Spreadsheet\ListFeed
+     * @return ListFeed
      */
     public function getListFeed(array $query = [])
     {
@@ -143,7 +143,7 @@ class Worksheet
     /**
      * Get the cell feed of this worksheet
      * 
-     * @return \Google\Spreadsheet\CellFeed
+     * @return CellFeed
      */
     public function getCellFeed(array $query = [])
     {
@@ -241,6 +241,7 @@ class Worksheet
      * Get the export csv url
      *
      * @return string
+     * 
      * @throws Exception
      */
     public function getExportCsvUrl()

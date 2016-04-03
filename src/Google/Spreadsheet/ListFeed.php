@@ -99,7 +99,7 @@ class ListFeed
     /**
      * Get the entries of this feed
      * 
-     * @return \Google\Spreadsheet\ListEntry[]
+     * @return ListEntry[]
      */
     public function getEntries()
     {
@@ -120,18 +120,22 @@ class ListFeed
         return $rows;
     }
 
+    /**
+     * Get open search total results
+     * 
+     * @return int
+     */
     public function getTotalResults()
     {
         $xml = $this->xml->children('openSearch', true);
         return intval($xml->totalResults);
     }
 
-    public function getItemsPerPage()
-    {
-        $xml = $this->xml->children('openSearch', true);
-        return intval($xml->itemsPerPage);
-    }
-
+    /**
+     * Get open search start index
+     * 
+     * @return int
+     */
     public function getStartIndex()
     {
         $xml = $this->xml->children('openSearch', true);

@@ -303,11 +303,8 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * 
      * @return string the xml response
      *
-     * @throws \Google\Spreadsheet\Exception If the was a problem with the request.
-     *                                       Will throw an exception if the response
-     *                                       code is 300 or greater
-     *                                       
      * @throws UnauthorizedException
+     * @throws BadRequestException
      *
      * @codeCoverageIgnore
      */

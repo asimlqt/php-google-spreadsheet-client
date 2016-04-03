@@ -47,7 +47,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * 
      * @var array
      */
-    protected $headers = array();
+    protected $headers = [];
 
     /**
      * Service url
@@ -69,6 +69,19 @@ class DefaultServiceRequest implements ServiceRequestInterface
      * @var boolean
      */
     protected $sslVerifyPeer = true;
+
+    /**
+     * cURL parameters
+     * 
+     * @var array
+     */
+    protected $curlParams = [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_FAILONERROR => false,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_VERBOSE => false,
+    ];
 
     /**
      * Initializes the service request object.
@@ -174,7 +187,7 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     public function getSslVerifyPeer()
     {
-        return $this->sslVerifyPeer;
+        return $this->curlParams[CURLOPT_SSL_VERIFYPEER];
     }
     
     /**
@@ -186,7 +199,31 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     public function setSslVerifyPeer($sslVerifyPeer)
     {
-        $this->sslVerifyPeer = (bool) $sslVerifyPeer;
+        $this->curlParams[CURLOPT_SSL_VERIFYPEER] = (bool) $sslVerifyPeer;
+        return $this;
+    }
+
+    /**
+     * Get currently set curl params
+     * 
+     * @return array
+     */
+    public function getCurlParams()
+    {
+        return $this->curlParams;
+    }
+
+    /**
+     * Add an extra curl parameter or override an existing one
+     * 
+     * @param string $name  'CURLOPT_*' constant
+     * @param mixed  $value
+     *
+     * @return DefaultServiceRequest
+     */
+    public function addCurlParam($name, $value)
+    {
+        $this->curlParams[$name] = $value;
         return $this;
     }
 
@@ -268,20 +305,12 @@ class DefaultServiceRequest implements ServiceRequestInterface
      */
     protected function initRequest($url, $requestHeaders = array())
     {
-        $curlParams = array (
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_FAILONERROR => false,
-            CURLOPT_SSL_VERIFYPEER => $this->sslVerifyPeer,
-            CURLOPT_VERBOSE => false,
-        );
-
         if(substr($url, 0, 4) !== "http") {
             $url = $this->serviceUrl . $url;
         }
 
         $ch = curl_init();
-        curl_setopt_array($ch, $curlParams);
+        curl_setopt_array($ch, $this->curlParams);
         curl_setopt($ch, CURLOPT_URL, $url);
 
         $headers = array();

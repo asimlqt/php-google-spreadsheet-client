@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<entry xmlns="http://www.w3.org/2005/Atom" xmlns:gs="http://schemas.google.com/spreadsheets/2006">
+    <content type="text">a &amp;  b &lt; c</content>
+    <title type="text"/>
+    <id>https://spreadsheets.google.com//R2C1</id>
+    <link rel="edit" type="application/atom+xml" href="https://spreadsheets.google.com//R2C1"/>
+    <gs:cell row="2" col="1" inputValue="a &amp;  b &lt; c">a &amp;  b &lt; c</gs:cell>
+</entry>

@@ -185,4 +185,23 @@ class CellFeedTest extends TestBase
         $this->assertTrue($actual instanceof CellEntry);
     }
 
+    public function testCreateCellWithAmpersand()
+    {
+        $mockCellFeed = $this->getMockBuilder(CellFeed::class)
+            ->setMethods(["getPostUrl"])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockCellFeed->expects($this->any())
+            ->method("getPostUrl")
+            ->will($this->returnValue("https://spreadsheets.google.com/"));
+
+        $actual = $mockCellFeed->createCell(2, 1, "a &  b < c");
+
+        $this->assertTrue($actual instanceof CellEntry);
+
+        $expectedXML = file_get_contents(__DIR__."/xml/cell-feed-with-ampersand.xml");
+        $actualXML = $actual->getXML()->asXML();
+        $this->assertXmlStringEqualsXmlString($actualXML,$expectedXML);
+    }
+
 }

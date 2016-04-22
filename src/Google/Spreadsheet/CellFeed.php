@@ -232,8 +232,12 @@ class CellFeed
                 xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">
             </entry>
         ");
-        
-        $child = $entry->addChild("content", $value);
+
+        // use ->content instead of addChild('content', $value)
+        // due to addChild not escaping & properly.
+        // http://php.net/manual/en/simplexmlelement.addchild.php#112204
+        $entry->content = $value;
+        $child = $entry->content;
         $child->addAttribute("type", "text");
         $child = $entry->addChild("title");
         $child->addAttribute("type", "text");
@@ -243,7 +247,9 @@ class CellFeed
         $link->addAttribute("type", "application/atom+xml");
         $link->addAttribute("href", $this->getPostUrl() . "/R" . $row . "C" . $col);
 
-        $child = $entry->addChild("xmlns:gs:cell", $value);
+        $elementType = 'gs:cell';
+        $entry->{$elementType} = $value;
+        $child = $entry->{$elementType};
         $child->addAttribute("row", $row);
         $child->addAttribute("col", $col);
         $child->addAttribute("inputValue", $value);

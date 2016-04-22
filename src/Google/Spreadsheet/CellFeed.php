@@ -247,7 +247,7 @@ class CellFeed
         $link->addAttribute("type", "application/atom+xml");
         $link->addAttribute("href", $this->getPostUrl() . "/R" . $row . "C" . $col);
 
-        $elementType = 'gs:cell';
+        $elementType = "gs:cell";
         $entry->{$elementType} = $value;
         $child = $entry->{$elementType};
         $child->addAttribute("row", $row);

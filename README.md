@@ -25,7 +25,7 @@
 
 # Introduction
 
-This library provides a simple interface to the Google Spreadsheet API.
+This library provides a simple interface to the Google Spreadsheet API v3.
 
 There are a couple of important things to note.
 

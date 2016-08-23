@@ -91,7 +91,7 @@ class ListEntry
         $entry->addChild("id", $this->xml->id->__toString());
 
         foreach($values as $colName => $value) {
-            $entry->addChild("xmlns:gsx:$colName", $value);
+            $entry->addChild("xmlns:gsx:$colName", htmlspecialchars($value));
         }
 
         ServiceRequestFactory::getInstance()->put($this->getEditUrl(), $entry->asXML());

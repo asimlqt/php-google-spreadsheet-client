@@ -100,4 +100,24 @@ class SpreadsheetFeed
         throw new SpreadsheetNotFoundException();
     }
 
+    /**
+     * Gets a spreadhseet from the feed by its ID in google drive.
+     * 
+     * @param string $id
+     * 
+     * @return Spreadsheet
+     *
+     * @throws SpreadsheetNotFoundException
+     */
+    public function getById($id)
+    {
+        foreach($this->xml->entry as $entry) {
+            if($entry->id->__toString() == $id) {
+                return new Spreadsheet($entry);
+            }
+        }
+
+        throw new SpreadsheetNotFoundException();
+    }
+
 }

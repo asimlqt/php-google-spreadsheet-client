@@ -73,7 +73,9 @@ class Util
         $namespacePrefix,
         $attribute
     ) {
-        return $xml->children($namespacePrefix, true)->attributes()[$attribute]->__toString();
+        $attr = $xml->children($namespacePrefix, true)->attributes()[$attribute];
+        
+        return $attr ? $attr->__toString() : null;
     }
     
 }

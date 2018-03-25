@@ -90,7 +90,7 @@ class ListFeed
         ");
 
         foreach($row as $colName => $value) {
-            $entry->addChild("xmlns:gsx:$colName", $value);
+            $entry->addChild("xmlns:gsx:$colName", htmlspecialchars($value));
         }
 
         ServiceRequestFactory::getInstance()->post($this->getPostUrl(), $entry->asXML());

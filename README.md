@@ -1,8 +1,6 @@
 [![Build Status](https://travis-ci.org/asimlqt/php-google-spreadsheet-client.svg?branch=master)](https://travis-ci.org/asimlqt/php-google-spreadsheet-client)
 
-> IMPORTANT: This library is no longer maintained. Please use the official [Google PHP Client](https://developers.google.com/sheets/api/quickstart/php)
-
-> Note: This library has been updated to v3 and it is not backwards compatible with v2 so please test/update your code appropriately before upgrading.
+> ### This library is no longer maintained. Please use the official [Google PHP Client](https://developers.google.com/sheets/api/quickstart/php)
 
 # Contents
 * [Introduction](#introduction)

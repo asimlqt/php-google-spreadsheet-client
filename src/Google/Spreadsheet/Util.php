@@ -66,14 +66,19 @@ class Util
      * @param  string            $namespaceFocus 
      * @param  string            $tagFocus
      * 
-     * @return string 
+     * @return string|null
      */
     public static function extractAttributeFromXml(
         \SimpleXMLElement $xml,
         $namespacePrefix,
         $attribute
     ) {
-        return $xml->children($namespacePrefix, true)->attributes()[$attribute]->__toString();
+        $attributes = $xml->children($namespacePrefix, true)->attributes();
+        if (isset($attributes[$attribute])) {
+            return $attributes[$attribute]->__toString();
+        }
+
+        return null;
     }
     
 }
